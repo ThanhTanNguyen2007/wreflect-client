@@ -1,0 +1,86 @@
+.personalReflectionPage {
+  @import './Manage/manageJudge.scss';
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .personalSection {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: #f2f3f5;
+    color: #6d7982;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px gray;
+    padding: 10px;
+
+    .manageJudge,
+    .analysis {
+      flex: 1;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .manageJudge.primary,
+    .analysis.primary {
+      background-color: white;
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px,
+      rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+  }
+}
+
+.steps-content {
+  min-height: 200px;
+  margin-top: 16px;
+  text-align: center;
+
+  .dynamic-delete-button {
+    position: relative;
+    top: 4px;
+    margin: 0 8px;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dynamic-delete-button:hover {
+    color: #777;
+  }
+  .dynamic-delete-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  [data-theme='dark'] .dynamic-delete-button {
+    color: rgba(255, 255, 255, 0.45);
+  }
+  [data-theme='dark'] .dynamic-delete-button:hover {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .ant-form-item-explain-error {
+    background-color: #ff726f;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 5px;
+    border-radius: 8px;
+  }
+}

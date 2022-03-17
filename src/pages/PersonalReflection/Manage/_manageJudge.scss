@@ -1,0 +1,11 @@
+.manageJudgePage {
+  display: flex;
+  flex-direction: column;
+
+  .actionSection {
+    gap: 30px;
+    display: flex;
+    flex-direction: row;
+  }
+}
+

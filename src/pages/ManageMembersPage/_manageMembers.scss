@@ -1,0 +1,13 @@
+.manageMembersPage {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+
+  .manageMembers {
+    padding: 24px;
+  }
+  .addTeamMembers {
+    padding: 40px 40px 100px 70px;
+    background: linear-gradient(to right, #f9f9f9 1%, white 99%);
+    border-left: solid 1px #e7eaea;
+  }
+}
