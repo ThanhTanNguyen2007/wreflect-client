@@ -13,6 +13,7 @@ export type Team = {
   isPublic: boolean;
   description: string | null;
   status: TeamStatus;
+  Owner: User;
   members: Member[];
   boards: Board[];
 };
@@ -84,7 +85,6 @@ export type Board = {
   type: BoardType;
   currentPhase: PhaseType;
   endTime: string;
-  team: Team;
   columns: Column[];
 };
 
@@ -153,15 +153,9 @@ export type Member = {
 export type UserProfile = {
   id: string;
   userId: string;
-  workplace: string | null;
-  address: string | null;
-  school: string | null;
-  introduction: string | null;
-  talents: string | null;
-  interests: string | null;
+
   createdAt: Date;
   updatedAt: Date;
-  gender: Gender;
   user: User;
 };
 
@@ -221,10 +215,15 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   isAdmin: boolean;
-  name: string;
   nickname: string;
   picture: string;
   userStatus: UserStatus;
-  profile: UserProfile;
   members: [Member];
+  workplace: string | null;
+  address: string | null;
+  school: string | null;
+  introduction: string | null;
+  talents: string | null;
+  interests: string | null;
+  gender: Gender;
 };

@@ -8,7 +8,7 @@ import {
   DeleteFilled,
 } from '@ant-design/icons';
 import { Droppable } from 'react-beautiful-dnd';
-import { Board, Column, Member } from '../../types';
+import { Board, Column, Member, Team } from '../../types';
 import CreateTicket from './createTicket';
 import OpinionComponent from './opinion';
 import { Dropdown, Menu, Modal, notification } from 'antd';
@@ -18,8 +18,9 @@ import { onError } from '@apollo/client/link/error';
 
 type Props = {
   index: number;
-  iMember?: Member;
+  iMember: Member;
   column: Column;
+  team: Team;
   board: Board;
   currentNumVotes: number | undefined;
   setCurrentNumVotes: (votes: number) => void;
@@ -32,6 +33,7 @@ export default function ColumnComponent({
   column,
   iMember,
   board,
+  team,
   index,
   currentNumVotes,
   setCurrentNumVotes,
@@ -144,6 +146,7 @@ export default function ColumnComponent({
                   iMember={iMember}
                   currentNumVotes={currentNumVotes}
                   setCurrentNumVotes={setCurrentNumVotes}
+                  team={team}
                   board={board}
                   column={column}
                   index={index}

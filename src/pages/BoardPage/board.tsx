@@ -4,7 +4,7 @@ import { Avatar, Tooltip, Empty, Badge } from 'antd';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
 
-import { useMutation, useQuery, useApolloClient } from '@apollo/client';
+import { useMutation, useQuery, useApolloClient, useSubscription } from '@apollo/client';
 import { BoardQueries, TeamQueries } from '../../grapql-client/queries';
 import ColumnComponent from './column';
 import { BoardMutations, ColumnMutations, OpinionMutations } from '../../grapql-client/mutations';
@@ -28,6 +28,7 @@ import { TopNavBar } from '../../components/TopNavBar';
 import ConfigTimeTrackingModal from './configTimeTrackingModal';
 import { CountDown } from '../../components/CountDown';
 import { Board } from '../../types';
+import { BoardSubscription } from '../../grapql-client/subcriptions';
 
 type Props = {
   teamId: string;
@@ -51,13 +52,15 @@ export default function board({ teamId, boardId }: Props) {
       variables: {
         teamId,
       },
+      fetchPolicy: 'network-only', // Used for first execution
+      nextFetchPolicy: 'cache-only',
       onCompleted: (data) => {
         setBoard(data?.team?.boards?.find((board) => board?.id === boardId) || null);
       },
     },
   );
 
-  const iMember = board?.team?.members.find((member) => member.userId === me?.id);
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
 
   useEffect(() => {
     setBoard(data?.team?.boards?.find((board) => board?.id === boardId) || null);
@@ -186,7 +189,7 @@ export default function board({ teamId, boardId }: Props) {
   return (
     <>
       <TopNavBar
-        team={board?.team}
+        team={data?.team}
         boardId={boardId}
         title="Do Reflect"
         selectedBoard={board}
@@ -204,7 +207,8 @@ export default function board({ teamId, boardId }: Props) {
                 visible={isUpdateModalVisible}
               />
               <ConfigTimeTrackingModal
-                boardData={board}
+                team={data?.team}
+                board={board}
                 setVisible={setTimeTrackingModalVisible}
                 visible={isTimeTrackingModalVisible}
               />
@@ -252,7 +256,7 @@ export default function board({ teamId, boardId }: Props) {
                       }}
                       maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
                     >
-                      {board?.team?.members?.map((member) => (
+                      {data?.team?.members?.map((member) => (
                         <div onClick={() => history.push(`/manage-members/${teamId}`)} key={member?.user?.email}>
                           {member.isOwner ? (
                             <Badge offset={[-15, -3]} count={<CrownFilled style={{ color: '#F79C2D' }} />}>
@@ -394,6 +398,7 @@ export default function board({ teamId, boardId }: Props) {
                           iMember={iMember}
                           currentNumVotes={currentNumVotes}
                           setCurrentNumVotes={setCurrentNumVotes}
+                          team={data?.team}
                           board={board}
                           index={index}
                           key={column.id}

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Select, PageHeader } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { Board, Team } from '../../types';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { TeamQueries } from '../../grapql-client/queries';
+import { BoardSubscription, OpinionSubscription } from '../../grapql-client/subcriptions';
+import selfContext from '../../contexts/selfContext';
 
 const { Option } = Select;
 
@@ -17,6 +19,37 @@ type Props = {
 
 const TopNavBar = ({ title, team, boardId }: Props) => {
   const history = useHistory();
+  const me = useContext(selfContext);
+
+  if (boardId) {
+    useSubscription<BoardSubscription.updateBoardResult, BoardSubscription.updateBoardVars>(
+      BoardSubscription.updateBoard,
+      {
+        variables: {
+          meId: me.id,
+          boardId: boardId,
+        },
+      },
+    );
+  }
+
+  useSubscription<BoardSubscription.deleteBoardResult, BoardSubscription.deleteBoardVars>(
+    BoardSubscription.deleteBoard,
+    {
+      variables: {
+        meId: me.id,
+      },
+    },
+  );
+
+  useSubscription<OpinionSubscription.updateOpinionResult, OpinionSubscription.updateOpinionVars>(
+    OpinionSubscription.updateOpinion,
+    {
+      variables: {
+        meId: me.id,
+      },
+    },
+  );
 
   const handleSelectBoard = async (value: string) => {
     history.push(`/board/${team?.id}/${value}`);
@@ -81,7 +114,7 @@ const TopNavBar = ({ title, team, boardId }: Props) => {
           <Link key="6" style={{ textDecoration: 'none' }} to={`/manage-board/${team?.id}`}>
             <Button type={title == 'Manage Board' ? 'primary' : undefined}>Board</Button>
           </Link>,
-          <Link key="6" style={{ textDecoration: 'none' }} to={`/team-details/${team?.id}`}>
+          <Link key="7" style={{ textDecoration: 'none' }} to={`/team-details/${team?.id}`}>
             <Button type={title == 'Setting' ? 'primary' : undefined}>Settings</Button>
           </Link>,
         ]}

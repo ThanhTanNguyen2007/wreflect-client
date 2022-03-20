@@ -1,7 +1,7 @@
 import { Dropdown, Input, Menu, Modal } from 'antd';
 import React, { KeyboardEvent, useEffect, useState, useRef } from 'react';
 import { Opinion, Remark, Column, Board, Member } from '../../types';
-import { EllipsisOutlined, DeleteFilled } from '@ant-design/icons';
+import { EllipsisOutlined, DeleteFilled, ArrowRightOutlined } from '@ant-design/icons';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { RemarkMutations } from '../../grapql-client/mutations';
 import _ from 'lodash';
@@ -69,7 +69,7 @@ export default function RemarkComponent({ isOpenRemark, setIsOpenRemark, board, 
         {opinion.remarks?.map((remark) => (
           <div key={remark?.id} className="remark">
             <div className="remarkHeader">
-              <p>{remark?.author.nickname}</p>
+              <p style={{ fontWeight: 'bold !important' }}>{remark?.author.nickname}</p>
               <Dropdown
                 overlayStyle={{ width: '180px' }}
                 overlay={
@@ -118,7 +118,9 @@ export default function RemarkComponent({ isOpenRemark, setIsOpenRemark, board, 
                 <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
               </Dropdown>
             </div>
-            <div className="remarkContent">{remark.text}</div>
+            <div className="remarkContent">
+              <ArrowRightOutlined /> &nbsp;{remark.text}
+            </div>
           </div>
         ))}
       </div>

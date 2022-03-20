@@ -243,9 +243,6 @@ div#rc-tabs-2-panel-1 {
   align-items: normal !important;
   justify-content: normal !important; }
 
-ul.ant-pagination.ant-table-pagination.ant-table-pagination-right {
-  display: none !important; }
-
 ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   margin: 20px 0px 0px 0px; }
 
@@ -253,6 +250,56 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   font-family: 'Poppins';
   font-size: 30px;
   font-style: "oblique"; }
+
+.profileUser {
+  padding: 10px 60px 0px 60px; }
+  .profileUser .headerSection {
+    display: flex;
+    align-items: center; }
+    .profileUser .headerSection .accInfor {
+      flex: 1;
+      display: flex;
+      align-items: center; }
+      .profileUser .headerSection .accInfor .accName {
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; }
+        .profileUser .headerSection .accInfor .accName .gmail {
+          font-size: 30px;
+          font-weight: bold !important; }
+        .profileUser .headerSection .accInfor .accName p {
+          color: gray;
+          font-size: 15px;
+          margin-bottom: 0; }
+          .profileUser .headerSection .accInfor .accName p .user_id {
+            display: inline;
+            background-color: #eff0f2;
+            padding: 2px 6px;
+            border-radius: 4px; }
+    .profileUser .headerSection .actionHeader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: auto; }
+  .profileUser .container {
+    margin-top: 20px; }
+    .profileUser .container .inforField {
+      border-bottom: 1px solid #e5e8ed;
+      padding: 20px 0px 20px 0px; }
+      .profileUser .container .inforField .hihihiha {
+        display: flex;
+        align-items: center; }
+        .profileUser .container .inforField .hihihiha div {
+          font-size: 15px; }
+        .profileUser .container .inforField .hihihiha .labelField {
+          flex: 1;
+          font-weight: bold !important; }
+        .profileUser .container .inforField .hihihiha .valueField {
+          flex: 5;
+          font-weight: lighter !important; }
+        .profileUser .container .inforField .hihihiha .actionField {
+          left: auto; }
 
 .manageMembersPage {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
@@ -569,7 +616,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
       justify-content: space-between;
       align-items: center; }
       .remarkline .remark .remarkHeader p {
-        font-size: 12px; }
+        font-size: 12px;
+        font-weight: 700 !important; }
 
 .headerModalText {
   margin-top: 30px;
@@ -710,7 +758,6 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
       box-sizing: border-box; }
     .actionsTracker .team.actioncontainer .ant-btn {
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-      background-color: #1e222f;
       text-align: center;
       font-family: 'inter-bold';
       cursor: pointer;

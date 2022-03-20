@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 
-import { Dropdown, Menu, Modal, Input, Badge, Avatar, Tooltip, notification } from 'antd';
+import { Dropdown, Spin, Menu, Modal, Input, Badge, Avatar, Tooltip, notification } from 'antd';
 import { Draggable } from 'react-beautiful-dnd';
 import {
   StarFilled,
@@ -14,9 +14,10 @@ import {
   ExclamationCircleOutlined,
   MessageFilled,
   MessageOutlined,
+  LoadingOutlined,
 } from '@ant-design/icons';
 
-import { Board, Column, Member, Opinion } from '../../types';
+import { Board, Column, Member, Opinion, Team } from '../../types';
 import { useMutation, useApolloClient } from '@apollo/client';
 import selfContext from '../../contexts/selfContext';
 import { OpinionMutations } from '../../grapql-client/mutations';
@@ -26,6 +27,7 @@ import ActionComponent from './action';
 
 type Props = {
   iMember?: Member;
+  team: Team;
   board: Board;
   column: Column;
   opinion: Opinion;
@@ -40,6 +42,7 @@ const { TextArea } = Input;
 export default function OpinionComponent({
   iMember,
   opinion,
+  team,
   board,
   column,
   index,
@@ -49,7 +52,12 @@ export default function OpinionComponent({
   const [isEdit, setIsEdit] = useState(false);
   const client = useApolloClient();
   const me = useContext(selfContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpenRemark, setIsOpenRemark] = useState(false);
+  const [loadingIcon, setLoadingIcon] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   const [updateOpinion] = useMutation<OpinionMutations.updateOpinionResult, OpinionMutations.updateOpinionVars>(
     OpinionMutations.updateOpinion,
@@ -93,7 +101,7 @@ export default function OpinionComponent({
             title: 'Do you want to delete these items?',
             centered: true,
             icon: <ExclamationCircleOutlined />,
-            onOk: () => {
+            onOk: async () => {
               const prevBoard = board;
               const newColumns = board.columns.map((column) => {
                 return { ...column, opinions: column.opinions.filter((x) => x.id != opinion.id) };
@@ -108,7 +116,7 @@ export default function OpinionComponent({
                   board: { ...board, columns: newColumns },
                 },
               });
-              removeOpinion({
+              await removeOpinion({
                 variables: {
                   teamId: board.teamId,
                   boardId: board.id,
@@ -333,13 +341,13 @@ export default function OpinionComponent({
                 }}
                 maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
               >
-                {board?.team?.members
+                {team.members
                   ?.filter(
                     (member) => opinion.mergedAuthors.includes(member?.userId) || opinion?.authorId == member?.userId,
                   )
                   .map((member) => (
                     <div key={member?.user?.email}>
-                      <Tooltip title={member?.user?.name} key={member?.user?.email} placement="bottom">
+                      <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
                         <Avatar
                           style={{ marginRight: '1px' }}
                           size="default"
@@ -352,14 +360,18 @@ export default function OpinionComponent({
                   ))}
               </Avatar.Group>
             </div>
-
-            {iMember?.id && (opinion.authorId === me?.id || opinion.mergedAuthors.includes(iMember?.id)) ? (
-              <Dropdown overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
-                <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-              </Dropdown>
-            ) : (
-              <div style={{ width: '20px' }}></div>
-            )}
+            <div>
+              <Spin spinning={isLoading} indicator={antIcon} />
+              {!isLoading &&
+              iMember?.id &&
+              (opinion.authorId === me?.id || opinion.mergedAuthors.includes(iMember?.id)) ? (
+                <Dropdown overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
+                  <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                </Dropdown>
+              ) : (
+                <div style={{ width: '20px' }}></div>
+              )}
+            </div>
           </div>
 
           <div className="opinionContent">
@@ -369,19 +381,19 @@ export default function OpinionComponent({
                   style={{ textAlign: 'center', minHeight: '180px' }}
                   autoFocus
                   bordered
-                  onBlur={(e) => {
-                    if (e.target.value && e.target.value.length > 0) {
+                  onPressEnter={(e) => {
+                    if (!e.shiftKey && e.currentTarget.value && e.currentTarget.value.length > 0) {
                       setIsEdit(false);
                       updateOpinion({
                         variables: {
                           teamId: board.teamId,
                           opinionId: opinion.id,
-                          text: e.target.value,
+                          text: e.currentTarget.value.trim(),
                         },
                         optimisticResponse: {
                           updateOpinion: {
                             ...opinion,
-                            text: e.target.value,
+                            text: e.currentTarget.value,
                           },
                         },
                       });
@@ -401,7 +413,9 @@ export default function OpinionComponent({
                   })}
                 </p>
               )}
-              {opinion.isAction === true && <ActionComponent board={board} column={column} opinion={opinion} />}
+              {opinion.isAction === true && (
+                <ActionComponent team={team} board={board} column={column} opinion={opinion} />
+              )}
             </div>
           </div>
 

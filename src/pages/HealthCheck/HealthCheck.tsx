@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import { Button, Modal, notification, Select, Switch } from 'antd';
+import { Button, Modal, notification, Select, Switch, Spin } from 'antd';
 import React, { useState, useContext } from 'react';
 import { TopNavBar } from '../../components/TopNavBar';
 import { HealthCheckQueries, TeamQueries } from '../../grapql-client/queries';
@@ -31,8 +31,6 @@ export default function HealthCheck({ teamId, boardId }: Props) {
 
   const [answers, setAnswers] = useState<{ questionId: string; value: string }[]>([]);
   const [comments, setComments] = useState<{ questionId: string; text: string }[]>([]);
-
-  const [] = useState();
 
   const { data, client } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(TeamQueries.getTeam, {
     variables: {
@@ -183,22 +181,26 @@ export default function HealthCheck({ teamId, boardId }: Props) {
   };
 
   const handleSubmitHealthCheck = () => {
-    if (selecteTemplate.statements.length !== answers.length) {
-      console.log('answers are', answers);
-      console.log('comments are', comments);
-      notification.error({ message: 'Please answer all question.', placement: 'bottomRight' });
-      return;
-    } else {
-      setAnswerHealthCheck({
-        variables: {
-          teamId,
-          boardId,
-          templateId: selecteTemplate.id,
-          answers,
-          comments,
-        },
-      });
-    }
+    window.scrollTo({
+      top: 50,
+      behavior: 'smooth'
+    });
+      if (selecteTemplate.statements.length !== answers.length) {
+        console.log('answers are', answers);
+        console.log('comments are', comments);
+        notification.error({ message: 'Please answer all question.', placement: 'bottomRight' });
+        return;
+      } else {
+        setAnswerHealthCheck({
+          variables: {
+            teamId,
+            boardId,
+            templateId: selecteTemplate.id,
+            answers,
+            comments,
+          },
+        });
+      }
   };
 
   const answerOfCurrentUser = healthCheckData?.getHealthCheck?.memberAnswers?.find(

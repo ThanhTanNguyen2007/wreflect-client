@@ -1,50 +1,16 @@
 import { gql } from '@apollo/client';
+import { OPINION_FIELDS } from './opinionFragments';
 export const COLUMN_FIELDS = gql`
-  fragment ColumnFields on Board {
+  ${OPINION_FIELDS}
+  fragment ColumnFields on Column {
     id
     color
     title
     isActive
-    opinions {
-      id
-      columnId
-      authorId
-      createdAt
-      updatedAt
-      text
-      upVote
-      downVote
-      updatedBy
-      isAction
-      isBookmarked
-      responsible
-      mergedAuthors
-      status
-      color
-      author {
-        id
-        email
-        name
-        nickname
-        picture
-      }
-      position
-      remarks {
-        id
-        authorId
-        opinionId
-        text
-        createdAt
-        updatedAt
-        author {
-          id
-          email
-          name
-          nickname
-          picture
-        }
-      }
-    }
     boardId
+    opinions {
+      ...OpinionFields
+     
+    }
   }
 `;

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { notification, Select } from 'antd';
 import { OpinionMutations } from '../../grapql-client/mutations';
-import { Board, Column, Opinion, OpinionStatus } from '../../types';
+import { Board, Column, Opinion, OpinionStatus, Team } from '../../types';
 
 const { Option } = Select;
 
 type Props = {
+  team: Team;
   board: Board;
   column: Column;
   opinion: Opinion;
 };
 
-export default function ActionComponent({ board, opinion }: Props) {
+export default function ActionComponent({ team, board, opinion }: Props) {
   const [myBoard, setBoard] = useState<Board>(board);
   const [myOpinion, setOpinion] = useState<Opinion>(opinion);
 
@@ -34,7 +35,7 @@ export default function ActionComponent({ board, opinion }: Props) {
   }, [opinion]);
 
   const handleRenderOptionMemberAssign = () => {
-    return myBoard?.team?.members?.map((member) => (
+    return team?.members?.map((member) => (
       <Option key={member?.user?.id} value={member?.user?.id}>
         {member?.user?.nickname}
       </Option>

@@ -1,3 +1,5 @@
+import { TEAM_FIELDS } from './../fragments/teamFragment';
+import { BOARD_FIELDS } from './../fragments/boardFragment';
 import { gql } from '@apollo/client';
 import { Board } from '../../types';
 
@@ -7,92 +9,17 @@ export type updateBoardResult = {
 
 export type updateBoardVars = {
   meId: string;
+  boardId: string;
 };
 
 export const updateBoard = gql`
-  subscription Subscription($meId: ID!) {
-    updateBoard(meId: $meId) {
-      id
-      teamId
-      createdAt
-      updatedAt
-      createdBy
-      isPublic
-      isLocked
-      disableDownVote
-      disableUpVote
-      isAnonymous
-      votesLimit
-      title
-      timerInProgress
-      endTime
-      type
-      currentPhase
+  ${TEAM_FIELDS}
+  ${BOARD_FIELDS}
+  subscription Subscription($meId: ID!, $boardId: ID!) {
+    updateBoard(meId: $meId, boardId: $boardId) {
+      ...BoardFields
       team(meId: $meId) {
-        id
-        name
-        ownerUserIds
-        startDate
-        createdAt
-        endDate
-        picture
-        numOfMember
-        isPublic
-        status
-        description
-        boards {
-          id
-          teamId
-          createdAt
-          updatedAt
-          createdBy
-          isPublic
-          isLocked
-          disableDownVote
-          disableUpVote
-          isAnonymous
-          votesLimit
-          title
-          timerInProgress
-          endTime
-          type
-          currentPhase
-        }
-      }
-      columns {
-        id
-        color
-        title
-        position
-        isActive
-        boardId
-        opinions {
-          id
-          columnId
-          memberId
-          authorId
-          createdAt
-          updatedAt
-          text
-          upVote
-          downVote
-          isAction
-          updatedBy
-          isBookmarked
-          responsible
-          mergedAuthors
-          status
-          color
-          position
-          remarks {
-            id
-            authorId
-            opinionId
-            text
-            createdAt
-            updatedAt
-          }
-        }
+        ...TeamFields
       }
     }
   }
@@ -128,12 +55,10 @@ export const deleteBoard = gql`
       team(meId: $meId) {
         id
         name
-        ownerUserIds
         startDate
         createdAt
         endDate
         picture
-        numOfMember
         isPublic
         status
         description

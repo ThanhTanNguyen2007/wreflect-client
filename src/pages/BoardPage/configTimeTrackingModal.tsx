@@ -1,18 +1,19 @@
 import { Modal, InputNumber, notification } from 'antd';
 import React, { useState } from 'react';
-import { Board } from '../../types';
+import { Board, Team } from '../../types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 import { BoardMutations } from '../../grapql-client/mutations';
 import moment from 'moment';
 
 type Props = {
-  boardData: Board;
+  team: Team;
+  board: Board;
   visible: boolean;
   setVisible: (isVisible: boolean) => void;
 };
 
-export default function ConfigTimeTrackingModal({ boardData, visible, setVisible }: Props) {
+export default function ConfigTimeTrackingModal({ team, board, visible, setVisible }: Props) {
   const [minutes, setMinutes] = useState(60);
 
   const [updateBoard] = useMutation<BoardMutations.updateBoardResult, BoardMutations.updateBoardVars>(
@@ -52,14 +53,14 @@ export default function ConfigTimeTrackingModal({ boardData, visible, setVisible
       onOk={() => {
         updateBoard({
           variables: {
-            teamId: boardData?.team?.id,
-            boardId: boardData?.id,
+            teamId: team?.id,
+            boardId: board?.id,
             timerInProgress: true,
             endTime: `${moment().add(minutes, 'minutes').valueOf()}`,
           },
           optimisticResponse: {
             updateBoard: {
-              ...boardData,
+              ...board,
               timerInProgress: true,
               endTime: `${moment().add(minutes, 'minutes').valueOf()}`,
             },

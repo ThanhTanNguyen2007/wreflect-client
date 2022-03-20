@@ -8,10 +8,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink, from, split } fr
 import config from './config';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { onError } from '@apollo/client/link/error';
-import { message, notification } from 'antd';
+import { notification } from 'antd';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { Column, Opinion } from './types';
-import { user } from './apis';
 import { updateLoginState } from './apis/axios';
 
 const httpLink = new HttpLink({
@@ -38,6 +36,7 @@ const splitLink = split(
 const errorLink = onError(({ networkError, graphQLErrors }) => {
   try {
     if (networkError) {
+      console.log(networkError.message);
       if ('statusCode' in networkError && networkError.statusCode === 401) {
         updateLoginState(null);
         notification.error({
@@ -52,6 +51,7 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
       }
     } else if (graphQLErrors) {
       for (const err of graphQLErrors) {
+        console.log(err.message);
         notification.error({
           placement: 'bottomRight',
           message: err.message,
@@ -72,27 +72,28 @@ const client = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
     resultCaching: true,
+    
     typePolicies: {
-      Query: {
-        fields: {
-          team: {
-            read(_, { args, toReference }) {
-              return toReference({
-                __typename: 'Team',
-                id: args?.teamId,
-              });
-            },
-          },
-          board: {
-            read(_, { args, toReference }) {
-              return toReference({
-                __typename: 'Board',
-                id: args?.boardId,
-              });
-            },
-          },
-        },
-      },
+      // Query: {
+      //   fields: {
+      //     team: {
+      //       read(_, { args, toReference }) {
+      //         return toReference({
+      //           __typename: 'Team',
+      //           id: args?.teamId,
+      //         });
+      //       },
+      //     },
+      //     board: {
+      //       read(_, { args, toReference }) {
+      //         return toReference({
+      //           __typename: 'Board',
+      //           id: args?.boardId,
+      //         });
+      //       },
+      //     },
+      //   },
+      // },
       // Column: {
       //   fields: {
       //     opinion: {

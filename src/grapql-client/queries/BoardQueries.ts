@@ -1,3 +1,7 @@
+import { REMARK_FIELDS } from './../fragments/remarkFragment';
+import { USER_FIELDS } from './../fragments/userFragment';
+import { OPINION_FIELDS } from './../fragments/opinionFragments';
+import { COLUMN_FIELDS } from './../fragments/columnFragment';
 import { Board } from './../../types';
 import { gql } from '@apollo/client';
 
@@ -12,54 +16,23 @@ export type getBoardsVars = {
 };
 
 export const getBoards = gql`
+  ${BOARD_FIELDS}
+  ${COLUMN_FIELDS}
+  ${OPINION_FIELDS}
+  ${USER_FIELDS}
+  ${REMARK_FIELDS}
   query Boards($teamId: String!) {
     boards(teamId: $teamId) {
-      id
-      teamId
-      createdAt
-      updatedAt
-      createdBy
-      isLocked
-      isPublic
-      disableDownVote
-      disableUpVote
-      votesLimit
-      isAnonymous
-      title
-      endTime
-      timerInProgress
+      ...BoardFields
       columns {
-        id
-        color
-        title
-        isActive
+        ...ColumnFields
         opinions {
-          id
-          columnId
-          authorId
-          createdAt
-          updatedAt
-          text
-          upVote
-          downVote
-          updatedBy
-          isAction
-          responsible
-          isBookmarked
-          mergedAuthors
-          color
-          status
+          ...OpinionFields
           author {
-            id
-            email
+            ...UserFields
           }
           remarks {
-            id
-            authorId
-            opinionId
-            text
-            createdAt
-            updatedAt
+            ...RemarkFields
           }
         }
       }

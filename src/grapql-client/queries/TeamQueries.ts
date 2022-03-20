@@ -2,6 +2,9 @@ import { gql } from '@apollo/client';
 import { Team } from '../../types';
 
 import { BOARD_FIELDS } from '../fragments/boardFragment';
+import { MEMBER_FIELDS } from '../fragments/memberFragment';
+import { TEAM_FIELDS } from '../fragments/teamFragment';
+import { USER_FIELDS } from '../fragments/userFragment';
 
 export type getTeamVars = {
   teamId: string;
@@ -12,40 +15,17 @@ export type getTeamResult = {
 };
 
 const getTeam = gql`
+  ${TEAM_FIELDS}
   ${BOARD_FIELDS}
+  ${MEMBER_FIELDS}
+  ${USER_FIELDS}
   query Query($teamId: String!) {
     team(teamId: $teamId) {
-      id
-      name
-      ownerUserIds
-      createdAt
-      startDate
-      endDate
-      picture
-      numOfMember
-      isPublic
-      status
-      description
+      ...TeamFields
       members {
-        id
-        userId
-        teamId
-        isOwner
-        isPendingInvitation
-        isGuess
-        invitedBy
-        joinedAt
-        role
+        ...MemberFields
         user {
-          id
-          email
-          createdAt
-          updatedAt
-          isAdmin
-          userStatus
-          name
-          nickname
-          picture
+          ...UserFields
         }
       }
       boards {
@@ -78,18 +58,56 @@ export type getTeamsVars = {
 };
 
 const getTeams = gql`
+  ${TEAM_FIELDS}
   ${BOARD_FIELDS}
+  ${USER_FIELDS}
+  ${MEMBER_FIELDS}
   query Teams($status: String, $isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
     teams(status: $status, isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
       data {
+        ...TeamFields
+        members {
+          ...MemberFields
+          user {
+            ...UserFields
+          }
+        }
+        boards {
+          ...BoardFields
+        }
+      }
+      total
+    }
+  }
+`;
+
+export type getOwnedTeamsResult = {
+  getOwnedTeams: {
+    data: Team[];
+    total: number;
+    page: number;
+    size: number;
+  };
+};
+
+export type getOwnedTeamsVars = {
+  status?: statusOfTeam;
+  isGettingAll?: boolean;
+  search?: string;
+  page?: number;
+  size?: number;
+};
+
+export const getOwnedTeams = gql`
+  query getOwnedTeams($isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
+    getOwnedTeams(isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
+      data {
         id
         name
-        ownerUserIds
         createdAt
         startDate
         endDate
         picture
-        numOfMember
         isPublic
         status
         description
@@ -110,77 +128,20 @@ const getTeams = gql`
             updatedAt
             isAdmin
             userStatus
-            name
             nickname
             picture
-            profile {
-              id
-              userId
-              workplace
-              address
-              school
-              introduction
-              talent
-              interest
-              createdAt
-              updatedAt
-              gender
-            }
           }
         }
-        boards {
-          ...BoardFields
+        owner {
+          email
+          id
+          createdAt
+          updatedAt
+          isAdmin
         }
       }
       total
     }
   }
 `;
-
-export const getEssentialData = gql`
-  query Teams($status: String, $isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
-    teams(status: $status, isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
-      data {
-        id
-        name
-        isPublic
-        members {
-          id
-          userId
-          teamId
-          isOwner
-          user {
-            id
-            email
-            name
-            nickname
-            picture
-          }
-        }
-        boards {
-          id
-          title
-          columns {
-            id
-            color
-            title
-            opinions {
-              id
-              columnId
-              authorId
-              text
-              isAction
-              responsible
-              color
-              mergedAuthors
-              status
-            }
-          }
-        }
-      }
-      total
-    }
-  }
-`;
-
 export { getTeams, getTeam };

@@ -45,7 +45,13 @@ const Team = () => {
           setActiveKey(key);
         }}
       >
-        <TabPane tab="All" key="1" className="flex flex-1">
+        <TabPane
+          tab={
+            <div style={activeKey == '1' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>All</div>
+          }
+          key="1"
+          className="flex flex-1"
+        >
           <TeamsCard
             setIsLoading={setIsLoading}
             searchText={searchText}
@@ -55,7 +61,13 @@ const Team = () => {
             setPage={setPage}
           />
         </TabPane>
-        <TabPane tab="Doing" key="2" className="flex flex-1">
+        <TabPane
+          tab={
+            <div style={activeKey == '2' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>Doing</div>
+          }
+          key="2"
+          className="flex flex-1"
+        >
           <TeamsCard
             status="DOING"
             setIsLoading={setIsLoading}
@@ -66,7 +78,13 @@ const Team = () => {
             setPage={setPage}
           />
         </TabPane>
-        <TabPane tab="Done" key="3" className="flex flex-1">
+        <TabPane
+          tab={
+            <div style={activeKey == '3' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>Done</div>
+          }
+          key="3"
+          className="flex flex-1"
+        >
           <TeamsCard
             status="DONE"
             setIsLoading={setIsLoading}

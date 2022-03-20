@@ -43,7 +43,6 @@ export const updateOpinion = gql`
         updatedAt
         isAdmin
         userStatus
-        name
         nickname
         picture
       }
@@ -78,12 +77,10 @@ export const updateOpinion = gql`
             id
             __typename
             name
-            ownerUserIds
             createdAt
             startDate
             endDate
             picture
-            numOfMember
             isPublic
             status
             description

@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client';
+import { REMARK_FIELDS } from './remarkFragment';
+import { USER_FIELDS } from './userFragment';
 export const OPINION_FIELDS = gql`
+  ${USER_FIELDS}
+  ${REMARK_FIELDS}
   fragment OpinionFields on Opinion {
     id
-    __typename
     columnId
     memberId
     authorId
@@ -10,125 +13,20 @@ export const OPINION_FIELDS = gql`
     updatedAt
     text
     upVote
-    updatedBy
     downVote
+    updatedBy
     isAction
     isBookmarked
     responsible
     mergedAuthors
     color
     status
-    author {
-      id
-      __typename
-      email
-      createdAt
-      updatedAt
-      isAdmin
-      userStatus
-      name
-      nickname
-      picture
-    }
     position
-    column {
-      id
-      __typename
-      color
-      title
-      position
-      isActive
-      boardId
-      board {
-        id
-        __typename
-        teamId
-        createdAt
-        updatedAt
-        createdBy
-        isPublic
-        isLocked
-        disableDownVote
-        disableUpVote
-        isAnonymous
-        votesLimit
-        title
-        timerInProgress
-        endTime
-        currentPhase
-        type
-        team {
-          id
-          __typename
-          name
-          ownerUserIds
-          createdAt
-          startDate
-          endDate
-          picture
-          numOfMember
-          isPublic
-          status
-          description
-          boards {
-            id
-            __typename
-            teamId
-            createdAt
-            updatedAt
-            createdBy
-            isPublic
-            isLocked
-            disableDownVote
-            disableUpVote
-            isAnonymous
-            votesLimit
-            title
-            endTime
-            timerInProgress
-            type
-            currentPhase
-            columns {
-              id
-              __typename
-              color
-              title
-              position
-              isActive
-              boardId
-              opinions {
-                id
-                __typename
-                columnId
-                memberId
-                authorId
-                createdAt
-                updatedAt
-                text
-                upVote
-                downVote
-                updatedBy
-                isAction
-                isBookmarked
-                responsible
-                mergedAuthors
-                color
-                status
-                position
-                remarks {
-                  id
-                  __typename
-                  authorId
-                  opinionId
-                  text
-                  createdAt
-                  updatedAt
-                }
-              }
-            }
-          }
-        }
-      }
+    author {
+      ...UserFields
+    }
+    remarks {
+      ...RemarkFields
     }
   }
 `;

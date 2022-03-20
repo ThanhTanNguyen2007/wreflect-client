@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { USER_FIELDS } from '../fragments/userFragment';
 
 const login = gql`
   query login($code: String, $state: String) {
@@ -13,54 +14,10 @@ const login = gql`
 `;
 
 const me = gql`
+  ${USER_FIELDS}
   query me {
     me {
-      id
-      email
-      createdAt
-      updatedAt
-      isAdmin
-      userStatus
-      name
-      nickname
-      picture
-      profile {
-        id
-        userId
-        workplace
-        address
-        school
-        introduction
-        talent
-        interest
-        createdAt
-        updatedAt
-        gender
-      }
-      members {
-        id
-        userId
-        teamId
-        isOwner
-        isPendingInvitation
-        isGuess
-        invitedBy
-        joinedAt
-        role
-        team {
-          id
-          name
-          ownerUserIds
-          createdAt
-          startDate
-          endDate
-          picture
-          numOfMember
-          isPublic
-          status
-          description
-        }
-      }
+      ...UserFields
     }
   }
 `;
@@ -83,21 +40,6 @@ const getUser = gql`
         assignedBy
         status
       }
-      profile {
-        id
-        name
-        nickname
-        gender
-        workplace
-        userStatus
-        school
-        introduction
-        talents
-        interests
-        createdAt
-        updatedAt
-        phoneNumbers
-      }
     }
   }
 `;
@@ -118,6 +60,5 @@ const getUsers = gql`
     }
   }
 `;
-
 
 export { login, me, getUsers, getUser };

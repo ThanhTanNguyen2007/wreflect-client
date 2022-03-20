@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, Switch, Tooltip, Empty } from 'antd';
+import { Button, Row, Col, Switch, Tooltip, Empty, Modal } from 'antd';
 import {
   PlusOutlined,
   LockTwoTone,
@@ -36,10 +36,18 @@ const ManageBoardPage = ({ teamId }: Props) => {
   );
 
   const handleDeleteBoard = (teamId: string, boardId: string) => {
-    deleteBoard({
-      variables: {
-        teamId,
-        boardId,
+    Modal.confirm({
+      title: 'Are you sure want to delete board',
+      centered: true,
+      okText: 'Delete',
+      cancelText: 'Cancel',
+      onOk: async () => {
+        deleteBoard({
+          variables: {
+            teamId,
+            boardId,
+          },
+        });
       },
     });
   };
@@ -50,18 +58,18 @@ const ManageBoardPage = ({ teamId }: Props) => {
       <TopNavBar team={data?.team} title="Manage Board" />
       <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
         <>
-          {data && data?.team ? (
-            <div className="manage-board">
-              <div className="board-selector">
-                <div className="button-right">
-                  <Button onClick={() => setIsCreateModalVisible(true)} icon={<PlusOutlined />}>
-                    Create Board
-                  </Button>
-                </div>
+          <div className="manage-board">
+            <div className="board-selector">
+              <div className="button-right">
+                <Button onClick={() => setIsCreateModalVisible(true)} icon={<PlusOutlined />}>
+                  Create Board
+                </Button>
               </div>
+            </div>
 
-              <Row gutter={16}>
-                <Col span={24}>
+            <Row gutter={16}>
+              <Col span={24}>
+                {data?.team?.boards?.length >= 1 ? (
                   <div className="board-list">
                     {data?.team.boards?.map((board) => {
                       return (
@@ -112,12 +120,12 @@ const ManageBoardPage = ({ teamId }: Props) => {
                       );
                     })}
                   </div>
-                </Col>
-              </Row>
-            </div>
-          ) : (
-            <Empty description="No Teams Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
-          )}
+                ) : (
+                  <Empty description="No Teams Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
+                )}
+              </Col>
+            </Row>
+          </div>
         </>
       </Loading>
     </>

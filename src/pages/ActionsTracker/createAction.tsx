@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Button, Form, Input, notification, Select } from 'antd';
 import { OpinionMutations } from '../../grapql-client/mutations';
@@ -18,29 +18,38 @@ export default function CreateAction({ team, selectedBoards }: Props) {
     OpinionMutations.createOpinion,
   );
 
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
   const handleOnFinish = (values: any) => {
-    createOpinion({
-      variables: {
-        teamId: team.id,
-        boardId: selectedBoards[0],
-        columnId: values['column'],
-        text: values['title'],
-        isAction: true,
-        isCreateBottom: false,
-      },
-      onCompleted: () => {
-        notification.success({
-          message: 'Create an Action Iteam successfully',
-          placement: 'bottomRight',
-        });
-      },
-      onError: (error) => {
-        notification.error({
-          placement: 'bottomRight',
-          message: error.message,
-        });
-      },
-    });
+    setLoading(true);
+    setDisabled(true);
+    setTimeout(() => {
+      createOpinion({
+        variables: {
+          teamId: team.id,
+          boardId: selectedBoards[0],
+          columnId: values['column'],
+          text: values['title'],
+          isAction: true,
+          isCreateBottom: false,
+        },
+        onCompleted: () => {
+          setLoading(false);
+          setDisabled(false);
+          notification.success({
+            message: 'Create an Action Iteam successfully',
+            placement: 'bottomRight',
+          });
+        },
+        onError: (error) => {
+          notification.error({
+            placement: 'bottomRight',
+            message: error.message,
+          });
+        },
+      });
+    }, 2000);
   };
   return (
     <div>
@@ -75,7 +84,15 @@ export default function CreateAction({ team, selectedBoards }: Props) {
                   })}
               </Select>
             </Form.Item>
-            <Button size="large" type="primary" htmlType="submit" icon={<PlusCircleOutlined />} style={{ flex: 2 }}>
+            <Button
+              loading={loading}
+              disabled={disabled}
+              size="large"
+              type="primary"
+              htmlType="submit"
+              icon={<PlusCircleOutlined />}
+              style={{ flex: 2 }}
+            >
               Create New
             </Button>
           </div>

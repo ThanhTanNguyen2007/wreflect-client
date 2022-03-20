@@ -8,9 +8,10 @@ type Props = {
   isLoading: boolean;
   onHandleSearch(searchValue: string): void;
   searchTextDefault?: string;
+  style?: React.CSSProperties;
 };
 
-const SearchBar = ({ searchTextDefault, placeholder, isLoading, onHandleSearch }: Props) => {
+const SearchBar = ({ searchTextDefault, style, placeholder, isLoading, onHandleSearch }: Props) => {
   const [searchText, setSearchText] = useState<string>();
 
   const handleSearchChange = (searchValue: string) => {
@@ -34,13 +35,14 @@ const SearchBar = ({ searchTextDefault, placeholder, isLoading, onHandleSearch }
     <Search
       placeholder={placeholder}
       bordered
+      style={style}
       value={searchText}
       allowClear={true}
       loading={isLoading}
       onChange={(e) => handleOnChange(e)}
       onPressEnter={(e) => handleSearchChange(e.currentTarget.value)}
-      size="small"
       onSearch={handleSearchChange}
+      enterButton
     />
   );
 };
