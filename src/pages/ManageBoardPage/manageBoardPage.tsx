@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Row, Col, Switch, Tooltip, Empty, Modal } from 'antd';
+import React, { useContext, useState } from 'react';
+import { Button, Row, Col, Switch, Tooltip, Empty, Modal, notification } from 'antd';
 import {
   PlusOutlined,
   LockTwoTone,
@@ -15,6 +15,7 @@ import { TopNavBar } from '../../components/TopNavBar';
 import { Loading } from '../../components/Loading';
 import { BoardMutations } from '../../grapql-client/mutations';
 import { ConfigBoardModal } from '../configBoardModal';
+import selfContext from '../../contexts/selfContext';
 
 type Props = {
   teamId: string;
@@ -23,6 +24,7 @@ type Props = {
 const ManageBoardPage = ({ teamId }: Props) => {
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const me = useContext(selfContext);
 
   const { loading, data, error, refetch } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -31,8 +33,28 @@ const ManageBoardPage = ({ teamId }: Props) => {
     },
   );
 
+  const [updateBoard, { loading: updatingBoard }] = useMutation<
+    BoardMutations.updateBoardResult,
+    BoardMutations.updateBoardVars
+  >(BoardMutations.updateBoard, {
+    onError: (error) => {
+      notification.error({
+        message: error?.message,
+        placement: 'bottomRight',
+      });
+    },
+  });
+
   const [deleteBoard] = useMutation<BoardMutations.updateBoardResult, BoardMutations.deleteBoardVars>(
     BoardMutations.deleteBoard,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const handleDeleteBoard = (teamId: string, boardId: string) => {
@@ -52,11 +74,13 @@ const ManageBoardPage = ({ teamId }: Props) => {
     });
   };
 
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
+
   return (
-    <>
-      <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
-      <TopNavBar team={data?.team} title="Manage Board" />
-      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+      <>
+        <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
+        <TopNavBar iMember={iMember} team={data?.team} title="Manage Board" />
         <>
           <div className="manage-board">
             <div className="board-selector">
@@ -96,12 +120,25 @@ const ManageBoardPage = ({ teamId }: Props) => {
                                   style={{ marginRight: 10 }}
                                   checkedChildren={<LockTwoTone twoToneColor="white" />}
                                   unCheckedChildren={<UnlockTwoTone twoToneColor="white" />}
+                                  checked={board.isLocked}
+                                  loading={updatingBoard}
+                                  onClick={() => {
+                                    if (iMember.isOwner || iMember.isSuperOwner) {
+                                      updateBoard({
+                                        variables: {
+                                          teamId,
+                                          boardId: board?.id,
+                                          isLocked: !board.isLocked,
+                                        },
+                                      });
+                                    }
+                                  }}
                                 />
                                 Lock Board
                               </span>
-                              <Tooltip title="Clone Board">
+                              {/* <Tooltip title="Clone Board">
                                 <CopyOutlined style={{ marginRight: 20 }} />
-                              </Tooltip>
+                              </Tooltip> */}
                               <Tooltip title="Edit">
                                 <EditOutlined
                                   onClick={() => setIsUpdateModalVisible(true)}
@@ -127,8 +164,8 @@ const ManageBoardPage = ({ teamId }: Props) => {
             </Row>
           </div>
         </>
-      </Loading>
-    </>
+      </>
+    </Loading>
   );
 };
 

@@ -1,16 +1,10 @@
 import React from 'react';
 import { Form, Input, Button, Layout } from 'antd';
 
-import { useMutation } from '@apollo/client';
-import { useState } from 'react';
-import { UserQueries } from '../../grapql-client/queries';
-
 const { Content } = Layout;
 const { TextArea } = Input;
 
 const NewUser = () => {
-  
-
   return (
     <div>
       <Layout

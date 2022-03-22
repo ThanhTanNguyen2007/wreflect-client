@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Avatar, Tooltip, Empty, Badge } from 'antd';
+import { Avatar, Tooltip, Empty, Badge, Spin, notification } from 'antd';
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
@@ -19,6 +19,11 @@ import {
   LikeOutlined,
   MessageOutlined,
   FieldTimeOutlined,
+  ArrowRightOutlined,
+  ExclamationCircleOutlined,
+  LockOutlined,
+  SnippetsOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
 import _ from 'lodash';
 import selfContext from '../../contexts/selfContext';
@@ -28,7 +33,8 @@ import { TopNavBar } from '../../components/TopNavBar';
 import ConfigTimeTrackingModal from './configTimeTrackingModal';
 import { CountDown } from '../../components/CountDown';
 import { Board } from '../../types';
-import { BoardSubscription } from '../../grapql-client/subcriptions';
+import ModalMeetingNote from './modalMeetingNote';
+import { isMemberName } from 'typescript';
 
 type Props = {
   teamId: string;
@@ -45,6 +51,8 @@ export default function board({ teamId, boardId }: Props) {
   const client = useApolloClient();
   const me = useContext(selfContext);
   const [currentNumVotes, setCurrentNumVotes] = useState(0);
+
+  const [isVisibleMeetingNote, setIsVisibleMeetingNote] = useState(false);
 
   const { loading, data, error, refetch } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -80,14 +88,38 @@ export default function board({ teamId, boardId }: Props) {
 
   const [updateBoard] = useMutation<BoardMutations.updateBoardResult, BoardMutations.updateBoardVars>(
     BoardMutations.updateBoard,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error?.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const [orderOpinion] = useMutation<ColumnMutations.orderOpinionResult, ColumnMutations.orderOpinionVars>(
     ColumnMutations.orderOpinion,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error?.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const [combineOpinion] = useMutation<OpinionMutations.combineOpinionResult, OpinionMutations.combineOpinionVars>(
     OpinionMutations.combineOpinion,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error?.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const handleOnDragEnd = async (result: DropResult) => {
@@ -188,18 +220,25 @@ export default function board({ teamId, boardId }: Props) {
 
   return (
     <>
-      <TopNavBar
-        team={data?.team}
-        boardId={boardId}
-        title="Do Reflect"
-        selectedBoard={board}
-        setSelectedBoard={setBoard}
-      />
       <Loading refetch={refetch} data={board} loading={loading} error={error}>
         <>
+          <TopNavBar
+            iMember={iMember}
+            team={data?.team}
+            boardId={boardId}
+            title="Do Reflect"
+            selectedBoard={board}
+            setSelectedBoard={setBoard}
+          />
           {data?.team && board ? (
             <>
               <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
+              <ModalMeetingNote
+                visible={isVisibleMeetingNote}
+                setVisible={setIsVisibleMeetingNote}
+                team={data?.team}
+                iMember={iMember}
+              />
               <ConfigBoardModal
                 teamId={teamId}
                 board={board}
@@ -230,16 +269,44 @@ export default function board({ teamId, boardId }: Props) {
                   </div>
                   <div className="boardActionPanel">
                     <ul>
-                      <li>
+                      {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                        <>
+                          <li>
+                            <PlusCircleOutlined className="boardPanelIcon " />
+                            <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                              Create New Board
+                            </a>
+                          </li>
+                          <li>
+                            <EditOutlined className="boardPanelIcon " />
+                            <a className="editBoard" onClick={() => setIsUpdateModalVisible(true)}>
+                              Edit Board
+                            </a>
+                          </li>
+                        </>
+                      )}
+                      {/* <li>
                         <PlusCircleOutlined className="boardPanelIcon " />
                         <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                          Create New Board
+                          Start Timer
                         </a>
-                      </li>
+                      </li> */}
+                      {/* <li>
+                        <PlusCircleOutlined className="boardPanelIcon " />
+                        <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                          Reset All Votes
+                        </a>
+                      </li> */}
+                      {/* <li>
+                        <StarOutlined className="boardPanelIcon " />
+                        <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                          Show Bookmarks
+                        </a>
+                      </li> */}
                       <li>
-                        <EditOutlined className="boardPanelIcon " />
-                        <a className="editBoard" onClick={() => setIsUpdateModalVisible(true)}>
-                          Edit Board
+                        <SnippetsOutlined className="boardPanelIcon " />
+                        <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>
+                          Meeting Notes
                         </a>
                       </li>
                     </ul>
@@ -248,7 +315,7 @@ export default function board({ teamId, boardId }: Props) {
               </div>
               <div className="board-header">
                 <div className="board-tracking">
-                  <div className="board-members">
+                  <div onClick={() => history.push(`/manage-members/${teamId}`)} className="board-members">
                     <Avatar.Group
                       maxCount={3}
                       style={{
@@ -257,10 +324,11 @@ export default function board({ teamId, boardId }: Props) {
                       maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
                     >
                       {data?.team?.members?.map((member) => (
-                        <div onClick={() => history.push(`/manage-members/${teamId}`)} key={member?.user?.email}>
-                          {member.isOwner ? (
-                            <Badge offset={[-15, -3]} count={<CrownFilled style={{ color: '#F79C2D' }} />}>
-                              <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
+                        // <div onClick={() => history.push(`/manage-members/${teamId}`)} key={member?.user?.email}>
+                        <>
+                          {member.isOwner || member.isSuperOwner ? (
+                            <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
+                              <Badge offset={[-15, -3]} count={<CrownFilled style={{ color: '#F79C2D' }} />}>
                                 <Avatar
                                   style={{ marginRight: '1px' }}
                                   size="default"
@@ -268,8 +336,8 @@ export default function board({ teamId, boardId }: Props) {
                                   key={member?.user?.email}
                                   src={member?.user?.picture}
                                 />
-                              </Tooltip>
-                            </Badge>
+                              </Badge>
+                            </Tooltip>
                           ) : (
                             <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
                               <Avatar
@@ -281,110 +349,183 @@ export default function board({ teamId, boardId }: Props) {
                               />
                             </Tooltip>
                           )}
-                        </div>
+                        </>
+                        // </div>
                       ))}
                     </Avatar.Group>
                   </div>
-                  <div className="phase-header" style={{ cursor: iMember?.isOwner ? 'pointer' : 'not-allowed' }}>
-                    <div className="board-phase">
-                      <div
-                        className={`phase-step ${board?.currentPhase === 'REFLECT' && 'active'}`}
-                        onClick={() => {
-                          if (iMember?.isOwner)
-                            updateBoard({
-                              variables: {
-                                teamId,
-                                boardId,
-                                currentPhase: 'REFLECT',
-                                timerInProgress: false,
-                              },
-                            });
-                        }}
-                      >
-                        <BulbOutlined />
-                        Reflect
-                      </div>
-                      <div
-                        className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
-                        onClick={() => {
-                          if (iMember?.isOwner)
-                            updateBoard({
-                              variables: {
-                                teamId,
-                                boardId,
-                                currentPhase: 'GROUP',
-                                timerInProgress: false,
-                              },
-                            });
-                        }}
-                      >
-                        <UngroupOutlined />
-                        Group
-                      </div>
-                      <div
-                        className={`phase-step ${board?.currentPhase === 'VOTES' && 'active'}`}
-                        onClick={() => {
-                          if (iMember?.isOwner)
-                            updateBoard({
-                              variables: {
-                                teamId,
-                                boardId,
-                                currentPhase: 'VOTES',
-                                timerInProgress: false,
-                              },
-                            });
-                        }}
-                      >
-                        <LikeOutlined />
-                        Votes
-                      </div>
-                      <div
-                        className={`phase-step ${board?.currentPhase === 'DISCUSS' && 'active'}`}
-                        onClick={() => {
-                          if (iMember?.isOwner)
-                            updateBoard({
-                              variables: {
-                                teamId,
-                                boardId,
-                                currentPhase: 'DISCUSS',
-                                timerInProgress: false,
-                              },
-                            });
-                        }}
-                      >
-                        <MessageOutlined />
-                        Discuss
-                      </div>
+                  {board.isAnonymous && (
+                    <div>
+                      <ExclamationCircleOutlined /> You are giving feedback anonymously
                     </div>
-                    {iMember?.isOwner && (
-                      <>
-                        {!board?.timerInProgress ? (
-                          <div className="phase-action-btn" onClick={() => setTimeTrackingModalVisible(true)}>
-                            <>
-                              <FieldTimeOutlined />
-                              Start Time
-                            </>
-                          </div>
-                        ) : (
+                  )}
+                  {!board.isLocked ? (
+                    board.type === 'PHASE' && (
+                      <div className="phase-header">
+                        <div className="board-phase">
                           <div
-                            className="phase-action-btn"
+                            className={`phase-step ${board?.currentPhase === 'REFLECT' && 'active'}`}
+                            style={{
+                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                            }}
                             onClick={() => {
-                              updateBoard({
-                                variables: {
-                                  teamId,
-                                  boardId,
-                                  timerInProgress: false,
-                                },
-                              });
+                              if (iMember?.isOwner || iMember?.isSuperOwner)
+                                updateBoard({
+                                  variables: {
+                                    teamId,
+                                    boardId,
+                                    currentPhase: 'REFLECT',
+                                    timerInProgress: false,
+                                  },
+                                });
                             }}
                           >
-                            <FieldTimeOutlined />
-                            Stop Time
+                            <BulbOutlined />
+                            Reflect
                           </div>
+                          <div
+                            className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
+                            style={{
+                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                            }}
+                            onClick={() => {
+                              if (iMember?.isOwner || iMember?.isSuperOwner)
+                                updateBoard({
+                                  variables: {
+                                    teamId,
+                                    boardId,
+                                    currentPhase: 'GROUP',
+                                    timerInProgress: false,
+                                  },
+                                });
+                            }}
+                          >
+                            <UngroupOutlined />
+                            Group
+                          </div>
+                          <div
+                            className={`phase-step ${board?.currentPhase === 'VOTES' && 'active'}`}
+                            style={{
+                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                            }}
+                            onClick={() => {
+                              if (iMember?.isOwner || iMember?.isSuperOwner)
+                                updateBoard({
+                                  variables: {
+                                    teamId,
+                                    boardId,
+                                    currentPhase: 'VOTES',
+                                    timerInProgress: false,
+                                  },
+                                });
+                            }}
+                          >
+                            <LikeOutlined />
+                            Votes
+                          </div>
+                          <div
+                            className={`phase-step ${board?.currentPhase === 'DISCUSS' && 'active'}`}
+                            style={{
+                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                            }}
+                            onClick={() => {
+                              if (iMember?.isOwner || iMember?.isSuperOwner)
+                                updateBoard({
+                                  variables: {
+                                    teamId,
+                                    boardId,
+                                    currentPhase: 'DISCUSS',
+                                    timerInProgress: false,
+                                  },
+                                });
+                            }}
+                          >
+                            <MessageOutlined />
+                            Discuss
+                          </div>
+                        </div>
+                        {(iMember.isOwner || iMember.isSuperOwner) && (
+                          <>
+                            {board.currentPhase === 'DISCUSS' ? (
+                              <div
+                                style={{ margin: '0px 2px 0px 2px' }}
+                                className="phase-action-btn"
+                                onClick={() => {
+                                  if (iMember?.isOwner || iMember?.isSuperOwner)
+                                    updateBoard({
+                                      variables: {
+                                        teamId,
+                                        boardId,
+                                        isLocked: true,
+                                      },
+                                    });
+                                }}
+                              >
+                                <>
+                                  <LockOutlined />
+                                  End Reflect
+                                </>
+                              </div>
+                            ) : (
+                              <div
+                                style={{ margin: '0px 2px 0px 2px' }}
+                                className="phase-action-btn"
+                                onClick={() => {
+                                  if (iMember?.isOwner || iMember?.isSuperOwner)
+                                    updateBoard({
+                                      variables: {
+                                        teamId,
+                                        boardId,
+                                        currentPhase:
+                                          board.currentPhase == 'REFLECT'
+                                            ? 'GROUP'
+                                            : board.currentPhase == 'GROUP'
+                                            ? 'VOTES'
+                                            : 'DISCUSS',
+                                        timerInProgress: false,
+                                      },
+                                    });
+                                }}
+                              >
+                                <ArrowRightOutlined />
+                                Next
+                              </div>
+                            )}
+                          </>
                         )}
-                      </>
-                    )}
-                  </div>
+                        {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                          <>
+                            {!board?.timerInProgress ? (
+                              <div className="phase-action-btn" onClick={() => setTimeTrackingModalVisible(true)}>
+                                <>
+                                  <FieldTimeOutlined />
+                                  Start Time
+                                </>
+                              </div>
+                            ) : (
+                              <div
+                                className="phase-action-btn"
+                                onClick={() => {
+                                  updateBoard({
+                                    variables: {
+                                      teamId,
+                                      boardId,
+                                      timerInProgress: false,
+                                    },
+                                  });
+                                }}
+                              >
+                                <FieldTimeOutlined />
+                                Stop Time
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )
+                  ) : (
+                    <div className="lockedNoti">This board is locked for feedback by Admin</div>
+                  )}
                 </div>
               </div>
 

@@ -10,7 +10,6 @@ export const COLUMN_FIELDS = gql`
     boardId
     opinions {
       ...OpinionFields
-     
     }
   }
 `;

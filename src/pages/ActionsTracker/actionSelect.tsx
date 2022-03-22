@@ -20,10 +20,8 @@ export default function ActionSelect({ team, board, column, opinion }: Props) {
     {
       onError: (error) => {
         notification.error({
+          message: error?.message,
           placement: 'bottomRight',
-          message:
-            error?.message === 'You dont have permission for this mutation' &&
-            'You can only change actions that assigned to you',
         });
       },
     },

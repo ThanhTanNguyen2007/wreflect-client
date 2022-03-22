@@ -41,15 +41,22 @@ export default function ColumnComponent({
 }: Props) {
   const [convertOpinions] = useMutation<ColumnMutations.convertColumnResult, ColumnMutations.convertColumnVars>(
     ColumnMutations.convertColumn,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error?.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const [emptyColumn] = useMutation<ColumnMutations.emptyColumnResult, ColumnMutations.emptyColumnVars>(
     ColumnMutations.emptyColumn,
     {
-      onError: () => {
+      onError: (error) => {
         notification.error({
-          message: 'Failed',
-          description: "Something failed, Can't empty column",
+          message: error?.message,
           placement: 'bottomRight',
         });
       },
@@ -121,27 +128,29 @@ export default function ColumnComponent({
   return (
     <Droppable
       isCombineEnabled={board.currentPhase === 'GROUP'}
-      // isDropDisabled={board.currentPhase === 'REFLECT'}
-
+      isDropDisabled={board.isLocked}
       key={column.id}
       droppableId={column.id}
     >
       {(provided) => (
         <div className="column flex" {...provided.droppableProps} ref={provided.innerRef}>
           <div className="colHead">
-            <div className="titleHead">{column.title}</div>
-            <div className="actionHead">
-              <Dropdown key={column.id} overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
-                <MenuOutlined style={{ cursor: 'pointer' }} />
-              </Dropdown>
-            </div>
+            <div className="titleHead">{column?.title}</div>
+
+            {(iMember?.isOwner || iMember?.isSuperOwner) && (
+              <div className="actionHead">
+                <Dropdown key={column.id} overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
+                  <MenuOutlined style={{ cursor: 'pointer' }} />
+                </Dropdown>
+              </div>
+            )}
           </div>
           <div className="colContent">
-            {column.opinions.length > 3 && !board.isLocked && board.currentPhase === 'REFLECT' && (
+            {column?.opinions?.length > 3 && !board?.isLocked && board?.currentPhase === 'REFLECT' && (
               <CreateTicket isCreateBottom={false} board={board} column={column} index={index} />
             )}
-            {column.opinions.map((opinion, index) => (
-              <div key={opinion.id}>
+            {column?.opinions.map((opinion, index) => (
+              <div key={opinion?.id}>
                 <OpinionComponent
                   iMember={iMember}
                   currentNumVotes={currentNumVotes}
@@ -156,7 +165,7 @@ export default function ColumnComponent({
             ))}
             {provided.placeholder}
 
-            {!board.isLocked && board.currentPhase === 'REFLECT' && (
+            {!board?.isLocked && board?.currentPhase === 'REFLECT' && (
               <CreateTicket isCreateBottom={true} board={board} column={column} index={index} />
             )}
           </div>

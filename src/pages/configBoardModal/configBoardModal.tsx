@@ -35,13 +35,29 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
     setTemplateSelect(`${value}`);
   };
 
-  const [createBoard] = useMutation<BoardMutations.createBoardResult, BoardMutations.createBoardVars>(
-    BoardMutations.createBoard,
-  );
+  const [createBoard, { loading: creatingBoard }] = useMutation<
+    BoardMutations.createBoardResult,
+    BoardMutations.createBoardVars
+  >(BoardMutations.createBoard, {
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
+  });
 
-  const [updateBoard] = useMutation<BoardMutations.updateBoardResult, BoardMutations.updateBoardVars>(
-    BoardMutations.updateBoard,
-  );
+  const [updateBoard, { loading: updatingBoard }] = useMutation<
+    BoardMutations.updateBoardResult,
+    BoardMutations.updateBoardVars
+  >(BoardMutations.updateBoard, {
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
+  });
 
   useEffect(() => {
     setBoardTemplate(boardTemplate.find((template) => template.name === templateSelect));
@@ -147,13 +163,13 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
             <h4>Board Type</h4>
             <div>You can run a retrospective with phases</div>
             <Form.Item name="type" initialValue={board?.type ?? 'DEFAULT'}>
-              <Select defaultValue={board?.type ?? 'DEFAULT'}>
+              <Select disabled defaultValue={board?.type ?? 'PHASE'}>
                 <Option value="DEFAULT">No Phase</Option>
                 <Option value="PHASE">Phase (Reflect, Group, Votes, Discuss)</Option>
               </Select>
             </Form.Item>
             <h4>Max Votes</h4>
-            <div>The number of votes per participant</div>
+            <div>{'The number of votes per participant '}</div>
             <Form.Item
               rules={[{ required: true, message: 'Please input limit votes' }]}
               name="votesLimit"
@@ -179,7 +195,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
                 <Switch defaultChecked={board?.isAnonymous} />
               </Form.Item>
             </div>
-            <div>
+            {/* <div>
               <h4>Disable Up Votes</h4>
               <div>The participants will not be able to up vote</div>
               <Form.Item name="disableUpVote" initialValue={board?.disableUpVote ?? false}>
@@ -192,7 +208,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
               <Form.Item name="disableDownVote" initialValue={board?.disableDownVote ?? false}>
                 <Switch defaultChecked={board?.disableDownVote} />
               </Form.Item>
-            </div>
+            </div> */}
           </div>
           <div className="config-column-board-modal">
             <h2>Columns</h2>
@@ -283,7 +299,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
                 {/* <Button htmlType="submit" size="large" loading={loading}>
                   {board ? 'Update Board' : 'Create Board'}
                 </Button> */}
-                <Button htmlType="submit" size="large">
+                <Button loading={creatingBoard || updatingBoard} htmlType="submit" size="large">
                   {board ? 'Update Board' : 'Create Board'}
                 </Button>
               </div>

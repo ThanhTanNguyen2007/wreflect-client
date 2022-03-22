@@ -1,7 +1,7 @@
-import { USER_FIELDS } from './userFragment';
 import { gql } from '@apollo/client';
+import { MEMBER_FIELDS } from './memberFragment';
 export const REMARK_FIELDS = gql`
-  ${USER_FIELDS}
+  ${MEMBER_FIELDS}
   fragment RemarkFields on Remark {
     id
     authorId
@@ -10,7 +10,7 @@ export const REMARK_FIELDS = gql`
     createdAt
     updatedAt
     author {
-      ...UserFields
+      ...MemberFields
     }
   }
 `;

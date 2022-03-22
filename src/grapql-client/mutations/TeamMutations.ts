@@ -1,3 +1,4 @@
+import { TEAM_FIELDS } from './../fragments/teamFragment';
 import { gql } from '@apollo/client';
 import { Team } from '../../types';
 
@@ -66,6 +67,7 @@ const createTeam = gql`
 `;
 
 const updateTeam = gql`
+  ${TEAM_FIELDS}
   mutation updateTeam(
     $id: String!
     $name: String
@@ -86,25 +88,7 @@ const updateTeam = gql`
       picture: $picture
       description: $description
     ) {
-      id
-      name
-      createdAt
-      startDate
-      endDate
-      picture
-      isPublic
-      description
-      status
-      members {
-        id
-        userId
-        teamId
-        isOwner
-        isPendingInvitation
-        isGuess
-        invitedBy
-        joinedAt
-      }
+      ...TeamFields
     }
   }
 `;
@@ -129,9 +113,10 @@ export type changeTeamAccessResult = {
 };
 
 const changeTeamAccess = gql`
+  ${TEAM_FIELDS}
   mutation ChangeTeamAccess($teamId: String!, $isPublic: Boolean!) {
     changeTeamAccess(teamId: $teamId, isPublic: $isPublic) {
-      count
+      ...TeamFields
     }
   }
 `;

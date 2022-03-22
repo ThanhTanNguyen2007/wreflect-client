@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Select, Button, notification } from 'antd';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { OpinionStatus } from '../../types';
@@ -9,6 +9,8 @@ import { TopNavBar } from '../../components/TopNavBar';
 import { OpinionMutations } from '../../grapql-client/mutations';
 import ActionSelect from './actionSelect';
 import CreateAction from './createAction';
+import selfContext from '../../contexts/selfContext';
+import { Loading } from '../../components/Loading';
 
 const { Option } = Select;
 
@@ -19,12 +21,16 @@ type Props = {
 export default function actionsTracker({ teamId }: Props) {
   const [selectedBoards, setSelectedBoards] = useState<string[]>([]);
   const [selectedAssigners, setSelectedAssigners] = useState<string[]>([]);
+  const me = useContext(selfContext);
 
-  const { data } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(TeamQueries.getTeam, {
-    variables: {
-      teamId,
+  const { data, refetch, error, loading } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
+    TeamQueries.getTeam,
+    {
+      variables: {
+        teamId,
+      },
     },
-  });
+  );
 
   useEffect(() => {
     setSelectedBoards(data?.team?.boards?.map((board) => board.id) || []);
@@ -95,151 +101,155 @@ export default function actionsTracker({ teamId }: Props) {
     setSelectedAssigners(selectedAssigners.filter((selectAssigner) => selectAssigner !== value));
   };
 
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
+
   return (
-    <>
-      <TopNavBar team={data?.team} title="Actions Tracker" />
-      <div className="actionsTracker">
-        <div className="header">
-          <h2>Actions Tracker</h2>
-          <p>Here you can create new action items & keep track of all the actions items in your teams.</p>
-        </div>
-        <CreateAction team={data?.team} selectedBoards={selectedBoards} />
-        <div className="fullBoard">
-          <div className="team actioncontainer">
-            <div className="boards">
-              <label>Board(s)</label>
-              <Select
-                onSelect={handleOnSelectBoards}
-                onDeselect={handleOnDeselectBoards}
-                showArrow
-                allowClear
-                onClear={() => setSelectedBoards([])}
-                placeholder="Select..."
-                mode="multiple"
-                style={{ width: '100%' }}
-                value={selectedBoards}
-              >
-                <Option key="selectAll" value="selectAll">
-                  Select All
-                </Option>
-                {optionChildBoard}
-              </Select>
-            </div>
-            <div className="assignees">
-              <label>Assignee(s)</label>
-              <Select
-                onSelect={handleOnSelectAssigners}
-                onDeselect={handleOnDeselectAssigners}
-                showArrow
-                allowClear
-                onClear={() => setSelectedAssigners([])}
-                placeholder="Select..."
-                mode="multiple"
-                value={selectedAssigners}
-                style={{ width: '100%' }}
-              >
-                <Option key="selectAll" value="selectAll">
-                  Select All
-                </Option>
-                <Option key="notAssigned" value="not-assigned">
-                  Not Assigned
-                </Option>
-                {optionChildAssignees}
-              </Select>
-            </div>
+    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+      <>
+        <TopNavBar iMember={iMember} team={data?.team} title="Actions Tracker" />
+        <div className="actionsTracker">
+          <div className="header">
+            <h2>Actions Tracker</h2>
+            <p>Here you can create new action items & keep track of all the actions items in your teams.</p>
           </div>
-          <div
-            className="boardcont"
-            style={{
-              marginTop: '20px',
-            }}
-          >
-            <div className="board flex flex-dir-r">
-              <DragDropContext onDragEnd={handleOnDragEnd}>
-                {data?.team && data?.team?.boards.length != 0 ? (
-                  columnActionTrackerDefault.map((columnActions: { name: string; key: string; index: string }) => {
-                    return (
-                      <Droppable key={columnActions.key} droppableId={columnActions.key}>
-                        {(provided) => (
-                          <div className="column flex" {...provided.droppableProps} ref={provided.innerRef}>
-                            <div className="colHead">
-                              <div className="titleHead">{columnActions.name}</div>
-                              <div className="actionHead"></div>
-                            </div>
-                            <div className="colContent">
-                              <div>
-                                {data?.team?.boards?.map((board) => {
-                                  return (
-                                    selectedBoards.includes(board.id) &&
-                                    board?.columns?.map((column) =>
-                                      column?.opinions?.map((opinion, index) => {
-                                        if (
-                                          opinion?.status === columnActions?.key &&
-                                          selectedAssigners.includes(opinion.responsible)
-                                        ) {
-                                          return (
-                                            <Draggable draggableId={opinion?.id} index={index} key={opinion?.id}>
-                                              {(provided) => (
-                                                <div
-                                                  {...provided.draggableProps}
-                                                  {...provided.dragHandleProps}
-                                                  ref={provided.innerRef}
-                                                >
-                                                  {opinion.isAction && (
-                                                    <div className={`opinionCol ${opinion.color}`}>
-                                                      <div className="opinionHeader"></div>
-                                                      <div className="opinionContent">
-                                                        <p>
-                                                          {opinion?.text?.split('\n').map((str) => {
-                                                            return (
-                                                              <>
-                                                                {str}
-                                                                <br />
-                                                              </>
-                                                            );
-                                                          })}
-                                                        </p>
-                                                        {/* <ActionComponent
+          <CreateAction team={data?.team} selectedBoards={selectedBoards} />
+          <div className="fullBoard">
+            <div className="team actioncontainer">
+              <div className="boards">
+                <label>Board(s)</label>
+                <Select
+                  onSelect={handleOnSelectBoards}
+                  onDeselect={handleOnDeselectBoards}
+                  showArrow
+                  allowClear
+                  onClear={() => setSelectedBoards([])}
+                  placeholder="Select..."
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                  value={selectedBoards}
+                >
+                  <Option key="selectAll" value="selectAll">
+                    Select All
+                  </Option>
+                  {optionChildBoard}
+                </Select>
+              </div>
+              <div className="assignees">
+                <label>Assignee(s)</label>
+                <Select
+                  onSelect={handleOnSelectAssigners}
+                  onDeselect={handleOnDeselectAssigners}
+                  showArrow
+                  allowClear
+                  onClear={() => setSelectedAssigners([])}
+                  placeholder="Select..."
+                  mode="multiple"
+                  value={selectedAssigners}
+                  style={{ width: '100%' }}
+                >
+                  <Option key="selectAll" value="selectAll">
+                    Select All
+                  </Option>
+                  <Option key="notAssigned" value="not-assigned">
+                    Not Assigned
+                  </Option>
+                  {optionChildAssignees}
+                </Select>
+              </div>
+            </div>
+            <div
+              className="boardcont"
+              style={{
+                marginTop: '20px',
+              }}
+            >
+              <div className="board flex flex-dir-r">
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  {data?.team && data?.team?.boards.length != 0 ? (
+                    columnActionTrackerDefault.map((columnActions: { name: string; key: string; index: string }) => {
+                      return (
+                        <Droppable key={columnActions.key} droppableId={columnActions.key}>
+                          {(provided) => (
+                            <div className="column flex" {...provided.droppableProps} ref={provided.innerRef}>
+                              <div className="colHead">
+                                <div className="titleHead">{columnActions.name}</div>
+                                <div className="actionHead"></div>
+                              </div>
+                              <div className="colContent">
+                                <div>
+                                  {data?.team?.boards?.map((board) => {
+                                    return (
+                                      selectedBoards.includes(board.id) &&
+                                      board?.columns?.map((column) =>
+                                        column?.opinions?.map((opinion, index) => {
+                                          if (
+                                            opinion?.status === columnActions?.key &&
+                                            selectedAssigners.includes(opinion.responsible)
+                                          ) {
+                                            return (
+                                              <Draggable draggableId={opinion?.id} index={index} key={opinion?.id}>
+                                                {(provided) => (
+                                                  <div
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    ref={provided.innerRef}
+                                                  >
+                                                    {opinion.isAction && (
+                                                      <div className={`opinionCol ${opinion.color}`}>
+                                                        <div className="opinionHeader"></div>
+                                                        <div className="opinionContent">
+                                                          <p>
+                                                            {opinion?.text?.split('\n').map((str) => {
+                                                              return (
+                                                                <>
+                                                                  {str}
+                                                                  <br />
+                                                                </>
+                                                              );
+                                                            })}
+                                                          </p>
+                                                          {/* <ActionComponent
                                                         board={board}
                                                         column={column}
                                                         opinion={opinion}
                                                       /> */}
-                                                        <ActionSelect
-                                                          team={data?.team}
-                                                          board={board}
-                                                          column={column}
-                                                          opinion={opinion}
-                                                        />
+                                                          <ActionSelect
+                                                            team={data?.team}
+                                                            board={board}
+                                                            column={column}
+                                                            opinion={opinion}
+                                                          />
+                                                        </div>
+                                                        <div className="opinionFooter"></div>
                                                       </div>
-                                                      <div className="opinionFooter"></div>
-                                                    </div>
-                                                  )}
-                                                </div>
-                                              )}
-                                            </Draggable>
-                                          );
-                                        }
-                                      }),
-                                    )
-                                  );
-                                })}
-                                {provided.placeholder}
+                                                    )}
+                                                  </div>
+                                                )}
+                                              </Draggable>
+                                            );
+                                          }
+                                        }),
+                                      )
+                                    );
+                                  })}
+                                  {provided.placeholder}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </Droppable>
-                    );
-                  })
-                ) : (
-                  <div></div>
-                )}
-              </DragDropContext>
+                          )}
+                        </Droppable>
+                      );
+                    })
+                  ) : (
+                    <div></div>
+                  )}
+                </DragDropContext>
+              </div>
             </div>
+            <label className="error"></label>
           </div>
-          <label className="error"></label>
         </div>
-      </div>
-    </>
+      </>
+    </Loading>
   );
 }

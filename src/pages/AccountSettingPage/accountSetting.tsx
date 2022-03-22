@@ -6,7 +6,7 @@ import { UserMutations } from '../../grapql-client/mutations';
 import SelfContext from '../../contexts/selfContext';
 
 import { user } from '../../apis';
-import { Avatar, Tabs, Button, Dropdown, Menu } from 'antd';
+import { Avatar, Tabs, Button, Dropdown, Menu, notification } from 'antd';
 import moment from 'moment';
 import OwnedTeams from './ownedTeams';
 
@@ -18,10 +18,17 @@ type Props = {
 
 const AccountSetting = ({ userId }: Props) => {
   const me = useContext(SelfContext);
-  const [updateAcctount] = useMutation(UserMutations.updateUser, {});
+  const [updateAccount] = useMutation(UserMutations.updateUser, {
+    onError: (error) => {
+      notification.error({
+        message: error?.message,
+        placement: 'bottomRight',
+      });
+    },
+  });
 
   const handleFinish = (values: any) => {
-    updateAcctount({ variables: { picture: values['email'] } });
+    updateAccount({ variables: { picture: values['email'] } });
     user.me();
   };
 
@@ -51,13 +58,13 @@ const AccountSetting = ({ userId }: Props) => {
             </p>
           </div>
         </div>
-        <div className="actionHeader">
+        {/* <div className="actionHeader">
           <Dropdown trigger={['click']} overlay={menu}>
             <Button type="primary">
               Action <DownOutlined />
             </Button>
           </Dropdown>
-        </div>
+        </div> */}
       </div>
       <div className="container">
         <Tabs defaultActiveKey="1">
@@ -68,12 +75,12 @@ const AccountSetting = ({ userId }: Props) => {
                 <div className="valueField">
                   <div>{me.nickname}</div>
                 </div>
-                <div className="actionField">
+                {/* <div className="actionField">
                   <Button>Edit</Button>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className="inforField">
+            {/* <div className="inforField">
               <div className="hihihiha">
                 <div className="labelField">data</div>
                 <div className="valueField">
@@ -83,7 +90,7 @@ const AccountSetting = ({ userId }: Props) => {
                   <Button>Edit</Button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </TabPane>
           <TabPane tab="Teams" key="2">
             <OwnedTeams />

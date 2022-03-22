@@ -53,7 +53,7 @@
       margin-right: 20px;
       right: 0;
       position: absolute;
-      top: 150px;
+      top: 170px;
       width: 0;
       display: none;
       z-index: 11;
@@ -118,6 +118,17 @@
           rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
       }
     }
+
+    .lockedNoti {
+      font-size: 12px;
+      letter-spacing: normal;
+      margin-top: 5px;
+      margin-bottom: 0px;
+      color: #6d7982;
+      border-radius: 4px;
+      background-color: rgba(30, 34, 47, 0.06);
+    }
+
     .phase-header {
       display: flex;
       flex-direction: row;

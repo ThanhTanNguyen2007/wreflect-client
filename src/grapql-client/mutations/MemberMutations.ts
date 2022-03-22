@@ -1,5 +1,7 @@
+import { TEAM_FIELDS } from './../fragments/teamFragment';
+import { MEMBER_FIELDS } from './../fragments/memberFragment';
 import { gql } from '@apollo/client';
-import { Member } from '../../types';
+import { Member, Team } from '../../types';
 
 const addMembers = gql`
   mutation addMembers($emailUsers: [String!], $teamId: String!) {
@@ -12,25 +14,19 @@ const addMembers = gql`
 `;
 
 const removeMember = gql`
-  mutation removeMember($memberId: String!) {
-    removeMember(memberId: $memberId) {
-      count
+  ${TEAM_FIELDS}
+  mutation removeMember($memberId: String!, $teamId: String!) {
+    removeMember(memberId: $memberId, teamId: $teamId) {
+      ...TeamFields
     }
   }
 `;
 
 const changeRoleMember = gql`
+  ${TEAM_FIELDS}
   mutation ChangeRoleMember($memberId: String!, $isOwner: Boolean!, $teamId: String!) {
     changeRoleMember(memberId: $memberId, isOwner: $isOwner, teamId: $teamId) {
-      id
-      teamId
-      userId
-      isOwner
-      isPendingInvitation
-      isGuess
-      invitedBy
-      joinedAt
-      role
+      ...TeamFields
     }
   }
 `;
@@ -41,6 +37,7 @@ export type addMembersVars = {
 };
 export type removeMemberVars = {
   memberId: string;
+  teamId: string;
 };
 
 export type changeRoleMemberVars = {
@@ -56,12 +53,28 @@ export type addMembersResult = {
   };
 };
 export type removeMemberResult = {
-  removeMember: {
-    count: number;
-  };
+  removeMember: Team;
 };
 export type changeRoleMemberResult = {
-  changeRoleMember: Member;
+  changeRoleMember: Team;
 };
+
+export type updateMeetingNoteResult = {
+  updateMeetingNote: Member;
+};
+
+export type updateMeetingNoteVars = {
+  teamId: string;
+  meetingNote: string;
+};
+
+export const updateMeetingNote = gql`
+  ${MEMBER_FIELDS}
+  mutation updateMeetingNote($teamId: String!, $meetingNote: String!) {
+    updateMeetingNote(teamId: $teamId, meetingNote: $meetingNote) {
+      ...MemberFields
+    }
+  }
+`;
 
 export { addMembers as addMembers, removeMember, changeRoleMember };

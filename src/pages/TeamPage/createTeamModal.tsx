@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Modal, Form, Input, DatePicker, Upload, Button, Select, message } from 'antd';
+import { Modal, Form, Input, DatePicker, Upload, Button, Select, message, notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
 
@@ -24,6 +24,12 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
   const [addNewTeam] = useMutation(TeamMutations.createTeam, {
     // refetchQueries: [TeamQueries.getTeams, TeamQueries.getTeamIds],
     refetchQueries: [TeamQueries.getTeams],
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
   });
 
   const normFile = (e: any) => {
@@ -67,6 +73,11 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
       console.log(info.fileList);
     },
   };
+
+  function disabledDate(current: moment.Moment) {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
 
   return (
     <Modal
@@ -128,8 +139,12 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
             <Button icon={<UploadOutlined />}>Upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="range-picker" label="RangePicker">
-          <RangePicker />
+        <Form.Item
+          name="range-picker"
+          label="RangePicker"
+          rules={[{ type: 'array' as const, required: true, message: 'Please select time!' }]}
+        >
+          <RangePicker disabledDate={disabledDate} />
         </Form.Item>
         <Form.Item name="select" label="Select">
           <Select defaultValue="public">

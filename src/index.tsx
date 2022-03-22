@@ -33,11 +33,11 @@ const splitLink = split(
   httpLink,
 );
 
-const errorLink = onError(({ networkError, graphQLErrors }) => {
+const errorLink = onError((error) => {
   try {
-    if (networkError) {
-      console.log(networkError.message);
-      if ('statusCode' in networkError && networkError.statusCode === 401) {
+    if (error.networkError) {
+      console.log(error.networkError.message);
+      if ('statusCode' in error.networkError && error.networkError.statusCode === 401) {
         updateLoginState(null);
         notification.error({
           placement: 'bottomRight',
@@ -47,14 +47,7 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
         notification.error({
           placement: 'bottomRight',
           message: `[Network error]`,
-        });
-      }
-    } else if (graphQLErrors) {
-      for (const err of graphQLErrors) {
-        console.log(err.message);
-        notification.error({
-          placement: 'bottomRight',
-          message: err.message,
+          description: "Can't connect to server",
         });
       }
     }
@@ -63,16 +56,20 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
       message: 'Something failed with server',
       placement: 'bottomRight',
     });
+  } finally {
+    if (error?.response?.errors) {
+      error.graphQLErrors = null;
+    }
   }
 });
 
 const client = new ApolloClient({
+  link: from([errorLink, splitLink]),
   connectToDevTools: true,
-
   cache: new InMemoryCache({
     addTypename: true,
     resultCaching: true,
-    
+
     typePolicies: {
       // Query: {
       //   fields: {
@@ -120,7 +117,6 @@ const client = new ApolloClient({
       // },
     },
   }),
-  link: from([errorLink, splitLink]),
 });
 
 ReactDOM.render(

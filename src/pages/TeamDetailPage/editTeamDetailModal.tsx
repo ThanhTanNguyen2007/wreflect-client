@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Modal, Avatar, Form, FormInstance, Upload, Input, DatePicker, Select, Button } from 'antd';
+import { Modal, Avatar, Form, FormInstance, Upload, Input, DatePicker, Select, Button, notification } from 'antd';
 import moment from 'moment';
 
 import { TeamMutations } from '../../grapql-client/mutations';
@@ -25,6 +25,12 @@ const EditTeamDetailModal = ({ teamData, isVisible, setIsVisible }: Props) => {
 
   const [updateTeam] = useMutation(TeamMutations.updateTeam, {
     refetchQueries: [TeamQueries.getTeam],
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
   });
 
   const handleFinish = () => {

@@ -60,61 +60,60 @@ const TeamDetail = ({ teamId }: Props) => {
   const endDate = moment(Number(data?.team.endDate)).format('DD-MM-YYYY');
   const me = useContext(selfContext);
 
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
   return (
-    <>
-      <TopNavBar team={data?.team} title="Team Settings" />
-      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+      <>
+        <TopNavBar iMember={iMember} team={data?.team} title="Team Details" />
         <div
           className="teamDetails site-layout-background flex flex-1 flex-dir-r"
           style={{ height: '100%', padding: '5px' }}
         >
           <>
             <div className="flex flex-2 " style={{ padding: '10px', height: '100%', overflow: 'auto' }}>
-              <div className="team-button">
-                {me?.members.map((member) => {
-                  return member.teamId === data?.team.id && member.isOwner === true ? (
-                    <div style={{ float: 'right', margin: '0px 20px 20px 0px' }}>
-                      <Button
-                        shape="round"
-                        icon={<DeleteFilled />}
-                        danger
-                        size="large"
-                        style={{ width: '100px', marginRight: 10 }}
-                        onClick={() => {
-                          Modal.confirm({
-                            title: 'Are you sure want to detele team',
-                            centered: true,
-                            okText: 'Delete',
-                            cancelText: 'Cancel',
-                          });
-                        }}
-                      >
-                        Delete
-                      </Button>
+              {/* {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                <div className="team-button">
+                  <div style={{ float: 'right', margin: '0px 20px 20px 0px' }}>
+                    <Button
+                      shape="round"
+                      icon={<DeleteFilled />}
+                      danger
+                      size="large"
+                      style={{ width: '100px', marginRight: 10 }}
+                      onClick={() => {
+                        Modal.confirm({
+                          title: 'Are you sure want to detele team',
+                          centered: true,
+                          okText: 'Delete',
+                          cancelText: 'Cancel',
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
 
-                      <Button
-                        shape="round"
-                        size="large"
-                        icon={<EditFilled />}
-                        style={{ width: '100px', marginRight: 10 }}
-                        onClick={() => setDisabled(false)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        shape="round"
-                        type="primary"
-                        size="large"
-                        icon={<SaveFilled />}
-                        style={{ width: '100px' }}
-                        onClick={() => handleSave()}
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  ) : null;
-                })}
-              </div>
+                    <Button
+                      shape="round"
+                      size="large"
+                      icon={<EditFilled />}
+                      style={{ width: '100px', marginRight: 10 }}
+                      onClick={() => setDisabled(false)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      shape="round"
+                      type="primary"
+                      size="large"
+                      icon={<SaveFilled />}
+                      style={{ width: '100px' }}
+                      onClick={() => handleSave()}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              )} */}
               <div
                 className="team-above site-layout-background card"
                 style={{
@@ -183,7 +182,12 @@ const TeamDetail = ({ teamId }: Props) => {
                       style={{ padding: 30, display: 'flex', alignItems: 'baseline', height: 50 }}
                     >
                       <h3 style={{ marginRight: 120 }}>Duration</h3>
-                      <RangePicker disabled={disabled} defaultValue={[moment(`${startDate}`), moment(`${endDate}`)]} />
+                      {/* console.log() */}
+                      {/* {console.log(startDate, endDate)} */}
+                      <RangePicker
+                        disabled={disabled}
+                        defaultValue={[moment(new Date(+startDate)), moment(new Date(+endDate))]}
+                      />
                     </div>
                     <div
                       className="status"
@@ -230,8 +234,8 @@ const TeamDetail = ({ teamId }: Props) => {
             </div>
           </>
         </div>
-      </Loading>
-    </>
+      </>
+    </Loading>
   );
 };
 

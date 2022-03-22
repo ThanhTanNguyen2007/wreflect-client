@@ -17,25 +17,9 @@ export type getBoardsVars = {
 
 export const getBoards = gql`
   ${BOARD_FIELDS}
-  ${COLUMN_FIELDS}
-  ${OPINION_FIELDS}
-  ${USER_FIELDS}
-  ${REMARK_FIELDS}
   query Boards($teamId: String!) {
     boards(teamId: $teamId) {
       ...BoardFields
-      columns {
-        ...ColumnFields
-        opinions {
-          ...OpinionFields
-          author {
-            ...UserFields
-          }
-          remarks {
-            ...RemarkFields
-          }
-        }
-      }
     }
   }
 `;
@@ -50,7 +34,7 @@ export type getBoardVars = {
 
 export const getBoard = gql`
   ${BOARD_FIELDS}
-  query Query($boardId: String) {
+  query getBoard($boardId: String) {
     board(boardId: $boardId) {
       ...BoardFields
     }

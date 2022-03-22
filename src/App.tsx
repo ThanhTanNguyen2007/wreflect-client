@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 
 import { User } from './types';
-import Routes from './Routes';
+// import Routes from './Routes';
+const Routes = React.lazy(() => import('./Routes'));
+
 import { setUpdateLoginState, user } from './apis';
 import SelfContext from './contexts/selfContext';
 
 // import { createUploadLink } from 'apollo-upload-client';
 
 import './styles/less/ant.less';
+import { Spin } from 'antd';
+import loading from './components/Loading/loading';
 // const link = createUploadLink({ uri: 'http://localhost:4000/graphql', credentials: 'include' });
 
 const App = (): JSX.Element => {
@@ -37,7 +41,15 @@ const App = (): JSX.Element => {
         setBoardId,
       }}
     >
-      <Routes me={me} />
+      <Suspense
+        fallback={
+          <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
+            <Spin size="large" />
+          </div>
+        }
+      >
+        <Routes me={me} />
+      </Suspense>
     </SelfContext.Provider>
   );
 };

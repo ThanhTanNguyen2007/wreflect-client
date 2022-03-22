@@ -23,13 +23,22 @@ type listStatusAddMembers = {
 const showNotification = (data: listStatusAddMembers) => {
   const { success, warnings, errors } = data;
   success.map((suc: string) => {
-    message.success(suc);
+    // message.success(suc);
+    notification.success({ message: suc, placement: 'bottomRight' });
   });
   warnings.map((warn: string) => {
-    message.info(warn);
+    // message.info(warn);
+    notification.info({
+      message: warn,
+      placement: 'bottomRight',
+    });
   });
   errors.map((error: string) => {
-    message.error(error);
+    // message.error(error);
+    notification.error({
+      message: error,
+      placement: 'bottomRight',
+    });
   });
 };
 
@@ -41,7 +50,12 @@ const AddMembersModal = ({ teamData }: Props) => {
     MemberMutations.addMembers,
     {
       refetchQueries: [TeamQueries.getTeams, TeamQueries.getTeam],
-      onError: () => ({}),
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
       onCompleted: (data) => {
         showNotification(data.addMembers);
         formRef.current?.resetFields();
@@ -127,6 +141,7 @@ const AddMembersModal = ({ teamData }: Props) => {
         Invite via URL
         <Switch
           loading={loading}
+          disabled={loading}
           style={{ marginLeft: 'auto' }}
           checkedChildren={<CheckOutlined />}
           unCheckedChildren={<CloseOutlined />}
@@ -148,6 +163,7 @@ const AddMembersModal = ({ teamData }: Props) => {
           </Tooltip>
         </Input.Group>
       </div>
+      <p>{'(This feature still developing)'}</p>
       <h4 className="mt-25">Invite via Email</h4>
       <Form onFinish={(value) => onAddEmail(value)} ref={formRef}>
         <Input.Group compact className="flex flex-dir-r">

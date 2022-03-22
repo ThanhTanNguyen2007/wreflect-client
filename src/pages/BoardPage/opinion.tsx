@@ -52,7 +52,6 @@ export default function OpinionComponent({
   const [isEdit, setIsEdit] = useState(false);
   const client = useApolloClient();
   const me = useContext(selfContext);
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpenRemark, setIsOpenRemark] = useState(false);
   const [loadingIcon, setLoadingIcon] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -64,8 +63,8 @@ export default function OpinionComponent({
     {
       onError: (error) => {
         notification.error({
-          message: 'Failed',
           placement: 'bottomRight',
+          message: error?.message,
         });
       },
     },
@@ -74,7 +73,6 @@ export default function OpinionComponent({
   const [removeOpinion] = useMutation<OpinionMutations.removeOpinionResult, OpinionMutations.removeOpinionVars>(
     OpinionMutations.removeOpinion,
     {
-      // onCompleted: (data) => {},
       onError: (error) => {
         notification.error({
           placement: 'bottomRight',
@@ -334,37 +332,36 @@ export default function OpinionComponent({
             )}
 
             <div className="owner-opinion">
-              <Avatar.Group
-                maxCount={3}
-                style={{
-                  cursor: 'pointer',
-                }}
-                maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-              >
-                {team.members
-                  ?.filter(
-                    (member) => opinion.mergedAuthors.includes(member?.userId) || opinion?.authorId == member?.userId,
-                  )
-                  .map((member) => (
-                    <div key={member?.user?.email}>
+              {board.isAnonymous ? (
+                <h4>Anonymous</h4>
+              ) : (
+                <Avatar.Group
+                  maxCount={2}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+                >
+                  {team.members
+                    ?.filter((member) => opinion.mergedAuthors.includes(member?.id) || opinion?.authorId == member?.id)
+                    .map((member) => (
                       <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
                         <Avatar
-                          style={{ marginRight: '1px' }}
+                          style={{ marginRight: '3px' }}
                           size="default"
-                          shape="circle"
                           key={member?.user?.email}
                           src={member?.user?.picture}
                         />
                       </Tooltip>
-                    </div>
-                  ))}
-              </Avatar.Group>
+                    ))}
+                </Avatar.Group>
+              )}
             </div>
             <div>
-              <Spin spinning={isLoading} indicator={antIcon} />
-              {!isLoading &&
-              iMember?.id &&
-              (opinion.authorId === me?.id || opinion.mergedAuthors.includes(iMember?.id)) ? (
+              {(!board?.isLocked &&
+                (opinion.authorId === iMember?.id || opinion?.mergedAuthors.includes(iMember?.id))) ||
+              iMember?.isSuperOwner ||
+              iMember?.isOwner ? (
                 <Dropdown overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
                   <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
                 </Dropdown>
@@ -414,7 +411,7 @@ export default function OpinionComponent({
                 </p>
               )}
               {opinion.isAction === true && (
-                <ActionComponent team={team} board={board} column={column} opinion={opinion} />
+                <ActionComponent iMember={iMember} team={team} board={board} column={column} opinion={opinion} />
               )}
             </div>
           </div>
@@ -545,24 +542,27 @@ export default function OpinionComponent({
               </>
             )}
 
-            <div className="remarks">
-              <Badge size="small" count={opinion.remarks.length} showZero={false}>
-                {opinion.remarks.length > 0 ? (
-                  <MessageFilled
-                    onClick={() => setIsOpenRemark(true)}
-                    style={{ fontSize: '20px', cursor: 'pointer' }}
-                  />
-                ) : (
-                  <MessageOutlined
-                    onClick={() => setIsOpenRemark(true)}
-                    style={{ fontSize: '20px', cursor: 'pointer' }}
-                  />
-                )}
-              </Badge>
-            </div>
+            {board.currentPhase == 'DISCUSS' && (
+              <div className="remarks">
+                <Badge size="small" count={opinion.remarks.length} showZero={false}>
+                  {opinion.remarks.length > 0 ? (
+                    <MessageFilled
+                      onClick={() => setIsOpenRemark(true)}
+                      style={{ fontSize: '20px', cursor: 'pointer' }}
+                    />
+                  ) : (
+                    <MessageOutlined
+                      onClick={() => setIsOpenRemark(true)}
+                      style={{ fontSize: '20px', cursor: 'pointer' }}
+                    />
+                  )}
+                </Badge>
+              </div>
+            )}
           </div>
           <Remark
             iMember={iMember}
+            team={team}
             board={board}
             column={column}
             isOpenRemark={isOpenRemark}

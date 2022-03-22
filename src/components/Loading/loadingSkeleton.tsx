@@ -12,33 +12,34 @@ type Props = {
 export default function LoadingSkeleton({ children, refetch, loading, error }: Props) {
   return (
     <>
-      {loading || error ? (
-        <div className="flex flex-1 flex-ai-c flex-jc-c card">
-          {loading ? (
-            <Skeleton active/>
-          ) : (
-            <>
-              <Result
-                status={error?.graphQLErrors[0]?.extensions?.code}
-                title={error?.graphQLErrors[0]?.extensions?.code}
-                subTitle={error?.message}
-                extra={
-                  <Button
-                    type="primary"
-                    key="console"
-                    onClick={() => {
-                      refetch();
-                    }}
-                  >
-                    Reload
-                  </Button>
-                }
-              />
-            </>
-          )}
-        </div>
+      {!error ? (
+        <>
+          <Skeleton loading={loading} active>
+            {children}
+          </Skeleton>
+          <Skeleton loading={loading} active />
+          <Skeleton loading={loading} active />
+        </>
       ) : (
-        children
+        // </div>
+        <>
+          <Result
+            status={error?.graphQLErrors[0]?.extensions?.code}
+            title={error?.graphQLErrors[0]?.extensions?.code}
+            subTitle={error?.message}
+            extra={
+              <Button
+                type="primary"
+                key="console"
+                onClick={() => {
+                  refetch();
+                }}
+              >
+                Reload
+              </Button>
+            }
+          />
+        </>
       )}
     </>
   );

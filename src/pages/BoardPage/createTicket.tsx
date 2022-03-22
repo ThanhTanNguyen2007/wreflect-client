@@ -25,10 +25,21 @@ export default function createTicket({ board, column, isCreateBottom }: Props) {
   const [createOpinion, { loading }] = useMutation<
     OpinionMutations.createOpinionResult,
     OpinionMutations.createOpinionVars
-  >(OpinionMutations.createOpinion);
+  >(OpinionMutations.createOpinion, {
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
+  });
 
   const handleCreateTicket = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (text.trim() && text.trim() != '' && text.length > 0) {
+    if (!text.trim().replace('\n', '')) {
+      e.preventDefault();
+      return;
+    }
+    if (!e.shiftKey && text.trim() && text.trim() != '' && text.length > 0) {
       createOpinion({
         variables: {
           teamId: board.teamId,

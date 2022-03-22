@@ -26,10 +26,10 @@ export default function ListMember({ searchText, teamData }: Props) {
     MemberMutations.changeRoleMember,
     {
       refetchQueries: [TeamQueries.getTeam],
-      onError: (err) => {
+      onError: (error) => {
         notification.error({
-          message: 'Error happen',
-          description: err.message,
+          placement: 'bottomRight',
+          message: error?.message,
         });
       },
     },
@@ -39,17 +39,25 @@ export default function ListMember({ searchText, teamData }: Props) {
     MemberMutations.removeMember,
     {
       refetchQueries: [TeamQueries.getTeam],
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
     },
   );
+
+  const iMember = teamData?.members?.find((member) => member?.userId === me?.id);
 
   return (
     <div style={{ flex: '1', overflowX: 'hidden', overflowY: 'scroll', height: '100%' }}>
       <List
-        dataSource={teamData?.members.filter((member: Member) => member?.user?.email?.includes(searchText))}
+        dataSource={teamData?.members?.filter((member: Member) => member?.user?.email?.includes(searchText))}
         renderItem={(member: Member) => {
           const handleRemove = () => {
             removeMember({
-              variables: { memberId: member.id },
+              variables: { memberId: member.id, teamId: teamData.id },
             })
               .then(() => message.success(`${member?.user?.email} successfully removed`))
               .catch((error) => message.error(error.message));
@@ -60,13 +68,13 @@ export default function ListMember({ searchText, teamData }: Props) {
                 key="1"
                 onClick={() => {
                   changeRoleMember({
-                    variables: { memberId: member.id, teamId: teamData?.id as string, isOwner: !member.isOwner },
+                    variables: { memberId: member.id, teamId: teamData?.id as string, isOwner: !member?.isOwner },
                   });
                 }}
               >
-                {member?.isOwner ? 'Withdraw Owner Rights' : 'Set Owner'}
+                {member?.isOwner || member?.isSuperOwner ? 'Withdraw Owner Rights' : 'Set Owner'}
               </Menu.Item>
-              <Menu.Item key="2">View Profile</Menu.Item>
+              {/* <Menu.Item key="2">View Profile</Menu.Item> */}
               <Menu.Item
                 key="3"
                 onClick={() => {
@@ -113,45 +121,35 @@ export default function ListMember({ searchText, teamData }: Props) {
                 avatar={<Avatar src={member?.user?.picture || `${config.SERVER_BASE_URL}/uploads/avatarDefault.png`} />}
                 title={
                   member?.isPendingInvitation ? (
-                    'Pending Invitation'
+                    'UnRegistered'
                   ) : (
                     <a href="https://ant.design">{member?.user?.nickname || 'Unknown'}</a>
                   )
                 }
                 description={member?.user?.email}
               />
-              {member.isOwner && (
+              {(member?.isOwner || member?.isSuperOwner) && (
                 <div
                   style={{
                     padding: '5px',
+                    marginRight: '10px',
                     backgroundColor: '#979FA6',
                     borderRadius: '10px',
                     color: '#FFFFFF',
                     fontSize: '10px',
                   }}
                 >
-                  Owner
+                  {member.isSuperOwner ? 'Super Owner' : 'Owner'}
                 </div>
               )}
-              <Dropdown key="list-loadmore-edit" overlay={menu}>
-                <Button
-                  type="text"
-                  style={
-                    member?.user?.email === me?.email ||
-                    !teamData?.members.find((member) => member.userId === me?.id && member.isOwner)
-                      ? {
-                          visibility: 'hidden',
-                        }
-                      : {}
-                  }
-                  // hidden={
-                  //   member?.user?.email === me?.email ||
-                  //   !teamData?.members.find((member) => member.userId === me?.id && member.isOwner)
-                  // }
-                >
-                  <MoreOutlined />
-                </Button>
-              </Dropdown>
+              {(iMember?.isOwner && !member.isOwner && !member.isSuperOwner) ||
+                (iMember?.isSuperOwner && !member.isSuperOwner) && (
+                  <Dropdown trigger={['click']} key="list-loadmore-edit" overlay={menu}>
+                    <Button type="text">
+                      <MoreOutlined />
+                    </Button>
+                  </Dropdown>
+                )}
             </List.Item>
           );
         }}

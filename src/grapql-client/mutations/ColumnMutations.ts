@@ -1,5 +1,7 @@
+import { COLUMN_FIELDS } from './../fragments/columnFragment';
+import { OPINION_FIELDS } from './../fragments/opinionFragments';
 import { gql } from '@apollo/client';
-import { Board, Column } from '../../types';
+import { Board, Column, Opinion } from '../../types';
 import { BOARD_FIELDS } from '../fragments/boardFragment';
 
 export type orderOpinionResult = {
@@ -57,7 +59,7 @@ export const convertColumn = gql`
 `;
 
 export type emptyColumnResult = {
-  emptyColumn: Column;
+  emptyColumn: [Opinion];
 };
 
 export type emptyColumnVars = {
@@ -67,17 +69,10 @@ export type emptyColumnVars = {
 };
 
 export const emptyColumn = gql`
+  ${COLUMN_FIELDS}
   mutation EmptyColumn($columnId: String, $teamId: String!, $boardId: String!) {
     emptyColumn(columnId: $columnId, teamId: $teamId, boardId: $boardId) {
-      id
-      title
-      position
-      isActive
-      opinions {
-        id
-        isAction
-        responsible
-      }
+      ...ColumnFields
     }
   }
 `;

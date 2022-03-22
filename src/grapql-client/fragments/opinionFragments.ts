@@ -1,13 +1,12 @@
+import { MEMBER_FIELDS } from './memberFragment';
 import { gql } from '@apollo/client';
 import { REMARK_FIELDS } from './remarkFragment';
-import { USER_FIELDS } from './userFragment';
 export const OPINION_FIELDS = gql`
-  ${USER_FIELDS}
+  ${MEMBER_FIELDS}
   ${REMARK_FIELDS}
   fragment OpinionFields on Opinion {
     id
     columnId
-    memberId
     authorId
     createdAt
     updatedAt
@@ -23,7 +22,7 @@ export const OPINION_FIELDS = gql`
     status
     position
     author {
-      ...UserFields
+      ...MemberFields
     }
     remarks {
       ...RemarkFields

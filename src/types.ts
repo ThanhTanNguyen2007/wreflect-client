@@ -13,7 +13,6 @@ export type Team = {
   isPublic: boolean;
   description: string | null;
   status: TeamStatus;
-  Owner: User;
   members: Member[];
   boards: Board[];
 };
@@ -103,7 +102,6 @@ export type Opinion = {
   id: string;
   columnId: string | null;
   authorId: string;
-  memberId: string;
   createdAt: Date;
   updatedAt: Date;
   text: string;
@@ -119,8 +117,7 @@ export type Opinion = {
   status: OpinionStatus;
   column: Column;
   remarks: Remark[];
-  author: User;
-  member: Member;
+  author: Member;
 };
 
 export type Remark = {
@@ -131,8 +128,7 @@ export type Remark = {
   createdAt: Date;
   updatedAt: Date;
   opinion: Opinion;
-  author: User;
-  member: Member;
+  author: Member;
 };
 
 export type Member = {
@@ -140,20 +136,25 @@ export type Member = {
   userId: string;
   teamId: string;
   isOwner: boolean;
+  isSuperOwner: boolean;
   isPendingInvitation: boolean;
   isGuess: boolean;
+  meetingNote: string;
   invitedBy: string | null;
   joinedAt: Date;
-  role: string | null;
-  boardActive: string;
+
   user: User;
   team: Team;
+  opinions: [Opinion];
+  remarks: [Remark];
+  assessments: [Assessment];
+  memberComments: [MemberComment];
+  memberAnswers: [MemberAnswer];
 };
 
 export type UserProfile = {
   id: string;
   userId: string;
-
   createdAt: Date;
   updatedAt: Date;
   user: User;
@@ -215,15 +216,14 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   isAdmin: boolean;
+  userStatus: UserStatus;
   nickname: string;
   picture: string;
-  userStatus: UserStatus;
-  members: [Member];
+  gender: Gender;
   workplace: string | null;
   address: string | null;
   school: string | null;
   introduction: string | null;
   talents: string | null;
   interests: string | null;
-  gender: Gender;
 };

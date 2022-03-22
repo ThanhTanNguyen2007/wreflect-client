@@ -52,8 +52,11 @@ export default function HealthCheck({ teamId, boardId }: Props) {
   const [startSurvey] = useMutation<HealthCheckMutations.startSurveyResult, HealthCheckMutations.startSurveyVars>(
     HealthCheckMutations.startSurvey,
     {
-      onError: () => {
-        notification.error({ message: 'Something failed with server', placement: 'bottomRight' });
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
       },
       updateQueries: {
         getHealthCheck: (previousData, { mutationResult }) => {
@@ -68,7 +71,10 @@ export default function HealthCheck({ teamId, boardId }: Props) {
     HealthCheckMutations.setAnswerHealthCheckVars
   >(HealthCheckMutations.setAnswerHealthCheck, {
     onError: (error) => {
-      notification.error({ message: error?.message, placement: 'bottomRight' });
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
     },
     updateQueries: {
       getHealthCheck: (previousData, { mutationResult }) => {
@@ -82,7 +88,10 @@ export default function HealthCheck({ teamId, boardId }: Props) {
     HealthCheckMutations.reopenHealthCheckVars
   >(HealthCheckMutations.reopenHealthCheck, {
     onError: (error) => {
-      notification.error({ message: error?.message, placement: 'bottomRight' });
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
     },
     updateQueries: {
       getHealthCheck: (previousData, { mutationResult }) => {
@@ -183,33 +192,35 @@ export default function HealthCheck({ teamId, boardId }: Props) {
   const handleSubmitHealthCheck = () => {
     window.scrollTo({
       top: 50,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
-      if (selecteTemplate.statements.length !== answers.length) {
-        console.log('answers are', answers);
-        console.log('comments are', comments);
-        notification.error({ message: 'Please answer all question.', placement: 'bottomRight' });
-        return;
-      } else {
-        setAnswerHealthCheck({
-          variables: {
-            teamId,
-            boardId,
-            templateId: selecteTemplate.id,
-            answers,
-            comments,
-          },
-        });
-      }
+    if (selecteTemplate.statements.length !== answers.length) {
+      console.log('answers are', answers);
+      console.log('comments are', comments);
+      notification.error({ message: 'Please answer all question.', placement: 'bottomRight' });
+      return;
+    } else {
+      setAnswerHealthCheck({
+        variables: {
+          teamId,
+          boardId,
+          templateId: selecteTemplate.id,
+          answers,
+          comments,
+        },
+      });
+    }
   };
 
   const answerOfCurrentUser = healthCheckData?.getHealthCheck?.memberAnswers?.find(
     (answer) => answer?.userId === me?.id,
   );
 
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
+
   return (
     <div className="healthCheckPage">
-      <TopNavBar team={data?.team} boardId={boardId} title="Health Check" />
+      <TopNavBar iMember={iMember} team={data?.team} boardId={boardId} title="Health Check" />
       <div className="team-health">
         {healthCheckData?.getHealthCheck?.healthCheck ? (
           <>

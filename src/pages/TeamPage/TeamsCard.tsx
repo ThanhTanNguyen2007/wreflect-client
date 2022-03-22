@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router';
 import { Card, Col, Avatar, Row, Pagination, Empty } from 'antd';
 
-import { NetworkStatus, useQuery } from '@apollo/client';
+import { NetworkStatus, useQuery, useSubscription } from '@apollo/client';
 import { TeamQueries } from '../../grapql-client/queries';
 import { SettingOutlined, UsergroupAddOutlined, AimOutlined } from '@ant-design/icons';
 import { Member, Team, TeamStatus } from '../../types';
 import { LoadingSkeleton } from '../../components/Loading';
+import { TeamSubscription } from '../../grapql-client/subcriptions';
+import selfContext from '../../contexts/selfContext';
 
 const { Meta } = Card;
 
@@ -20,19 +22,34 @@ type Props = {
   setPage: (value: number) => void;
 };
 
-const TeamsCard = ({ searchText, page, size, setPage, setSize }: Props) => {
+const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) => {
   const history = useHistory();
+  const me = useContext(selfContext);
+
+  useSubscription<TeamSubscription.subOnUpdateTeamResult, TeamSubscription.subOnUpdateTeamVars>(
+    TeamSubscription.subOnUpdateTeam,
+    {
+      variables: {
+        meId: me?.id,
+      },
+      onSubscriptionData: ({ subscriptionData }) => {
+        if (subscriptionData?.data?.subOnUpdateTeam) {
+          refetch();
+        }
+      },
+    },
+  );
 
   const redirect = (team: Team) => {
-    history.push(`/board/${team.id}/${team.boards[0].id}`);
+    history.push(`/board/${team.id}/${team?.boards[0]?.id}`);
   };
 
   const { error, data, loading, refetch, networkStatus } = useQuery<
     TeamQueries.getTeamsResult,
     TeamQueries.getTeamsVars
   >(TeamQueries.getTeams, {
-    variables: { isGettingAll: false, search: searchText, page, size },
-    fetchPolicy: 'cache-and-network', // Used for first execution
+    variables: { isGettingAll: false, search: searchText, page, size, status },
+    fetchPolicy: 'network-only', // Used for first execution
     notifyOnNetworkStatusChange: true,
   });
 
@@ -49,7 +66,7 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize }: Props) => {
         loading={loading || networkStatus === NetworkStatus.refetch}
         error={error}
       >
-        {data && data?.teams.data.length > 0 ? (
+        {data && data?.teams?.data?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-dir-c">
               <Row
@@ -88,13 +105,17 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize }: Props) => {
                           <AimOutlined
                             key="reflect"
                             onClick={() => history.push(`/board/${team.id}/${team.boards[0].id}`)}
-                            title='Do Reflect'
+                            title="Do Reflect"
                           />,
-                          <SettingOutlined title='Manage Board' key="setting" onClick={() => history.push(`/manage-board/${team.id}`)} />,
+                          <SettingOutlined
+                            title="Manage Board"
+                            key="setting"
+                            onClick={() => history.push(`/manage-board/${team.id}`)}
+                          />,
                           <UsergroupAddOutlined
                             key="edit"
                             onClick={() => history.push(`/manage-members/${team.id}`)}
-                            title='Add member'
+                            title="Add member"
                           />,
                         ]}
                       >
@@ -119,7 +140,6 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize }: Props) => {
                                         <Avatar
                                           style={{ marginRight: '3px' }}
                                           size="default"
-                                          // srcSet={member?.user?.picture}
                                           key={member?.user?.email}
                                           src={member?.user?.picture}
                                         />

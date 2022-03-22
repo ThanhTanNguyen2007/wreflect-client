@@ -353,7 +353,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
       margin-right: 20px;
       right: 0;
       position: absolute;
-      top: 150px;
+      top: 170px;
       width: 0;
       display: none;
       z-index: 11; }
@@ -400,6 +400,14 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
         border-style: solid !important;
         border-width: 2px;
         box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
+    .board-header .board-tracking .lockedNoti {
+      font-size: 12px;
+      letter-spacing: normal;
+      margin-top: 5px;
+      margin-bottom: 0px;
+      color: #6d7982;
+      border-radius: 4px;
+      background-color: rgba(30, 34, 47, 0.06); }
     .board-header .board-tracking .phase-header {
       display: flex;
       flex-direction: row;

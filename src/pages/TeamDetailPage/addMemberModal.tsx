@@ -33,6 +33,12 @@ const AddMembersModal = ({ teamId }: Props) => {
 
   const [addNewMember] = useMutation(MemberMutations.addMembers, {
     refetchQueries: [TeamQueries.getTeam],
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
   });
 
   const onAddEmail = (value: any) => {

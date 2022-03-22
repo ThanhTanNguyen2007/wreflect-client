@@ -25,24 +25,6 @@ export default function ConfigTimeTrackingModal({ team, board, visible, setVisib
           message: error?.message,
         });
       },
-      // update: (cache, { data }) => {
-      //   if (!data) return;
-      //   cache.modify({
-      //     id: cache.identify(data.updateBoard),
-      //     fields: {
-      //       timerInProgress: () => data.updateBoard.timerInProgress,
-      //       endTime: () => data.updateBoard.endTime,
-      //     },
-      //   });
-      //   setVisible(false);
-      // },
-      // optimisticResponse: {
-      //   updateBoard: {
-      //     ...boardData,
-      //     timerInProgress: true,
-      //     endTime: moment().add(minutes, 'minutes').toDate().getTime().toString(),
-      //   },
-      // },
     },
   );
 

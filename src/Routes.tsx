@@ -26,7 +26,7 @@ const { Content } = Layout;
 const customHistory = createBrowserHistory();
 
 const Routes = ({ me }: Props) => {
-  const isLoggedIn = !!me;
+  const isLoggedIn = !!me?.id;
   const email = me?.email || null;
   const isAdmin = me?.isAdmin || null;
   const picture = me?.picture || null;
@@ -57,11 +57,8 @@ const Routes = ({ me }: Props) => {
                         <>
                           <Switch>
                             {/* <Route path={`/team-details//:teamId`} children={[]} render={({ match }) => <TeamDetailsPage />} /> */}
-                            <Route
-                              path="/manage-members/:teamId"
-                              render={({ match }) => <ManageMembers teamId={match.params.teamId} />}
-                            />
-                            <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} />
+
+                            {/* <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} /> */}
                             <Route
                               path="/board/:teamId/:boardId"
                               exact
@@ -74,12 +71,16 @@ const Routes = ({ me }: Props) => {
                               exact
                               render={({ match }) => <ActionTracker teamId={match.params.teamId} />}
                             />
-                            <Route
+                            {/* <Route
                               path="/team-health/:teamId/:boardId"
                               exact
                               render={({ match }) => (
                                 <HealthCheck teamId={match.params.teamId} boardId={match.params.boardId} />
                               )}
+                            /> */}
+                            <Route
+                              path="/manage-members/:teamId"
+                              render={({ match }) => <ManageMembers teamId={match.params.teamId} />}
                             />
                             <Route
                               path="/me"

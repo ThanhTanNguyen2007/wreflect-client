@@ -16,6 +16,14 @@ const { Option } = Select;
 export default function CreateAction({ team, selectedBoards }: Props) {
   const [createOpinion] = useMutation<OpinionMutations.createOpinionResult, OpinionMutations.createOpinionVars>(
     OpinionMutations.createOpinion,
+    {
+      onError: (error) => {
+        notification.error({
+          message: error?.message,
+          placement: 'bottomRight',
+        });
+      },
+    },
   );
 
   const [loading, setLoading] = useState(false);

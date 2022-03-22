@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Empty } from 'antd';
 
 import { useQuery } from '@apollo/client';
@@ -11,6 +11,7 @@ import { Loading } from '../../components/Loading';
 import { AddTeamMembers } from '.';
 
 import { TopNavBar } from '../../components/TopNavBar';
+import selfContext from '../../contexts/selfContext';
 
 type Props = {
   teamId: string;
@@ -19,6 +20,7 @@ type Props = {
 export default function manageMembers({ teamId }: Props) {
   const [isVisibleEditDetails, setIsVisibleEditDetails] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const me = useContext(selfContext);
 
   const { loading, data, error, refetch } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -31,10 +33,12 @@ export default function manageMembers({ teamId }: Props) {
     setSearchText(searchText);
   };
 
+  const iMember = data?.team?.members.find((member) => member.userId === me?.id);
+
   return (
-    <>
-      <TopNavBar team={data?.team} title="Manage Members" />
-      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+      <>
+        <TopNavBar iMember={iMember} team={data?.team} title="Manage Members" />
         <>
           {data && data?.team ? (
             <div className="flex flex-1 flex-dir-r manageMembersPage card mt-10">
@@ -61,7 +65,7 @@ export default function manageMembers({ teamId }: Props) {
             <Empty description="No Teams Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
           )}
         </>
-      </Loading>
-    </>
+      </>
+    </Loading>
   );
 }
