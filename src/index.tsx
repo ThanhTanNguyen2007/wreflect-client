@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: `${config.SERVER_BASE_URL.replace('https', 'ws').replace('wss', 'ws')}/graphql`,
+  uri: `${config.SERVER_BASE_URL.replace('http', 'ws').replace('wss', 'ws')}/graphql`,
   options: {
     reconnect: true,
   },
