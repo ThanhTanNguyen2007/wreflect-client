@@ -42,4 +42,5 @@ export default {
     redirectUri: parseString('REACT_APP_REDIRECT_URI'),
   },
   SERVER_BASE_URL: parseString('REACT_APP_SERVER_BASE_URL'),
+  GIPHY_API: parseString('REACT_APP_GIPHY_API'),
 };

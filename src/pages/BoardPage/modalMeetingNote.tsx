@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function ModalMeetingNote({ iMember, team, visible, setVisible }: Props) {
-  const [text, setText] = useState(iMember.meetingNote);
+  const [text, setText] = useState(iMember?.meetingNote);
 
   const [updateMeetingNote] = useMutation<
     MemberMutations.updateMeetingNoteResult,

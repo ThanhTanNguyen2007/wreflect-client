@@ -315,17 +315,20 @@
 
         .opinionContent {
           overflow-wrap: break-word;
+          display: flex;
           text-align: center;
           align-items: center;
+          justify-content: center;
           margin-top: 20px;
-          max-width: 500px;
+          position: relative;
+
+          .opinionText {
+            overflow-wrap: break-word;
+          }
 
           .opinionAction {
             display: flex;
             gap: 5px;
-          }
-          .select {
-            flex: 1;
           }
         }
 

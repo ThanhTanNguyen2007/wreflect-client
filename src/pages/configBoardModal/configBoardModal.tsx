@@ -162,10 +162,10 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
 
             <h4>Board Type</h4>
             <div>You can run a retrospective with phases</div>
-            <Form.Item name="type" initialValue={board?.type ?? 'DEFAULT'}>
+            <Form.Item name="type" initialValue={board?.type ?? 'PHASE'}>
               <Select disabled defaultValue={board?.type ?? 'PHASE'}>
-                <Option value="DEFAULT">No Phase</Option>
                 <Option value="PHASE">Phase (Reflect, Group, Votes, Discuss)</Option>
+                <Option value="DEFAULT">No Phase</Option>
               </Select>
             </Form.Item>
             <h4>Max Votes</h4>

@@ -1,3 +1,4 @@
+import { TEAM_FIELDS } from './../fragments/teamFragment';
 import { gql } from '@apollo/client';
 import { Board, BoardType, PhaseType } from '../../types';
 import { BOARD_FIELDS } from '../fragments/boardFragment';
@@ -32,7 +33,7 @@ export type createBoardVars = {
 };
 
 const createBoard = gql`
-  ${BOARD_FIELDS}
+  ${TEAM_FIELDS}
   mutation Mutation(
     $teamId: String!
     $isPublic: Boolean
@@ -81,7 +82,7 @@ const createBoard = gql`
       isActiveCol4: $isActiveCol4
       isActiveCol5: $isActiveCol5
     ) {
-      ...BoardFields
+      ...TeamFields
     }
   }
 `;
@@ -183,10 +184,10 @@ export type deleteBoardVars = {
 };
 
 const deleteBoard = gql`
-  ${BOARD_FIELDS}
+  ${TEAM_FIELDS}
   mutation Mutation($teamId: String!, $boardId: String!) {
     deleteBoard(teamId: $teamId, boardId: $boardId) {
-      ...BoardFields
+      ...TeamFields
     }
   }
 `;

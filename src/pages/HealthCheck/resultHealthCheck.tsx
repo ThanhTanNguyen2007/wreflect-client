@@ -6,7 +6,17 @@ import { HealthCheck, MemberAnswer, MemberComment } from '../../types';
 type Props = {
   teamId: string;
   boardId: string;
-  selectedTemplate: templateHealthCheckType;
+  selectedTemplate: {
+    id: string;
+    title: string;
+    statements: {
+      id: string;
+      title: string;
+      color: string;
+      bad: string;
+      good: string;
+    }[];
+  };
   healthCheckData: {
     getHealthCheck: {
       memberAnswers: [MemberAnswer];
@@ -19,7 +29,7 @@ type Props = {
 type data = {
   item: string;
   user?: string;
-  value?: string;
+  value?: number;
 };
 
 export default function ResultHealthCheck({ teamId, boardId, selectedTemplate, healthCheckData }: Props) {
@@ -27,7 +37,7 @@ export default function ResultHealthCheck({ teamId, boardId, selectedTemplate, h
 
   useEffect(() => {
     if (healthCheckData?.getHealthCheck?.memberAnswers?.length > 0) {
-      const test = [];
+      const test = [] as { item: string; user: string; value: number }[];
       const memberAnswers = healthCheckData?.getHealthCheck?.memberAnswers;
 
       memberAnswers?.forEach((memberAnswer) => {
@@ -36,19 +46,34 @@ export default function ResultHealthCheck({ teamId, boardId, selectedTemplate, h
           if (data) {
             test.push({
               item: statement?.title,
-              user: memberAnswer?.user?.email,
+              user: memberAnswer?.member?.user?.nickname,
               value: parseInt(data?.value),
             });
           }
         });
       });
 
-      setData(test);
+      const avg =
+        selectedTemplate?.statements?.map((statement) => {
+          return {
+            item: statement?.title,
+            user: 'Average',
+            value:
+              test.reduce((prev, cur) => {
+                if (cur?.item === statement?.title) {
+                  return prev + cur.value;
+                }
+                return prev;
+              }, 0) / memberAnswers?.length,
+          };
+        }) || [];
+
+      setData([...avg, ...test]);
     } else {
       setData(
-        selectedTemplate.statements.map((statement) => {
+        selectedTemplate?.statements?.map((statement) => {
           return {
-            item: statement.title,
+            item: statement?.title,
           };
         }),
       );

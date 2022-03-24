@@ -120,7 +120,7 @@ export default function RemarkComponent({
               <p style={{ fontWeight: 'bold !important' }}>
                 {board.isAnonymous ? 'Anonymous' : `${remark?.author?.user?.nickname}`}
               </p>
-              {(iMember.isOwner || iMember.isSuperOwner || remark.authorId === iMember.id) && (
+              {(iMember?.isOwner || iMember?.isSuperOwner || remark?.authorId === iMember?.id) && (
                 <Dropdown
                   overlayStyle={{ width: '180px' }}
                   overlay={

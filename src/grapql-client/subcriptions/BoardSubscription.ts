@@ -9,18 +9,14 @@ export type updateBoardResult = {
 
 export type updateBoardVars = {
   meId: string;
-  boardId: string;
+  teamId: string;
 };
 
 export const updateBoard = gql`
-  ${TEAM_FIELDS}
   ${BOARD_FIELDS}
-  subscription Subscription($meId: ID!, $boardId: ID!) {
-    updateBoard(meId: $meId, boardId: $boardId) {
+  subscription Subscription($meId: ID!, $teamId: ID!) {
+    updateBoard(meId: $meId, teamId: $teamId) {
       ...BoardFields
-      team(meId: $meId) {
-        ...TeamFields
-      }
     }
   }
 `;
@@ -31,64 +27,14 @@ export type deleteBoardResult = {
 
 export type deleteBoardVars = {
   meId: string;
+  teamId: string;
 };
 
 export const deleteBoard = gql`
-  subscription Subscription($meId: ID!) {
-    deleteBoard(meId: $meId) {
-      id
-      teamId
-      createdAt
-      updatedAt
-      createdBy
-      isPublic
-      isLocked
-      disableDownVote
-      disableUpVote
-      isAnonymous
-      votesLimit
-      title
-      timerInProgress
-      endTime
-      type
-      currentPhase
-      team(meId: $meId) {
-        id
-        name
-        startDate
-        createdAt
-        endDate
-        picture
-        isPublic
-        status
-        description
-        boards {
-          id
-          teamId
-          createdAt
-          updatedAt
-          createdBy
-          isPublic
-          isLocked
-          disableDownVote
-          disableUpVote
-          isAnonymous
-          votesLimit
-          title
-          timerInProgress
-          endTime
-          type
-          currentPhase
-        }
-      }
-      columns {
-        id
-        color
-        title
-        position
-        isActive
-        boardId
-      }
+  ${TEAM_FIELDS}
+  subscription Subscription($meId: ID!, $teamId: ID!) {
+    deleteBoard(meId: $meId, teamId: $teamId) {
+      ...TeamFields
     }
   }
 `;

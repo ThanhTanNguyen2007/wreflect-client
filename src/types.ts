@@ -41,10 +41,10 @@ export type MemberAnswer = {
   healthCheckId: string | null;
   createdAt: Date;
   updatedAt: Date;
-  userId: string;
+  memberId: string;
   answers: [Answer];
   healthCheck: HealthCheck | null;
-  user: User;
+  member: Member;
 };
 
 export type MemberComment = {
@@ -53,10 +53,10 @@ export type MemberComment = {
   healthCheckId: string | null;
   createdAt: Date;
   updatedAt: Date;
-  userId: string;
+  memberId: string;
   questionId: string;
   text: string;
-  user: User;
+  member: Member;
   healthCheck: HealthCheck | null;
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 
-import { Menu, Layout, Modal, Tooltip } from 'antd';
+import { Menu, Layout, Modal, Tooltip, Button, Row, Col, Tabs } from 'antd';
 import { Link } from 'react-router-dom';
 import { Logout } from '../Logout';
 
@@ -15,6 +15,7 @@ import {
   BarChartOutlined,
   UserOutlined,
   AimOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons';
 
 import { auth } from '../../apis';
@@ -23,6 +24,7 @@ import Avatar from 'antd/lib/avatar/avatar';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
+const { TabPane } = Tabs;
 
 type Props = {
   email: null | string;
@@ -31,8 +33,16 @@ type Props = {
 
 const SideBar = ({ isAdmin }: Props) => {
   const [isCollapse, setIsCollapse] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const me = useContext(selfContext);
 
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+  };
   const onClickLogout = () => {
     Modal.confirm({
       title: 'Are you sure want to sign out',
@@ -98,6 +108,9 @@ const SideBar = ({ isAdmin }: Props) => {
                 <Menu.Item icon={<UserOutlined />} key="account">
                   <Link to="/me">Account</Link>
                 </Menu.Item>
+                <Menu.Item icon={<QuestionOutlined />} onClick={handleShowModal}>
+                  Help
+                </Menu.Item>
               </>
             )}
 
@@ -107,6 +120,21 @@ const SideBar = ({ isAdmin }: Props) => {
               </Logout>
             </Menu.Item>
           </Menu>
+          <Modal className="modal-userguide" title="User Guide" visible={showModal} onCancel={handleCancel}>
+            <Row>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Create Team" key="1">
+                  <iframe width="950" height="350" src="https://www.youtube.com/embed/G6C0enWSx-Q/"></iframe>{' '}
+                </TabPane>
+                <TabPane tab="Add member" key="2">
+                  <iframe width="950" height="350" src="https://www.youtube.com/embed/eSSS5c9K4yw"></iframe>{' '}
+                </TabPane>
+                <TabPane tab="Do Reflect" key="3">
+                  <iframe width="950" height="350" src="https://www.youtube.com/embed/QDSBj48JwRw/"></iframe>{' '}
+                </TabPane>
+              </Tabs>
+            </Row>
+          </Modal>
         </Sider>
       )}
     </>

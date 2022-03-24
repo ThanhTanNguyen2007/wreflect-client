@@ -1,3 +1,4 @@
+import { MEMBER_FIELDS } from './../fragments/memberFragment';
 import { HealthCheck } from './../../types';
 import { gql } from '@apollo/client';
 import { MemberAnswer, MemberComment, StatusHealthCheck } from '../../types';
@@ -22,6 +23,7 @@ export type startSurveyVars = {
 };
 
 export const startSurvey = gql`
+  ${MEMBER_FIELDS}
   mutation Mutation(
     $teamId: String!
     $boardId: String!
@@ -42,11 +44,11 @@ export const startSurvey = gql`
         id
         templateId
         updatedAt
-        userId
+        memberId
         createdAt
         healthCheckId
-        user {
-          email
+        member {
+          ...MemberFields
         }
         answers {
           questionId
@@ -59,11 +61,11 @@ export const startSurvey = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
+        memberId
         questionId
         text
-        user {
-          email
+        member {
+          ...MemberFields
         }
       }
       healthCheck {
@@ -101,6 +103,7 @@ export type setAnswerHealthCheckVars = {
 };
 
 export const setAnswerHealthCheck = gql`
+  ${MEMBER_FIELDS}
   mutation Mutation(
     $teamId: String!
     $boardId: String!
@@ -125,7 +128,10 @@ export const setAnswerHealthCheck = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
+        member {
+          ...MemberFields
+        }
+        memberId
       }
       memberComments {
         id
@@ -133,7 +139,10 @@ export const setAnswerHealthCheck = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
+        memberId
+        member {
+          ...MemberFields
+        }
         questionId
         text
       }
@@ -169,6 +178,7 @@ export type reopenHealthCheckVars = {
 };
 
 export const reopenHealthCheck = gql`
+  ${MEMBER_FIELDS}
   mutation Mutation($teamId: String!, $boardId: String!) {
     reopenHealthCheck(teamId: $teamId, boardId: $boardId) {
       memberAnswers {
@@ -180,8 +190,11 @@ export const reopenHealthCheck = gql`
         templateId
         healthCheckId
         createdAt
+        member {
+          ...MemberFields
+        }
         updatedAt
-        userId
+        memberId
       }
       memberComments {
         id
@@ -189,7 +202,10 @@ export const reopenHealthCheck = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
+        memberId
+        member {
+          ...MemberFields
+        }
         questionId
         text
       }

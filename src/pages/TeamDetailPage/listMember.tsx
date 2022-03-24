@@ -64,17 +64,20 @@ export default function ListMember({ searchText, teamData }: Props) {
           };
           const menu = (
             <Menu>
-              <Menu.Item
-                key="1"
-                onClick={() => {
-                  changeRoleMember({
-                    variables: { memberId: member.id, teamId: teamData?.id as string, isOwner: !member?.isOwner },
-                  });
-                }}
-              >
-                {member?.isOwner || member?.isSuperOwner ? 'Withdraw Owner Rights' : 'Set Owner'}
-              </Menu.Item>
+              {iMember?.isSuperOwner && (
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    changeRoleMember({
+                      variables: { memberId: member?.id, teamId: teamData?.id as string, isOwner: !member?.isOwner },
+                    });
+                  }}
+                >
+                  {member?.isOwner || member?.isSuperOwner ? 'Withdraw Owner Rights' : 'Set Owner'}
+                </Menu.Item>
+              )}
               {/* <Menu.Item key="2">View Profile</Menu.Item> */}
+
               <Menu.Item
                 key="3"
                 onClick={() => {
@@ -142,14 +145,14 @@ export default function ListMember({ searchText, teamData }: Props) {
                   {member.isSuperOwner ? 'Super Owner' : 'Owner'}
                 </div>
               )}
-              {(iMember?.isOwner && !member.isOwner && !member.isSuperOwner) ||
-                (iMember?.isSuperOwner && !member.isSuperOwner) && (
-                  <Dropdown trigger={['click']} key="list-loadmore-edit" overlay={menu}>
-                    <Button type="text">
-                      <MoreOutlined />
-                    </Button>
-                  </Dropdown>
-                )}
+              {((iMember?.isOwner && !member.isOwner && !member.isSuperOwner) ||
+                (iMember?.isSuperOwner && !member.isSuperOwner)) && (
+                <Dropdown trigger={['click']} key="list-loadmore-edit" overlay={menu}>
+                  <Button type="text">
+                    <MoreOutlined />
+                  </Button>
+                </Dropdown>
+              )}
             </List.Item>
           );
         }}

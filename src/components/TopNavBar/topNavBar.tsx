@@ -32,7 +32,8 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
     TeamSubscription.subOnUpdateTeam,
     {
       variables: {
-        meId: me.id,
+        meId: me?.id,
+        teamId: team?.id,
       },
     },
   );
@@ -42,18 +43,19 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
       BoardSubscription.updateBoard,
       {
         variables: {
-          meId: me.id,
-          boardId: boardId,
+          meId: me?.id,
+          teamId: team?.id,
         },
       },
     );
   }
 
   useSubscription<BoardSubscription.deleteBoardResult, BoardSubscription.deleteBoardVars>(
-    BoardSubscription.deleteBoard,
+    BoardSubscription?.deleteBoard,
     {
       variables: {
-        meId: me.id,
+        meId: me?.id,
+        teamId: team?.id,
       },
     },
   );
@@ -62,7 +64,8 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
     ColumnSubscription.subOnUpdateColumn,
     {
       variables: {
-        meId: me.id,
+        meId: me?.id,
+        teamId: team?.id,
       },
     },
   );
@@ -71,7 +74,8 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
     OpinionSubscription.updateOpinion,
     {
       variables: {
-        meId: me.id,
+        meId: me?.id,
+        teamId: team?.id,
       },
     },
   );
@@ -130,15 +134,14 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
           <Link key="3" to={`/actions-tracker/${team?.id}`}>
             <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>Actions Tracker</Button>
           </Link>,
-          // <Link key="4" to={`/team-health/${team?.id}/${boardId || team?.boards[0]?.id}`}>
-          //   <Button type={title == 'Health Check' ? 'primary' : undefined}>Health Check</Button>
-          // </Link>,
+          <Link key="4" to={`/team-health/${team?.id}/${boardId || team?.boards[0]?.id}`}>
+            <Button type={title == 'Health Check' ? 'primary' : undefined}>Health Check</Button>
+          </Link>,
+          <Link key="5" style={{ textDecoration: 'none' }} to={`/manage-members/${team?.id}`}>
+            <Button type={title == 'Manage Members' ? 'primary' : undefined}>Members</Button>
+          </Link>,
           (iMember?.isOwner || iMember?.isSuperOwner) && (
             <>
-              <Link key="5" style={{ textDecoration: 'none' }} to={`/manage-members/${team?.id}`}>
-                <Button type={title == 'Manage Members' ? 'primary' : undefined}>Members</Button>
-              </Link>
-
               <Link key="6" style={{ textDecoration: 'none' }} to={`/manage-board/${team?.id}`}>
                 <Button type={title == 'Manage Board' ? 'primary' : undefined}>Board</Button>
               </Link>

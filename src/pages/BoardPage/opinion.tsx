@@ -84,11 +84,11 @@ export default function OpinionComponent({
 
   const menu = (
     <Menu>
-      {board.currentPhase === 'DISCUSS' && (
+      {/* {board.currentPhase === 'DISCUSS' && (
         <Menu.Item key="3" icon={<FireFilled />}>
           Convet to Action
         </Menu.Item>
-      )}
+      )} */}
       <Menu.Item onClick={() => setIsEdit(true)} key="2" icon={<EditFilled />}>
         Edit
       </Menu.Item>
@@ -331,7 +331,7 @@ export default function OpinionComponent({
               />
             )}
 
-            <div className="owner-opinion">
+            <div style={{ marginRight: 'auto', marginLeft: '10px' }} className="owner-opinion">
               {board.isAnonymous ? (
                 <h4>Anonymous</h4>
               ) : (
@@ -531,7 +531,7 @@ export default function OpinionComponent({
                     style={{ fontSize: '20px', marginLeft: '5px', cursor: 'pointer' }}
                   />
                 </div>
-                <div className="myVotes">
+                <div style={{ marginLeft: 'auto' }} className="myVotes">
                   [Your votes{' '}
                   {`${
                     opinion?.upVote.filter((voteIds) => voteIds == iMember?.id).length +

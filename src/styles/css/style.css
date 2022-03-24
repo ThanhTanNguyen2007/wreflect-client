@@ -553,15 +553,17 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
         width: 100%; }
       .board .column .colContent .opinionCol .opinionContent {
         overflow-wrap: break-word;
+        display: flex;
         text-align: center;
         align-items: center;
+        justify-content: center;
         margin-top: 20px;
-        max-width: 500px; }
+        position: relative; }
+        .board .column .colContent .opinionCol .opinionContent .opinionText {
+          overflow-wrap: break-word; }
         .board .column .colContent .opinionCol .opinionContent .opinionAction {
           display: flex;
           gap: 5px; }
-        .board .column .colContent .opinionCol .opinionContent .select {
-          flex: 1; }
       .board .column .colContent .opinionCol .opinionFooter {
         margin-top: 15px;
         text-align: end;
@@ -811,14 +813,15 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
       flex-wrap: wrap;
       justify-content: center;
       align-items: center; }
+      .healthCheckPage .team-health .templates-overview .templates-overview-card.card {
+        min-height: 300px !important; }
       .healthCheckPage .team-health .templates-overview .templates-overview-card {
         justify-content: space-between;
-        width: 40%;
-        height: auto;
-        min-height: 200px;
+        width: 45%;
+        min-height: 300px;
         background-color: #f6f6f7;
         margin: 10px;
-        padding: 10px;
+        padding: 30px;
         border-radius: 5px;
         flex-direction: column;
         cursor: pointer;
@@ -946,6 +949,11 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   .sidebar .ant-layout-logo span {
     font-family: "Baloo Bhai";
     font-size: 23px; }
+
+.modal-userguide {
+  width: 1000px !important; }
+  .modal-userguide .ant-modal-footer .ant-btn-primary {
+    display: none; }
 
 .topNavBar {
   inset: 0 0 auto 0;

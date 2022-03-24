@@ -7,6 +7,7 @@ import { auth, user } from '../../apis';
 import EmailVerificationNotice from './EmailVerificationNotice';
 import { createSemanticDiagnosticsBuilderProgram } from 'typescript';
 import { useHistory } from 'react-router-dom';
+import { Button } from 'antd';
 
 type Props = {
   isLoggedIn: boolean;
@@ -19,6 +20,7 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
   const [email, setEmail] = useState<null | string>(null);
   const [needsEmailVerification, setNeedsEmailVerification] = useState<null | boolean>(null);
   const [sub, setSub] = useState<null | string>(null);
+  const [loading, setLoading] = useState(false);
   const params = new URLSearchParams(location.search);
   const authConfig: AuthOptions = config.AUTH0_WEBAUTH_CONFIG;
 
@@ -36,7 +38,9 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
     setSub: (sub: string) => void,
     history: H.History,
   ) => {
+    setLoading(true);
     const res = await auth.login(code, state);
+    setLoading(false);
     if (!res) {
       return;
     }
@@ -100,7 +104,9 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
         webAuth={webAuth}
         needsEmailVerification={needsEmailVerification}
       />
-      <div onClick={() => webAuth.authorize({ prompt: 'login' })}>{children}</div>
+      <Button loading={loading} onClick={() => webAuth.authorize({ prompt: 'login' })}>
+        {children}
+      </Button>
     </div>
   );
 };

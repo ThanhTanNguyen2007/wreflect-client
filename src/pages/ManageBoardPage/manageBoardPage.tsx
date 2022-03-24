@@ -123,12 +123,12 @@ const ManageBoardPage = ({ teamId }: Props) => {
                                   checked={board.isLocked}
                                   loading={updatingBoard}
                                   onClick={() => {
-                                    if (iMember.isOwner || iMember.isSuperOwner) {
+                                    if (iMember?.isOwner || iMember?.isSuperOwner) {
                                       updateBoard({
                                         variables: {
                                           teamId,
                                           boardId: board?.id,
-                                          isLocked: !board.isLocked,
+                                          isLocked: !board?.isLocked,
                                         },
                                       });
                                     }

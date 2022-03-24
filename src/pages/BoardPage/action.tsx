@@ -74,10 +74,10 @@ export default function ActionComponent({ team, iMember, board, opinion }: Props
           className="select"
           disabled={
             !(
-              iMember.isOwner ||
-              iMember.isSuperOwner ||
-              opinion.responsible == iMember.id ||
-              opinion.authorId == iMember.id
+              iMember?.isOwner ||
+              iMember?.isSuperOwner ||
+              opinion?.responsible == iMember?.id ||
+              opinion?.authorId == iMember?.id
             )
           }
           value={myOpinion?.status}
@@ -95,10 +95,10 @@ export default function ActionComponent({ team, iMember, board, opinion }: Props
           style={{ width: 120 }}
           disabled={
             !(
-              iMember.isOwner ||
-              iMember.isSuperOwner ||
-              opinion.responsible == iMember.id ||
-              opinion.authorId == iMember.id
+              iMember?.isOwner ||
+              iMember?.isSuperOwner ||
+              opinion?.responsible == iMember?.id ||
+              opinion?.authorId == iMember?.id
             )
           }
         >

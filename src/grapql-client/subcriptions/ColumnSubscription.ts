@@ -8,12 +8,13 @@ export type subOnUpdateColumnResults = {
 
 export type subOnUpdateColumnVars = {
   meId: string;
+  teamId: string;
 };
 
 export const subOnUpdateColumn = gql`
   ${COLUMN_FIELDS}
-  subscription subOnUpdateColumn($meId: ID!) {
-    subOnUpdateColumn(meId: $meId) {
+  subscription subOnUpdateColumn($meId: ID!, $teamId: ID!) {
+    subOnUpdateColumn(meId: $meId, teamId: $teamId) {
       ...ColumnFields
     }
   }

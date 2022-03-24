@@ -1,3 +1,4 @@
+import { MEMBER_FIELDS } from './../fragments/memberFragment';
 import { HealthCheck, MemberAnswer, MemberComment } from './../../types';
 import { gql } from '@apollo/client';
 
@@ -15,6 +16,7 @@ export type getBoardVars = {
 };
 
 export const getHealthCheck = gql`
+  ${MEMBER_FIELDS}
   query getHealthCheck($teamId: String, $boardId: String) {
     getHealthCheck(teamId: $teamId, boardId: $boardId) {
       memberAnswers {
@@ -23,9 +25,9 @@ export const getHealthCheck = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
-        user {
-          email
+        memberId
+        member {
+          ...MemberFields
         }
         answers {
           questionId
@@ -38,11 +40,11 @@ export const getHealthCheck = gql`
         healthCheckId
         createdAt
         updatedAt
-        userId
+        memberId
         questionId
         text
-        user {
-          email
+        member {
+          ...MemberFields
         }
       }
       healthCheck {

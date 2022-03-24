@@ -9,6 +9,8 @@ export type orderOpinionResult = {
 };
 
 export type orderOpinionVars = {
+  teamId: string;
+  boardId: string;
   destination: {
     droppableId: string;
     index: number;
@@ -22,8 +24,20 @@ export type orderOpinionVars = {
 
 const orderOpinion = gql`
   ${BOARD_FIELDS}
-  mutation OrderOpinion($destination: orderOpinion, $source: orderOpinion, $draggableId: String) {
-    orderOpinion(destination: $destination, source: $source, draggableId: $draggableId) {
+  mutation OrderOpinion(
+    $teamId: String!
+    $boardId: String!
+    $destination: orderOpinion
+    $source: orderOpinion
+    $draggableId: String
+  ) {
+    orderOpinion(
+      teamId: $teamId
+      boardId: $boardId
+      destination: $destination
+      source: $source
+      draggableId: $draggableId
+    ) {
       ...BoardFields
     }
   }

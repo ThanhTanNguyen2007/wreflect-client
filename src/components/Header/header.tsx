@@ -11,7 +11,7 @@ type Props = {
 const LoginSection = ({ email }: Props) => {
   return (
     <Login isLoggedIn={!!email}>
-      <Button>Login / Sign up</Button>
+      <span>Login / Sign up</span>
     </Login>
   );
 };

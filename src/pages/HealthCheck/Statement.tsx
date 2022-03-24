@@ -9,7 +9,8 @@ type Props = {
     id: string;
     title: string;
     color: string;
-    description: string;
+    bad: string;
+    good: string;
   };
   answerOfCurrentUser?: MemberAnswer;
   commentOfAllMembers?: MemberComment[];
@@ -50,7 +51,8 @@ export default function Statement({
   return (
     <>
       <h3>{statement?.title}</h3>
-      <p style={{ textAlign: 'center' }}>{statement?.description}</p>
+      <p style={{ textAlign: 'center' }}>{statement?.good}</p>
+      <p style={{ textAlign: 'center' }}>{statement?.bad}</p>
       <div style={answerOfCurrentUser && { cursor: 'default' }} className="num-wrapper poll-center-items">
         <span
           style={answerOfCurrentUser && { cursor: 'default' }}

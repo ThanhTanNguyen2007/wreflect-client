@@ -14,9 +14,11 @@ import { AccountSetting } from './pages/AccountSettingPage';
 import { UserManagements } from './components/UserManagements';
 import { NotFound } from './pages/NotFoundPage';
 import { ManageBoardPage } from './pages/ManageBoardPage';
-import HealthCheck from './pages/HealthCheck/HealthCheck';
+// import HealthCheck from './pages/HealthCheck/HealthCheck';
 import TeamDetail from './pages/TeamDetailPage/teamDetail';
 import { PersonalReflection } from './pages/PersonalReflection';
+
+const HealthCheck = React.lazy(() => import('./pages/HealthCheck/HealthCheck'));
 
 type Props = {
   me: null | User;
@@ -71,13 +73,13 @@ const Routes = ({ me }: Props) => {
                               exact
                               render={({ match }) => <ActionTracker teamId={match.params.teamId} />}
                             />
-                            {/* <Route
+                            <Route
                               path="/team-health/:teamId/:boardId"
                               exact
                               render={({ match }) => (
                                 <HealthCheck teamId={match.params.teamId} boardId={match.params.boardId} />
                               )}
-                            /> */}
+                            />
                             <Route
                               path="/manage-members/:teamId"
                               render={({ match }) => <ManageMembers teamId={match.params.teamId} />}

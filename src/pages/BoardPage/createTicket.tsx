@@ -1,11 +1,12 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { Input, notification } from 'antd';
+import { Input, notification, Modal } from 'antd';
 import { useMutation } from '@apollo/client';
 import { OpinionMutations } from '../../grapql-client/mutations';
 import { Board, Column } from '../../types';
 import Picker, { IEmojiData } from 'emoji-picker-react';
 import { SmileOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import GenerateGif from './generateGif';
 
 const { TextArea } = Input;
 
@@ -70,15 +71,6 @@ export default function createTicket({ board, column, isCreateBottom }: Props) {
   return (
     <>
       <div style={{ position: 'relative' }} className="panel tab">
-        <section
-          style={{
-            position: 'absolute',
-            bottom: '120px',
-            zIndex: '50',
-          }}
-        >
-          {isIconOpen && <Picker pickerStyle={{ width: '250px', height: '250px' }} onEmojiClick={onEmojiClick} />}
-        </section>
         <a className={!isAction ? 'active link' : 'link'} onClick={() => setIsAction(false)}>
           Opinion
         </a>
@@ -93,12 +85,15 @@ export default function createTicket({ board, column, isCreateBottom }: Props) {
         </div>
         {/* <Picker onEmojiClick={onEmojiClick} /> */}
         <TextArea
+          style={{ marginBottom: '5px' }}
           onChange={handleOnChange}
           onPressEnter={handleCreateTicket}
           value={text}
           placeholder={`Press enter to add ${isAction ? 'Action' : 'Opinion'}`}
           disabled={loading}
         />
+        {/* <GenerateGif /> */}
+        {isIconOpen && <Picker pickerStyle={{ width: '100%', height: '300px' }} onEmojiClick={onEmojiClick} />}
       </div>
     </>
   );

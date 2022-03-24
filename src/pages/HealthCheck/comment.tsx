@@ -11,7 +11,8 @@ type Props = {
     id: string;
     title: string;
     color: string;
-    description: string;
+    bad: string;
+    good: string;
   };
 };
 
@@ -27,7 +28,8 @@ export default function Comment({ statement, isOpenComment, setIsOpenComment, co
         <div className="headerModalText">
           <div className="flex flex-dir-col flex-ai-c flex-jc-c">
             <h3>{statement.title}</h3>
-            <p className="flex flex-jc-c flex-ai-c">{statement.description}</p>
+            <p className="flex flex-jc-c flex-ai-c">{statement.good}</p>
+            <p className="flex flex-jc-c flex-ai-c">{statement.bad}</p>
           </div>
         </div>
       }
@@ -42,7 +44,7 @@ export default function Comment({ statement, isOpenComment, setIsOpenComment, co
           <>
             <div key={comment?.id} className="remark">
               <div className="remarkHeader">
-                <p>{comment?.user.email}</p>
+                <p>{comment?.member.user.email}</p>
               </div>
               <div className="remarkContent">{comment.text}</div>
             </div>

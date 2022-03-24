@@ -8,6 +8,7 @@ export type updateOpinionResult = {
 
 export type updateOpinionVars = {
   meId: string;
+  teamId: string;
 };
 
 // # ${OPINION_FIELDS}
@@ -19,8 +20,8 @@ export type updateOpinionVars = {
 
 export const updateOpinion = gql`
   ${OPINION_FIELDS}
-  subscription UpdateOpinion($meId: ID!) {
-    updateOpinion(meId: $meId) {
+  subscription UpdateOpinion($meId: ID!, $teamId: ID!) {
+    updateOpinion(meId: $meId, teamId: $teamId) {
       ...OpinionFields
     }
   }
