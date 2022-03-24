@@ -70,6 +70,11 @@ export default function OpinionComponent({
     },
   );
 
+  const [convertOpinion, { loading: loadConvertingOpinion }] = useMutation<
+    OpinionMutations.convertToActionResult,
+    OpinionMutations.convertToActionVars
+  >(OpinionMutations.convertOpinion);
+
   const [removeOpinion] = useMutation<OpinionMutations.removeOpinionResult, OpinionMutations.removeOpinionVars>(
     OpinionMutations.removeOpinion,
     {
@@ -84,11 +89,25 @@ export default function OpinionComponent({
 
   const menu = (
     <Menu>
-      {/* {board.currentPhase === 'DISCUSS' && (
-        <Menu.Item key="3" icon={<FireFilled />}>
-          Convet to Action
+      {board.currentPhase === 'DISCUSS' && (
+        <Menu.Item
+          onClick={() =>
+            convertOpinion({
+              variables: {
+                teamId: team?.id,
+                boardId: board?.id,
+                columnId: column?.id,
+                opinionId: opinion?.id,
+                isAction: opinion?.isAction ? false : true,
+              },
+            })
+          }
+          key="3"
+          icon={<FireFilled />}
+        >
+          {opinion?.isAction ? 'Convert to Opinion' : 'Convert to Action'}
         </Menu.Item>
-      )} */}
+      )}
       <Menu.Item onClick={() => setIsEdit(true)} key="2" icon={<EditFilled />}>
         Edit
       </Menu.Item>

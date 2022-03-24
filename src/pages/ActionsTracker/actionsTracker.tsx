@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { TeamQueries } from '../../grapql-client/queries';
 import { columnActionTrackerDefault } from '../../const/boardTemplateOption';
 import { TopNavBar } from '../../components/TopNavBar';
-import { OpinionMutations } from '../../grapql-client/mutations';
+import { OpinionMutations, TeamMutations } from '../../grapql-client/mutations';
 import ActionSelect from './actionSelect';
 import CreateAction from './createAction';
 import selfContext from '../../contexts/selfContext';
@@ -47,6 +47,11 @@ export default function actionsTracker({ teamId }: Props) {
       });
     },
   });
+
+  const [updateActionTracker] = useMutation<
+    TeamMutations.updateActionTrackerResult,
+    TeamMutations.updateActionTrackerVars
+  >(TeamMutations.updateActionTracker);
 
   const handleOnDragEnd = (result: DropResult) => {
     if (result && !result.destination) return;
@@ -197,7 +202,10 @@ export default function actionsTracker({ teamId }: Props) {
                                                     {opinion.isAction && (
                                                       <div className={`opinionCol ${opinion.color}`}>
                                                         <div className="opinionHeader"></div>
-                                                        <div className="opinionContent">
+                                                        <div
+                                                          style={{ flex: 1, flexDirection: 'column' }}
+                                                          className="opinionContent"
+                                                        >
                                                           <p>
                                                             {opinion?.text?.split('\n').map((str) => {
                                                               return (

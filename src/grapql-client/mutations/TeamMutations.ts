@@ -1,3 +1,4 @@
+import { OpinionStatus } from './../../types';
 import { TEAM_FIELDS } from './../fragments/teamFragment';
 import { gql } from '@apollo/client';
 import { Team } from '../../types';
@@ -121,4 +122,46 @@ const changeTeamAccess = gql`
   }
 `;
 
-export { createTeam, updateTeam, deleteTeam, changeTeamAccess };
+export type updateActionTrackerResult = {
+  updateActionTracker: Team;
+};
+
+export type updateActionTrackerVars = {
+  teamId: string;
+  sourceBoardId: string;
+  sourceColumnId: string;
+  destinationBoardId: string;
+  destinationColumnId: string;
+  opinionId: string;
+  responsible: string;
+  status: OpinionStatus;
+};
+
+const updateActionTracker = gql`
+  ${TEAM_FIELDS}
+  mutation updateActionTracker(
+    $teamId: String!
+    $sourceBoardId: String!
+    $sourceColumnId: String!
+    $destinationBoardId: String!
+    $destinationColumnId: String!
+    $opinionId: String!
+    $responsible: String!
+    $status: OpinionStatus!
+  ) {
+    updateActionTracker(
+      teamId: $teamId
+      sourceBoardId: $sourceBoardId
+      sourceColumnId: $sourceColumnId
+      destinationBoardId: $destinationBoardId
+      destinationColumnId: $destinationColumnId
+      opinionId: $opinionId
+      responsible: $responsible
+      status: $status
+    ) {
+      ...TeamFields
+    }
+  }
+`;
+
+export { createTeam, updateTeam, deleteTeam, changeTeamAccess, updateActionTracker };
