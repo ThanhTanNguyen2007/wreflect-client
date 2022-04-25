@@ -1,13 +1,13 @@
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { Avatar, Button, notification, Select } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { AnalysisQueries, AssessmentQueries, TeamQueries } from '../../../grapql-client/queries';
-import { Evaluation, Team } from '../../../types';
+import { AnalysisQueries, AssessmentQueries, TeamQueries } from '../../grapql-client/queries';
+import { Evaluation, Team } from '../../types';
 import { useHistory } from 'react-router-dom';
 import AreaRadarChart from './areaRadarChart';
 import RosePlotChart from './rosePlotChart';
 import GroupedBulletChart from './groupedBulletChart';
-import selfContext from '../../../contexts/selfContext';
+import selfContext from '../../contexts/selfContext';
 import _ from 'lodash';
 
 const { Option } = Select;

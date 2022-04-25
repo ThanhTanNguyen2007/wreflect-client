@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Radar } from '@ant-design/plots';
-import { Criteria, Member } from '../../../types';
+import { Criteria, Member } from '../../types';
 
 type areaRadarChartData = {
   isSubmit: boolean;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Criteria } from '../../../types';
+import { Criteria } from '../../types';
 import { Rose } from '@ant-design/plots';
 
 type rosePlotChartData = {

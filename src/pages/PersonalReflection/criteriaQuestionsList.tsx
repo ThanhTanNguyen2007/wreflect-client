@@ -1,12 +1,12 @@
 import { Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { AnswerOnCriteria, Evaluation, Member, Result } from '../../../types';
+import { AnswerOnCriteria, Evaluation, Member, Result } from '../../types';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import CriteriaQuestion from './criteriaQuestion';
 import { point } from '@antv/g2plot';
 import _ from 'lodash';
-import { CriteriaQueries } from '../../../grapql-client/queries';
-import { setAnswerHealthCheck } from '../../../grapql-client/mutations/HealthCheckMutation';
+import { CriteriaQueries } from '../../grapql-client/queries';
+import { setAnswerHealthCheck } from '../../grapql-client/mutations/HealthCheckMutation';
 
 type Props = {
   isAllowEdit: boolean;

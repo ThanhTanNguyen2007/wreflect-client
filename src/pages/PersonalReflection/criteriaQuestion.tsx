@@ -2,7 +2,7 @@ import { Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import { QuestionCircleOutlined, MessageFilled, MessageOutlined } from '@ant-design/icons';
-import { AnswerOnCriteria, Evaluation, Member } from '../../../types';
+import { AnswerOnCriteria, Evaluation, Member } from '../../types';
 import CommentModal from './commentModal';
 
 type answerType = {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Criteria } from '../../../types';
+import { Criteria } from '../../types';
 import { Bullet } from '@ant-design/plots';
 
 type rosePlotChartData = {

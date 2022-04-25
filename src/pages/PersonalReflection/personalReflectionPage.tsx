@@ -4,7 +4,7 @@ import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router
 import { TopNavBar } from '../../components/TopNavBar';
 import { TeamQueries } from '../../grapql-client/queries';
 import { Team } from '../../types';
-import AnalysisPersonal from './AnalysisPage/analysisPersonal';
+import AnalysisPersonal from './analysisPersonal';
 import ManageJudge from './Manage/manageJudge';
 import queryString from 'query-string';
 import { Loading } from '../../components/Loading';

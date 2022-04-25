@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Modal, DatePicker, Form, Steps, message, Button, FormInstance, Input, Select, Tooltip } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
-import { Assessment, Criteria, Team } from '../../../types';
+import { Assessment, Criteria, Team } from '../../types';
 import moment from 'moment';
 import { useMutation } from '@apollo/client';
-import { AssessmentMutations } from '../../../grapql-client/mutations';
+import { AssessmentMutations } from '../../grapql-client/mutations';
 import _ from 'lodash';
 import Search from 'antd/lib/transfer/search';
 

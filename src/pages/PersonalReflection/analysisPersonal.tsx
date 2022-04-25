@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
-import { TeamQueries } from '../../../grapql-client/queries';
-import { Team } from '../../../types';
+import { TeamQueries } from '../../grapql-client/queries';
+import { Team } from '../../types';
 import { useHistory } from 'react-router-dom';
 
 type Props = {
