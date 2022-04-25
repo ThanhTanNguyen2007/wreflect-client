@@ -17,7 +17,9 @@ export default function ConnectPage() {
             <SearchBar placeholder="What are you looking for ?" isLoading={false} onHandleSearch={onHandleSearch} />
           </div>
         </div>
-        <div className="container"></div>
+        <div className="container">
+          <div></div>
+        </div>
       </div>
     </>
   );
