@@ -17,6 +17,8 @@ import { ManageBoardPage } from './pages/ManageBoardPage';
 // import HealthCheck from './pages/HealthCheck/HealthCheck';
 import TeamDetail from './pages/TeamDetailPage/teamDetail';
 import { PersonalReflection } from './pages/PersonalReflection';
+import NotificationPage from './pages/NotificationPage/notificationList';
+import ConnectPage from './pages/ConnectPage/connectPage';
 
 const HealthCheck = React.lazy(() => import('./pages/HealthCheck/HealthCheck'));
 
@@ -42,10 +44,7 @@ const Routes = ({ me }: Props) => {
               <SideBar email={email} isAdmin={isAdmin} />
               <Layout className="site-layout">
                 {/* <TopNavBar email={email} picture={picture} /> */}
-                <Content
-                  className="flex flex-1"
-                  style={{ margin: '10px 16px', padding: '10px', gap: '10px', overflow: 'auto' }}
-                >
+                <Content className="flex flex-1" style={{ margin: '10px 16px', padding: '10px', gap: '10px' }}>
                   <Switch>
                     {/* <Route exact path="/" component={Team} /> */}
                     {isAdmin ? (
@@ -58,9 +57,7 @@ const Routes = ({ me }: Props) => {
                         <Route path="/teams" exact component={Team} />
                         <>
                           <Switch>
-                            {/* <Route path={`/team-details//:teamId`} children={[]} render={({ match }) => <TeamDetailsPage />} /> */}
-
-                            {/* <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} /> */}
+                            <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} />
                             <Route
                               path="/board/:teamId/:boardId"
                               exact
@@ -84,11 +81,13 @@ const Routes = ({ me }: Props) => {
                               path="/manage-members/:teamId"
                               render={({ match }) => <ManageMembers teamId={match.params.teamId} />}
                             />
+                            <Route path="/notifications" exact render={({ match }) => <NotificationPage />} />
                             <Route
                               path="/me"
                               exact
                               render={({ match }) => <AccountSetting userId={match.params.userId} />}
                             />
+                            <Route path="/connect" exact render={({ match }) => <ConnectPage />} />
                             <Route
                               path="/manage-board/:teamId"
                               render={({ match }) => <ManageBoardPage teamId={match.params.teamId} />}

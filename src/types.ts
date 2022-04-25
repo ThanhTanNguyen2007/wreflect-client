@@ -15,6 +15,7 @@ export type Team = {
   status: TeamStatus;
   members: Member[];
   boards: Board[];
+  assessments: Assessment[];
 };
 
 export type HealthCheck = {
@@ -83,7 +84,7 @@ export type Board = {
   timerInProgress: boolean;
   type: BoardType;
   currentPhase: PhaseType;
-  endTime: string;
+  endTime: Date;
   columns: Column[];
 };
 
@@ -142,7 +143,6 @@ export type Member = {
   meetingNote: string;
   invitedBy: string | null;
   joinedAt: Date;
-
   user: User;
   team: Team;
   opinions: [Opinion];
@@ -150,6 +150,8 @@ export type Member = {
   assessments: [Assessment];
   memberComments: [MemberComment];
   memberAnswers: [MemberAnswer];
+  assessors: [Result];
+  concerningMembers: [Result];
 };
 
 export type UserProfile = {
@@ -180,15 +182,35 @@ export type Assessment = {
   status: AssessmentStatus;
   team: Team;
   ownerMember: Member;
-  assessmentOnCriteriaList: AssessmentOnCriteria[];
+  evaluations: Evaluation[];
 };
 
-export type AssessmentOnCriteria = {
+export type Evaluation = {
+  id: string;
+  name: string;
+  assessorId: string;
+  isSubmit: boolean;
   assessmentId: string;
+  createdAt: string;
+  assessor: Member;
+  results: Result[];
+};
+
+export type Result = {
+  id: string;
+  evaluationId: string;
+  concerningMemberId: string;
+  answerOnCriteriaList: AnswerOnCriteria[];
+  concerningMember: Member;
+};
+
+export type AnswerOnCriteria = {
+  id: string;
   criteriaId: string;
-  createdAt: Date;
-  createdBy: string;
-  assessment: Assessment;
+  resultId: string;
+  point?: number;
+  comment?: string;
+  updatedAt: string;
   criteria: Criteria;
 };
 
@@ -196,7 +218,7 @@ export type Criteria = {
   id: string;
   name: string;
   description: string;
-  assessmentOnCriteriaList: AssessmentOnCriteria[];
+  assessmentOnCriteriaList: Evaluation[];
 };
 
 export type MemberStatus = 'PENDING_INVITATION' | 'JOINED';
@@ -208,7 +230,7 @@ export type OpinionStatus = 'NEW' | 'IN_PROGRESS' | 'DONE' | 'REJECTED';
 export type BoardType = 'DEFAULT' | 'PHASE';
 export type PhaseType = 'REFLECT' | 'GROUP' | 'VOTES' | 'DISCUSS';
 export type StatusHealthCheck = 'OPEN' | 'CLOSED';
-export type AssessmentStatus = 'PLANNED' | 'DOING' | 'COMPLETE' | 'REOPENED';
+export type AssessmentStatus = 'Planned' | 'Doing' | 'Complete' | 'Reopened';
 
 export type User = {
   id: string;
@@ -226,4 +248,34 @@ export type User = {
   introduction: string | null;
   talents: string | null;
   interests: string | null;
+  notifications: Notification[];
+  skillValues: UserOnCriteria[];
+};
+
+export type UserOnCriteria = {
+  id: string;
+  userId: string;
+  criteriaId: string;
+  value: number;
+  criteria: Criteria
+};
+
+export type Notification = {
+  id: string;
+  receiverId: string;
+  senderId: string;
+  title: string;
+  description: string;
+  isSeen: boolean;
+  createdAt: string;
+  receiver: User;
+};
+
+export type RemiderNotification = {
+  id: string;
+  dateSent: string;
+  title: string;
+  description: string;
+  sentBy: string;
+  sentTo: string;
 };

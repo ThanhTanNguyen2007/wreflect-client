@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
 
 import { UserMutations } from '../../grapql-client/mutations';
@@ -9,6 +9,8 @@ import { user } from '../../apis';
 import { Avatar, Tabs, Button, Dropdown, Menu, notification } from 'antd';
 import moment from 'moment';
 import OwnedTeams from './ownedTeams';
+import { UserQueries } from '../../grapql-client/queries';
+import AnalyticComponent from './analytic';
 
 const { TabPane } = Tabs;
 
@@ -26,6 +28,9 @@ const AccountSetting = ({ userId }: Props) => {
       });
     },
   });
+
+  const { data: test } = useQuery<UserQueries.getUserResult>(UserQueries?.getUser);
+  console.log('result ar', test);
 
   const handleFinish = (values: any) => {
     updateAccount({ variables: { picture: values['email'] } });
@@ -95,8 +100,9 @@ const AccountSetting = ({ userId }: Props) => {
           <TabPane tab="Teams" key="2">
             <OwnedTeams />
           </TabPane>
-          <TabPane tab="" key="3">
-            Content of Tab Pane 3
+          <TabPane tab="skills" key="3">
+            Your skill chart here
+            <AnalyticComponent skillValues={test?.account?.skillValues} />
           </TabPane>
         </Tabs>
       </div>

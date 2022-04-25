@@ -39,6 +39,10 @@ code {
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch; }
+  .flex-gap-5 {
+    gap: 5px; }
+  .flex-gap-10 {
+    gap: 10px; }
   .flex-1 {
     flex: 1; }
   .flex-2 {
@@ -184,6 +188,7 @@ code {
   margin-right: 12px; }
 
 .card {
+  padding: 30px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02), 0 2px 3px 0 rgba(0, 0, 0, 0.02), 0 2px 7px 0 rgba(0, 0, 0, 0.04);
   background: #fff;
   border-radius: 8px;
@@ -212,6 +217,10 @@ code {
 
 .purple {
   background-color: #e4ddfe; }
+
+.bold {
+  font-weight: bold !important;
+  font-size: 13px; }
 
 .ant-menu.ant-menu-dark .ant-menu-sub, .ant-layout-sider-trigger {
   background: #a4a0f1; }
@@ -636,6 +645,9 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   justify-content: center;
   align-items: center; }
 
+.headerModal-purple .ant-modal-header {
+  background-color: #a4a0f1; }
+
 .headerModal-white .ant-modal-header {
   background-color: pink; }
 
@@ -873,12 +885,129 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   flex-direction: column;
   height: 100%; }
   .personalReflectionPage .manageJudgePage {
+    height: 100%;
     display: flex;
     flex-direction: column; }
     .personalReflectionPage .manageJudgePage .actionSection {
       gap: 30px;
       display: flex;
       flex-direction: row; }
+    .personalReflectionPage .manageJudgePage .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column; }
+      .personalReflectionPage .manageJudgePage .container .listOfAssessment {
+        flex: 1; }
+        .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          border-radius: 5px;
+          padding: 20px;
+          background-color: white;
+          margin: 20px;
+          box-shadow: -1px 0px 2px 0 rgba(0, 0, 0, 0.02), -1px 0px 2px 0 rgba(0, 0, 0, 0.02), 0px 1px 2px 0 rgba(0, 0, 0, 0.02), 0px -1px 2px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02), 0 2px 3px 0 rgba(0, 0, 0, 0.02), 0 2px 7px 0 rgba(0, 0, 0, 0.04); }
+          .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard .inforAssessment {
+            flex: 1; }
+            .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard .inforAssessment .fieldInfor {
+              display: flex;
+              gap: 5px;
+              flex-direction: row;
+              font-size: 14px !important; }
+              .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard .inforAssessment .fieldInfor .upperCase {
+                font-size: inherit;
+                font-weight: bold !important; }
+          .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard.done {
+            background-color: #d8d8d8; }
+  .personalReflectionPage .doPersonalReflection .personalSection {
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px; }
+    .personalReflectionPage .doPersonalReflection .personalSection .assessmentTitle {
+      display: flex;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold !important;
+      align-items: center; }
+    .personalReflectionPage .doPersonalReflection .personalSection .actionDoPersionalReflection {
+      display: flex;
+      gap: 5px; }
+  .personalReflectionPage .doPersonalReflection .headerOfDoPersonalReflection {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; }
+  .personalReflectionPage .doPersonalReflection .criteriaQuestionList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; }
+    .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 5px;
+      background-color: white;
+      box-shadow: -1px 0px 2px 0 rgba(0, 0, 0, 0.02), -1px 0px 2px 0 rgba(0, 0, 0, 0.02), 0px 1px 2px 0 rgba(0, 0, 0, 0.02), 0px -1px 2px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02), 0 2px 3px 0 rgba(0, 0, 0, 0.02), 0 2px 7px 0 rgba(0, 0, 0, 0.04), 40px 0px 2px 0 rgba(0, 0, 0, 0); }
+      .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 15px;
+        font-weight: bold !important; }
+      .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaBody {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between; }
+        .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaBody .questionPoint .num-wrapper {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 20px; }
+          .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaBody .questionPoint .num-wrapper .num {
+            font-size: 10px;
+            height: 35px;
+            width: 35px;
+            line-height: 25px;
+            color: #6d7982;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center; }
+          .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaBody .questionPoint .num-wrapper .num.is-selected {
+            border: 3px solid #6d7982; }
+        .personalReflectionPage .doPersonalReflection .criteriaQuestionList .criteriaQuestion .criteriaBody .actions {
+          display: flex;
+          align-items: center;
+          justify-content: center; }
+  .personalReflectionPage .assessmentAnalysisPage .personalSection {
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px; }
+    .personalReflectionPage .assessmentAnalysisPage .personalSection .assessmentTitle {
+      display: flex;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold !important;
+      align-items: center; }
+    .personalReflectionPage .assessmentAnalysisPage .personalSection .actionDoPersionalReflection {
+      display: flex;
+      gap: 5px; }
   .personalReflectionPage .personalSection {
     height: 60px;
     display: flex;
@@ -904,42 +1033,58 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
     .personalReflectionPage .personalSection .manageJudge.primary,
     .personalReflectionPage .personalSection .analysis.primary {
       background-color: white; }
-  .personalReflectionPage .content {
-    flex: 1;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    margin-top: 30px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
 
-.steps-content {
-  min-height: 200px;
-  margin-top: 16px;
-  text-align: center; }
-  .steps-content .dynamic-delete-button {
-    position: relative;
-    top: 4px;
-    margin: 0 8px;
-    color: #999;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s; }
-  .steps-content .dynamic-delete-button:hover {
-    color: #777; }
-  .steps-content .dynamic-delete-button[disabled] {
-    cursor: not-allowed;
-    opacity: 0.5; }
-  .steps-content [data-theme='dark'] .dynamic-delete-button {
-    color: rgba(255, 255, 255, 0.45); }
-  .steps-content [data-theme='dark'] .dynamic-delete-button:hover {
-    color: rgba(255, 255, 255, 0.65); }
-  .steps-content .ant-form-item-explain-error {
-    background-color: #ff726f;
-    color: white;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    padding: 5px;
-    border-radius: 8px; }
+.containerModal {
+  display: flex;
+  flex-direction: row; }
+  .containerModal .settingEssentialInfor {
+    width: 50%;
+    padding: 10px; }
+  .containerModal .setting-criteria {
+    width: 50%;
+    padding: 10px; }
+    .containerModal .setting-criteria .criteria {
+      display: flex;
+      flex-direction: row; }
+      .containerModal .setting-criteria .criteria .dynamic-delete-button {
+        position: relative;
+        top: 4px;
+        margin: 0 8px;
+        color: #999;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.3s; }
+      .containerModal .setting-criteria .criteria .dynamic-delete-button:hover {
+        color: #777; }
+      .containerModal .setting-criteria .criteria .dynamic-delete-button[disabled] {
+        cursor: not-allowed;
+        opacity: 0.5; }
+      .containerModal .setting-criteria .criteria [data-theme='dark'] .dynamic-delete-button {
+        color: rgba(255, 255, 255, 0.45); }
+      .containerModal .setting-criteria .criteria [data-theme='dark'] .dynamic-delete-button:hover {
+        color: rgba(255, 255, 255, 0.65); }
+    .containerModal .setting-criteria .actionOfCriteriaList {
+      display: flex;
+      gap: 10px;
+      flex-direction: row; }
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  margin-top: 30px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
+
+.notificationPage {
+  padding: 10px 60px 0px 60px; }
+  .notificationPage .headerSection {
+    font-size: 30px;
+    font-weight: bold !important; }
+  .notificationPage .container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; }
 
 .sidebar .ant-layout-logo {
   height: 32px;

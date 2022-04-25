@@ -128,9 +128,9 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
           <Link key="1" to={`/board/${team?.id}/${boardId || team?.boards[0]?.id}`}>
             <Button type={title == 'Do Reflect' ? 'primary' : undefined}>Reflect</Button>
           </Link>,
-          // <Link key="2" to={`/personal-reflect/manage/${team?.id}`}>
-          //   <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>Personal</Button>
-          // </Link>,
+          <Link key="2" to={`/personal-reflect/manage/${team?.id}`}>
+            <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>Personal</Button>
+          </Link>,
           <Link key="3" to={`/actions-tracker/${team?.id}`}>
             <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>Actions Tracker</Button>
           </Link>,

@@ -1,0 +1,25 @@
+.assessmentAnalysisPage {
+  .personalSection {
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+
+    .assessmentTitle {
+      display: flex;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold !important;
+      align-items: center;
+    }
+    .actionDoPersionalReflection {
+      display: flex;
+      gap: 5px;
+    }
+  }
+
+ 
+}

@@ -48,11 +48,6 @@ export default function actionsTracker({ teamId }: Props) {
     },
   });
 
-  const [updateActionTracker] = useMutation<
-    TeamMutations.updateActionTrackerResult,
-    TeamMutations.updateActionTrackerVars
-  >(TeamMutations.updateActionTracker);
-
   const handleOnDragEnd = (result: DropResult) => {
     if (result && !result.destination) return;
     updateOpinion({
@@ -109,9 +104,9 @@ export default function actionsTracker({ teamId }: Props) {
   const iMember = data?.team?.members.find((member) => member.userId === me?.id);
 
   return (
-    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
-      <>
-        <TopNavBar iMember={iMember} team={data?.team} title="Actions Tracker" />
+    <>
+      <TopNavBar iMember={iMember} team={data?.team} title="Actions Tracker" />
+      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
         <div className="actionsTracker">
           <div className="header">
             <h2>Actions Tracker</h2>
@@ -257,7 +252,7 @@ export default function actionsTracker({ teamId }: Props) {
             <label className="error"></label>
           </div>
         </div>
-      </>
-    </Loading>
+      </Loading>
+    </>
   );
 }

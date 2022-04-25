@@ -1,204 +1,116 @@
-import React, { useState } from 'react';
-import { Modal, DatePicker, Form, Steps, message, Button, FormInstance, Input, Select } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Modal, DatePicker, Form, Steps, message, Button, FormInstance, Input, Select, Tooltip } from 'antd';
+import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
-import { Criteria, Team } from '../../../types';
+import { Assessment, Criteria, Team } from '../../../types';
+import moment from 'moment';
+import { useMutation } from '@apollo/client';
+import { AssessmentMutations } from '../../../grapql-client/mutations';
+import _ from 'lodash';
+import Search from 'antd/lib/transfer/search';
 
 type Props = {
   team: Team;
+  assessment?: Assessment;
   criteriaData: Criteria[];
   isVisible: boolean;
   setVisible: (isVisible: boolean) => void;
 };
 
-const { Step } = Steps;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 4 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 20 },
-  },
-};
-const formItemLayoutWithOutLabel = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 4 },
-  },
-};
-
-const steps = [
-  {
-    title: 'First',
-    content: function test(team: Team, criteriaData: Criteria[]) {
-      return (
-        <>
-          <Form.Item label="Team Id" name={'teamId'} initialValue={team?.id}>
-            <Input disabled placeholder="" />
-          </Form.Item>
-          <Form.Item
-            label="Name"
-            name={'name'}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input placeholder="" />
-          </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-            style={{ textAlign: 'start' }}
-            name="range-time-picker"
-            label="Start Date - End Date"
-          >
-            <RangePicker format="YYYY-MM-DD" />
-          </Form.Item>
-        </>
-      );
-    },
-  },
-  {
-    title: 'Second',
-    content: function test(team: Team, criteriaData: Criteria[]) {
-      return (
-        <>
-          <Form.List
-            name="names"
-            initialValue={criteriaData.map((criteriaData) => criteriaData.id).slice(0, 5)}
-            rules={[
-              {
-                validator: async (_, names) => {
-                  if (!names || names.length < 5) {
-                    return Promise.reject(new Error('At least 5 criteria'));
-                  }
-                },
-              },
-              {
-                validator: async (_, names) => {
-                  if (names && names.length > 9) {
-                    return Promise.reject(new Error('At maxium 9 criteria'));
-                  }
-                },
-              },
-
-              //   {
-              //     validator: async (_, names) => {
-              //       console.log('name', names);
-              //       const toFindDuplicates = (arry) => arry.filter((item, index) => arry.indexOf(item) !== index);
-              //       const duplicateElementa = toFindDuplicates(names);
-              //       console.log('duplicated data', duplicateElementa);
-              //       if (duplicateElementa.length > 0) {
-              //         return Promise.reject(new Error("Criteria's duplicated"));
-              //       }
-              //     },
-              //   },
-            ]}
-          >
-            {(fields, { add, remove }, { errors }) => (
-              <>
-                <Form.ErrorList errors={errors} />
-                {fields.map((field, index) => (
-                  <Form.Item
-                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Criteria List' : ''}
-                    required={false}
-                    key={field.key}
-                  >
-                    <Form.Item
-                      {...field}
-                      validateTrigger={['onChange', 'onBlur']}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select criteria's name or delete this field.",
-                        },
-                      ]}
-                      noStyle
-                    >
-                      <Select placeholder="Select a criteria" style={{ width: 500 }}>
-                        {criteriaData?.map((criteria) => (
-                          <Option key={criteria.id} value={criteria.id}>
-                            {criteria.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-                    {fields.length > 1 ? (
-                      <MinusCircleOutlined className="dynamic-delete-button" onClick={() => remove(field.name)} />
-                    ) : null}
-                  </Form.Item>
-                ))}
-                <div className="flex flex-ai-c flex-jc-c">
-                  <Button type="dashed" onClick={() => add()} style={{ width: '60%' }} icon={<PlusOutlined />}>
-                    Add field
-                  </Button>
-                  <Button
-                    type="dashed"
-                    onClick={() => {
-                      add(criteriaData[0].id, 0);
-                    }}
-                    style={{ width: '60%', marginTop: '20px' }}
-                    icon={<PlusOutlined />}
-                  >
-                    Add field at head
-                  </Button>
-                </div>
-              </>
-            )}
-          </Form.List>
-        </>
-      );
-    },
-  },
-];
-
-export default function CreatingAssessmentModal({ criteriaData, team, isVisible, setVisible }: Props) {
-  const [current, setCurrent] = useState(0);
+export default function CreatingAssessmentModal({ assessment, criteriaData, team, isVisible, setVisible }: Props) {
   const [form] = Form.useForm();
 
-  const next = () => {
-    setCurrent(current + 1);
+  const [selectedCriteria, setSelectedCriteria] = useState(
+    criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5),
+  );
+
+  const [createAssessment] = useMutation<
+    AssessmentMutations.createAssessmentResult,
+    AssessmentMutations.createAssessmentVars
+  >(AssessmentMutations.createAssessment, {
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  useEffect(() => {
+    setSelectedCriteria(criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5));
+  }, [criteriaData]);
+
+  const handleOnSelectCriteria = (newValue: any, oldValue: string) => {
+    const temp = [...selectedCriteria];
+    setSelectedCriteria(
+      temp.map((criteria) => {
+        if (criteria === oldValue) {
+          return newValue;
+        }
+        return criteria;
+      }),
+    );
   };
 
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-
-  const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
-  };
-
-  const handleOnFinish = () => {
+  const handleCreate = () => {
     form.validateFields().then(async (values: any) => {
-      console.log(values);
+      const nameAssessment = values['name'];
+      const startDate = values['range-picker'] && values['range-picker'][0] ? values['range-picker'][0] : moment();
+      const endDate = values['range-picker'] && values['range-picker'][1] ? values['range-picker'][1] : moment();
+      const criteriaList = values['names'];
+      const memberIds = values['memberDoAssessment'];
+      console.log('members is', memberIds);
+      createAssessment({
+        variables: {
+          teamId: team?.id,
+          startDate,
+          endDate,
+          nameAssessment,
+          criteriaList,
+          memberIds,
+        },
+        onCompleted: () => {
+          setVisible(false);
+          setSelectedCriteria(criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5));
+        },
+        refetchQueries: ['getAssessmentsList'],
+        updateQueries: {
+          getAssessmentsList: (previousData, { mutationResult }) => {
+            return { getAssessmentsList: [mutationResult?.data?.createAssessment] };
+          },
+        },
+      });
     });
   };
 
-  const handleOnNext = () => {
-    form.validateFields().then(async (values: any) => {
-      next();
-    });
+  function disabledDate(current) {
+    return current && current < moment().startOf('day');
+  }
+
+  const handleOnSelectAssigners = (value: string) => {
+    if (value === 'selectAll') {
+      // setSelectedAssigners(team?.members?.map((member) => member?.user?.id) || []);
+      form.setFieldsValue({ memberDoAssessment: team?.members?.map((member) => member?.id) || [] });
+    }
   };
+
+  const optionChildAssignees = team?.members.map((member) => {
+    if (!member?.isPendingInvitation) {
+      return (
+        <Option key={member?.id} value={member?.id}>
+          {member?.user?.nickname}
+        </Option>
+      );
+    }
+  });
 
   return (
     <Modal
       onCancel={() => {
         setVisible(false);
-        setCurrent(0);
+        setSelectedCriteria(criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5));
       }}
-      width="700px"
+      width="1000px"
       visible={isVisible}
       closable
       centered
@@ -207,46 +119,205 @@ export default function CreatingAssessmentModal({ criteriaData, team, isVisible,
       maskClosable={false}
       footer={
         <>
-          <div className="steps-action">
-            <Button onClick={() => setVisible(false)}>Cancle</Button>
-            {current > 0 && (
-              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                Previous
-              </Button>
-            )}
-            {current < steps.length - 1 && (
-              <Button
-                type="primary"
-                htmlType="submit"
-                onClick={() => {
-                  handleOnNext();
-                }}
-              >
-                Next
-              </Button>
-            )}
-            {current === steps.length - 1 && (
-              <Button type="primary" htmlType="submit" onClick={() => handleOnFinish()}>
-                Done
-              </Button>
-            )}
-          </div>
+          <Button onClick={() => setVisible(false)}>Cancle</Button>
+          {assessment ? (
+            <Button onClick={() => console.log('updated')} type="primary" htmlType="submit">
+              Update
+            </Button>
+          ) : (
+            <Button onClick={() => handleCreate()} type="primary" htmlType="submit">
+              Create
+            </Button>
+          )}
         </>
       }
     >
-      <Form
-        {...layout}
-        layout="horizontal"
-        form={form}
-        // initialValues={{ names: criteriaData.map((criteriaData) => criteriaData.id).slice(0, 5) }}
-      >
-        <Steps current={current}>
-          {steps.map((item) => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className="steps-content" style={{ marginTop: '50px' }}>
-          {steps[current].content(team, criteriaData)}
+      <Form preserve={false} layout="vertical" form={form}>
+        <div className="containerModal">
+          <div className="settingEssentialInfor">
+            <Form.Item
+              label="Name"
+              name={'name'}
+              style={{ textAlign: 'start' }}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input placeholder="Please input name of assessment" />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              style={{ textAlign: 'start' }}
+              name="range-picker"
+              label="Start Date - End Date"
+            >
+              <RangePicker disabledDate={disabledDate} defaultValue={[moment(), null]} format="DD-MM-YYYY" />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              style={{ textAlign: 'start' }}
+              name="memberDoAssessment"
+              label="Members"
+              initialValue={
+                team?.members?.map((member) => {
+                  if (!member?.isPendingInvitation) return member?.id;
+                }) || []
+              }
+            >
+              <Select
+                onSelect={handleOnSelectAssigners}
+                showArrow
+                allowClear
+                onClear={() => form.setFieldsValue({ memberDoAssessment: [] })}
+                placeholder="Select..."
+                mode="multiple"
+                style={{ width: '100%' }}
+              >
+                <Option key="selectAll" value="selectAll">
+                  Select All
+                </Option>
+                {optionChildAssignees}
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="setting-criteria">
+            <h3>Criteria List:</h3>
+            <Form.List
+              name="names"
+              initialValue={selectedCriteria}
+              rules={[
+                {
+                  validator: async (_, names) => {
+                    if (!names || names.length < 5) {
+                      return Promise.reject(new Error('At least 5 criteria'));
+                    }
+                  },
+                },
+                {
+                  validator: async (_, names) => {
+                    if (names && names.length > 9) {
+                      return Promise.reject(new Error('At maxium 9 criteria'));
+                    }
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }, { errors }) => (
+                <>
+                  <Form.ErrorList errors={errors} />
+                  {fields.map((field, index) => (
+                    <Form.Item required={false} key={field.key}>
+                      <div className="criteria">
+                        <Form.Item
+                          {...field}
+                          validateTrigger={['onChange', 'onBlur']}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select criteria's name or delete this field.",
+                            },
+                          ]}
+                          noStyle
+                        >
+                          <Select
+                            onSelect={(value) =>
+                              handleOnSelectCriteria(
+                                value,
+                                selectedCriteria?.find((criteria, index) => index === field?.key),
+                              )
+                            }
+                            placeholder="Select a criteria"
+                            style={{ width: 500 }}
+                          >
+                            {criteriaData?.map((criteria) => (
+                              <Option
+                                disabled={selectedCriteria.includes(criteria.id)}
+                                key={criteria.id}
+                                value={criteria.id}
+                              >
+                                {criteria.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <Tooltip
+                          trigger={['click']}
+                          placement="bottom"
+                          title={
+                            criteriaData?.find(
+                              (criteria) =>
+                                criteria?.id === selectedCriteria?.find((criteria, index) => index === field?.key),
+                            )?.description
+                          }
+                        >
+                          <QuestionCircleOutlined className="dynamic-delete-button" />
+                        </Tooltip>
+                        {fields.length > 5 ? (
+                          <MinusCircleOutlined
+                            className="dynamic-delete-button"
+                            onClick={() => {
+                              remove(field.name);
+                              setSelectedCriteria(
+                                [...selectedCriteria].filter((criteria, index) => index != field.name),
+                              );
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                    </Form.Item>
+                  ))}
+                  <div>
+                    <div className="actionOfCriteriaList">
+                      <Button
+                        type="dashed"
+                        onClick={() => {
+                          // if (criteriaData?.length === selectedCriteria.length) {
+                          // } else {
+                          const addedCriteria = criteriaData?.filter(
+                            (criteria) => !selectedCriteria.includes(criteria?.id),
+                          )[0]?.id;
+                          if (addedCriteria) {
+                            add(addedCriteria);
+                            setSelectedCriteria([...selectedCriteria, addedCriteria]);
+                          }
+                          // }
+                        }}
+                        icon={<PlusOutlined />}
+                      >
+                        Add field
+                      </Button>
+                      <Button
+                        type="dashed"
+                        onClick={() => {
+                          const addedCriteria = criteriaData?.filter(
+                            (criteria) => !selectedCriteria.includes(criteria?.id),
+                          )[0]?.id;
+                          console.log('criteria', addedCriteria);
+                          if (addedCriteria) {
+                            add(addedCriteria, 0);
+                            setSelectedCriteria([addedCriteria, ...selectedCriteria]);
+                          }
+                        }}
+                        icon={<PlusOutlined />}
+                      >
+                        Add field at head
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </Form.List>
+          </div>
         </div>
       </Form>
     </Modal>

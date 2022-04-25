@@ -38,13 +38,13 @@ export default function ConfigTimeTrackingModal({ team, board, visible, setVisib
             teamId: team?.id,
             boardId: board?.id,
             timerInProgress: true,
-            endTime: `${moment().add(minutes, 'minutes').valueOf()}`,
+            endTime: `${moment().add(minutes, 'minutes')}`,
           },
           optimisticResponse: {
             updateBoard: {
               ...board,
               timerInProgress: true,
-              endTime: `${moment().add(minutes, 'minutes').valueOf()}`,
+              endTime: moment().add(minutes, 'minutes').toDate(),
             },
           },
         });

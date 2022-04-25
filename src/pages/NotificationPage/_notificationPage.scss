@@ -1,0 +1,12 @@
+.notificationPage {
+  padding: 10px 60px 0px 60px;
+  .headerSection {
+    font-size: 30px;
+    font-weight: bold !important;
+  }
+  .container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+}

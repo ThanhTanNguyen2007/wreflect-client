@@ -1,16 +1,20 @@
 import { gql } from '@apollo/client';
 import { Criteria } from '../../types';
 
-export type getListCriteria = {
-  criteriaList: Criteria[];
+export type getEssentialDataResult = {
+  getEssentialData: {
+    criteriaList: Criteria[];
+  };
 };
 
-export const getListCriteria = gql`
-  query CriteriaList {
-    criteriaList {
-      id
-      name
-      description
+export const getEssentialData = gql`
+  query getEssentialData {
+    getEssentialData {
+      criteriaList {
+        id
+        name
+        description
+      }
     }
   }
 `;

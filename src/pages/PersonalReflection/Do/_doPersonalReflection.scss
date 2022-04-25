@@ -1,0 +1,100 @@
+.doPersonalReflection {
+  .personalSection {
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+
+    .assessmentTitle {
+      display: flex;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: bold !important;
+      align-items: center;
+    }
+    .actionDoPersionalReflection {
+      display: flex;
+      gap: 5px;
+    }
+  }
+
+  .headerOfDoPersonalReflection {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .criteriaQuestionList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .criteriaQuestion {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 5px;
+      background-color: white;
+      box-shadow: -1px 0px 2px 0 rgba(0, 0, 0, 0.02), -1px 0px 2px 0 rgba(0, 0, 0, 0.02),
+        0px 1px 2px 0 rgba(0, 0, 0, 0.02), 0px -1px 2px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02),
+        0 2px 3px 0 rgba(0, 0, 0, 0.02), 0 2px 7px 0 rgba(0, 0, 0, 0.04), 40px 0px 2px 0 rgba(0, 0, 0, 0);
+
+      .criteriaHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        font-size: 15px;
+        font-weight: bold !important;
+      }
+
+      .criteriaBody {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .questionPoint {
+          .num-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+
+            .num {
+              font-size: 10px;
+              height: 35px;
+              width: 35px;
+              line-height: 25px;
+              color: #6d7982;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            .num.is-selected {
+              border: 3px solid #6d7982;
+            }
+          }
+        }
+
+        .actions {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

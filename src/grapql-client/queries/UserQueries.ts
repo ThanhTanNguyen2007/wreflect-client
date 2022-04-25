@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { User } from '../../types';
 import { USER_FIELDS } from '../fragments/userFragment';
 
 const login = gql`
@@ -22,24 +23,15 @@ const me = gql`
   }
 `;
 
+export type getUserResult = {
+  account: User;
+};
+
 const getUser = gql`
-  query getUser($email: String!) {
-    user(email: $email) {
-      id
-      email
-      createdAt
-      updatedAt
-      isAdmin
-      status
-      members {
-        id
-        email
-        isOwner
-        teamId
-        joinedAt
-        assignedBy
-        status
-      }
+  ${USER_FIELDS}
+  query getUser {
+    account {
+      ...UserFields
     }
   }
 `;

@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { TeamQueries } from '../../../grapql-client/queries';
 import { Team } from '../../../types';
+import { useHistory } from 'react-router-dom';
 
 type Props = {
   teamId: string;
@@ -9,6 +10,8 @@ type Props = {
 };
 
 export default function AnalysisPersonal({ teamId, setTeam }: Props) {
+  const history = useHistory();
+
   const { data } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(TeamQueries.getTeam, {
     variables: {
       teamId,
@@ -19,5 +22,17 @@ export default function AnalysisPersonal({ teamId, setTeam }: Props) {
     setTeam(data?.team);
   }, [data]);
 
-  return <div>Analysis</div>;
+  return (
+    <>
+      <div>
+        <div className="personalSection">
+          <div onClick={() => history?.push(`/personal-reflect/manage/${data?.team?.id}`)} className={`manageJudge`}>
+            Manage
+          </div>
+          <div className={`analysis primary`}>Analysis</div>
+        </div>
+      </div>
+      <div className="content">Analysis</div>;
+    </>
+  );
 }

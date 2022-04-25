@@ -76,7 +76,7 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
 
   function disabledDate(current: moment.Moment) {
     // Can not select days before today and today
-    return current && current < moment().endOf('day');
+    return current && current < moment().startOf('day');
   }
 
   return (
@@ -144,7 +144,7 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
           label="RangePicker"
           rules={[{ type: 'array' as const, required: true, message: 'Please select time!' }]}
         >
-          <RangePicker disabledDate={disabledDate} />
+          <RangePicker format="DD-MM-YYYY" disabledDate={disabledDate} />
         </Form.Item>
         <Form.Item name="select" label="Select">
           <Select defaultValue="public">

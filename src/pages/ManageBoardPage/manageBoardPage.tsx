@@ -77,10 +77,10 @@ const ManageBoardPage = ({ teamId }: Props) => {
   const iMember = data?.team?.members.find((member) => member.userId === me?.id);
 
   return (
-    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
-      <>
-        <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
-        <TopNavBar iMember={iMember} team={data?.team} title="Manage Board" />
+    <>
+      <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
+      <TopNavBar iMember={iMember} team={data?.team} title="Manage Board" />
+      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
         <>
           <div className="manage-board">
             <div className="board-selector">
@@ -164,8 +164,8 @@ const ManageBoardPage = ({ teamId }: Props) => {
             </Row>
           </div>
         </>
-      </>
-    </Loading>
+      </Loading>
+    </>
   );
 };
 

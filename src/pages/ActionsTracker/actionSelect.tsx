@@ -3,7 +3,7 @@ import React from 'react';
 import { notification, Select } from 'antd';
 import { Board, Column, Opinion, Team } from '../../types';
 import { useMutation } from '@apollo/client';
-import { OpinionMutations } from '../../grapql-client/mutations';
+import { OpinionMutations, TeamMutations } from '../../grapql-client/mutations';
 
 type Props = {
   team: Team;
@@ -15,17 +15,21 @@ type Props = {
 const { Option } = Select;
 
 export default function ActionSelect({ team, board, column, opinion }: Props) {
-  const [updateOpinion] = useMutation<OpinionMutations.updateOpinionResult, OpinionMutations.updateOpinionVars>(
-    OpinionMutations.updateOpinion,
-    {
-      onError: (error) => {
-        notification.error({
-          message: error?.message,
-          placement: 'bottomRight',
-        });
-      },
-    },
-  );
+  // const [updateOpinion] = useMutation<OpinionMutations.updateOpinionResult, OpinionMutations.updateOpinionVars>(
+  //   OpinionMutations.updateOpinion,
+  //   {
+  //     onError: (error) => {
+  //       notification.error({
+  //         message: error?.message,
+  //         placement: 'bottomRight',
+  //       });
+  //     },
+  //   },
+  // );
+  const [updateActionTracker] = useMutation<
+    TeamMutations.updateActionTrackerResult,
+    TeamMutations.updateActionTrackerVars
+  >(TeamMutations.updateActionTracker);
 
   const renderListAssignees = team.members.map((member) => (
     <Option value={member.user.id} key={member.id}>
@@ -50,31 +54,46 @@ export default function ActionSelect({ team, board, column, opinion }: Props) {
   });
 
   const handleOnSelectAssignee = (value: string) => {
-    updateOpinion({
+    updateActionTracker({
       variables: {
-        opinionId: opinion.id,
-        teamId: team.id,
+        teamId: team?.id,
+        sourceBoardId: board?.id,
+        sourceColumnId: column?.id,
+        destinationBoardId: board?.id,
+        destinationColumnId: column?.id,
+        opinionId: opinion?.id,
         responsible: value,
+        status: opinion.status,
       },
     });
   };
 
   const handleOnSelectBoard = (value: string) => {
-    updateOpinion({
+    updateActionTracker({
       variables: {
-        opinionId: opinion.id,
-        teamId: team.id,
-        newColumnId: team.boards.find((board) => board.id === value)?.columns[0].id,
+        teamId: team?.id,
+        sourceBoardId: board?.id,
+        sourceColumnId: column?.id,
+        destinationBoardId: value,
+        destinationColumnId: column?.id,
+        opinionId: opinion?.id,
+        responsible: opinion.responsible,
+        status: opinion.status,
       },
     });
   };
 
   const handleOnSelectColumn = (value: string) => {
-    updateOpinion({
+    updateActionTracker({
       variables: {
-        opinionId: opinion.id,
-        teamId: team.id,
-        newColumnId: value,
+        teamId: team?.id,
+        sourceBoardId: board?.id,
+        sourceColumnId: column?.id,
+        destinationBoardId: board?.id,
+        destinationColumnId: value,
+        opinionId: opinion?.id,
+        responsible: opinion.responsible,
+        status: opinion.status,
       },
     });
   };
