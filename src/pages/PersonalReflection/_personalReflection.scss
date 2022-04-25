@@ -1,7 +1,7 @@
 .personalReflectionPage {
-  @import './Manage/manageJudge.scss';
-  @import './do/doPersonalReflection.scss';
-  @import './AssessmentAnalysis/assessmentAnalysis.scss';
+  @import './manageJudge.scss';
+  @import './doPersonalReflection.scss';
+  @import './assessmentAnalysis.scss';
 
   display: flex;
   flex-direction: column;
