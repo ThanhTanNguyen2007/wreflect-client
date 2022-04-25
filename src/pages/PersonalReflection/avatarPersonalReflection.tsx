@@ -1,6 +1,6 @@
 import { Avatar, Badge, Tooltip } from 'antd';
 import React, { useCallback } from 'react';
-import { Evaluation, Member, Result } from '../../../types';
+import { Evaluation, Member, Result } from '../../types';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 
 type Props = {

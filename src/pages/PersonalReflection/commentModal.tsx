@@ -1,6 +1,6 @@
 import { Modal, Input, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { AnswerOnCriteria, Evaluation, Member } from '../../../types';
+import { AnswerOnCriteria, Evaluation, Member } from '../../types';
 
 const { TextArea } = Input;
 
