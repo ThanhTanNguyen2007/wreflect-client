@@ -188,8 +188,8 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
                         <div style={{ margin: '0px 10px 0px 10px' }} className="actions flex flex-dir-c flex-gap-10">
                           {
                             <>
-                              <Button>ReOpen</Button>
-                              <Button>Share</Button>
+                              {/* <Button>ReOpen</Button>
+                              <Button>Share</Button> */}
                               <Button
                                 loading={isLoading}
                                 onClick={async () => {
