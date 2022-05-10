@@ -155,6 +155,13 @@ code {
 .ant-spin {
   color: #a4a0f1; }
 
+.ant-row {
+  width: 100%; }
+
+.ant-page-header-heading-title {
+  color: inherit;
+  font-weight: bold; }
+
 .ant-spin-dot-item {
   background-color: #a4a0f1; }
 
@@ -261,6 +268,9 @@ code {
 .scrollable {
   width: 100%;
   overflow-y: auto; }
+
+.non-scroll {
+  overflow: hidden; }
 
 .ant-menu.ant-menu-dark .ant-menu-sub, .ant-layout-sider-trigger {
   background: #a4a0f1; }
@@ -1127,7 +1137,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
 .healthCheckConfiguration {
   display: flex;
   flex-direction: column;
-  height: 380px; }
+  overflow: hidden; }
   .healthCheckConfiguration .statement {
     font-size: 10px;
     height: 25px;

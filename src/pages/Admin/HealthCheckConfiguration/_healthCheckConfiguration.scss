@@ -1,7 +1,7 @@
 .healthCheckConfiguration {
   display: flex;
   flex-direction: column;
-  height: 380px;
+  overflow: hidden;
 
   .statement {
     font-size: 10px;

@@ -66,7 +66,7 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
             Create
           </Button>
         </div>
-        <div className="listItem  flex flex-1 width-100 scrollable">
+        <div className="listItem  flex flex-1 width-100 non-scroll">
           <Loading data={templates} loading={loading}>
             <>
               {templates?.getTemplates?.data?.length > 0 ? (
@@ -102,7 +102,7 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
                       </Card>
                     ))}
                   </div>
-                  <div className="flex flex-dir-r flex-ai-c flex-gap-10  mt-25">
+                  <div className="flex  flex-dir-r flex-ai-c flex-gap-10  mt-25">
                     <Pagination
                       defaultCurrent={1}
                       current={page}

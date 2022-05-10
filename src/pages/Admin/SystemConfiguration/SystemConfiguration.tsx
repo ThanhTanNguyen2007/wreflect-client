@@ -24,7 +24,10 @@ export default function SystemConfiguration({ isAdmin }: Props) {
 
   return (
     <div className="systemConfiguration flex flex-dir-c flex-1">
-      <PageHeader className="site-page-header flex flex-ai-c flex-jc-c dpurple" title="System Configuration" />
+      <PageHeader
+        className="site-page-header flex flex-ai-c flex-jc-c dpurple color-white"
+        title="System Configuration"
+      />
       <Switch>
         <Route path={`${path}/health-check`} render={({ match }) => <HealthCheckConfiguration isAdmin={isAdmin} />} />
         <Route path={`${path}/criteria`} render={({ match }) => <CriteriaConfiguration isAdmin={isAdmin} />} />

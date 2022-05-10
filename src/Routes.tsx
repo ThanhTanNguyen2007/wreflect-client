@@ -126,6 +126,7 @@ const Routes = ({ me }: Props) => {
                 </Layout>
               </>
             ) : (
+
               <Switch>
                 <Route path="/" component={() => <HomePage email={email} picture={picture} />} />
                 <Redirect to="/" />
