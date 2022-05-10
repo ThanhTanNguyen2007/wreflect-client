@@ -253,7 +253,6 @@ export default function HealthCheck({ teamId, boardId }: Props) {
   return (
     <div className="healthCheckPage">
       <TopNavBar iMember={iMember} team={data?.team} boardId={boardId} title="Health Check" />
-
       <div className="team-health">
         {healthCheckData?.getHealthCheck?.healthCheck ? (
           <>

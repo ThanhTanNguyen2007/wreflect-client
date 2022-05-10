@@ -1,33 +1,36 @@
 @import url(antd/dist/antd.css);
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
-* {
+*, *::before, *::after, *:not(textarea) {
   margin: 0px;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  font-weight: 700 !important; }
+  font-weight: 700;
+  user-select: none; }
+
+html {
+  box-sizing: border-box;
+  overflow: hidden; }
+
+body {
+  height: 100%; }
 
 p, input {
   font-family: 'Inter', sans-serif;
   font-weight: 400 !important; }
 
-div {
+div, span {
   font-family: 'Inter', sans-serif;
-  font-weight: 400 !important;
-  font-size: 12px; }
-
-span {
-  font-size: 12px; }
+  font-weight: 400 !important; }
 
 .ant-layout {
+  height: 100vh;
+  display: flex;
   padding: 10px;
   flex-direction: column;
   width: 100%;
   padding: 0;
   margin: 0px;
-  background: #fff;
-  max-width: 100%;
-  max-height: 100%;
-  min-height: 100vh; }
+  background: #fff; }
 
 code {
   font-family: 'Inter', sans-serif;
@@ -36,13 +39,13 @@ code {
 
 .flex {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch; }
+  flex-direction: column; }
   .flex-gap-5 {
     gap: 5px; }
   .flex-gap-10 {
     gap: 10px; }
+  .flex-gap-24 {
+    gap: 24px; }
   .flex-1 {
     flex: 1; }
   .flex-2 {
@@ -67,6 +70,8 @@ code {
     justify-content: center; }
   .flex-jc-s {
     justify-content: stretch; }
+  .flex-jc-bl {
+    justify-content: baseline; }
   .flex-jc-start {
     justify-content: start; }
   .flex-jc-end {
@@ -75,6 +80,14 @@ code {
     align-items: center; }
   .flex-ai-s {
     align-items: stretch; }
+  .flex-ai-bl {
+    align-items: baseline; }
+  .flex-ai-e {
+    align-items: end; }
+  .flex-ai-st {
+    align-items: flex-start; }
+  .flex-ai-fe {
+    align-items: flex-end; }
   .flex-dir-c {
     flex-direction: column; }
   .flex-dir-r {
@@ -133,11 +146,29 @@ code {
   color: #a4a0f1;
   text-shadow: 0 0 0.25px currentColor; }
 
+.site-page-header {
+  border: 1px solid #ebedf0; }
+
+.ant-layout-content {
+  overflow: auto; }
+
 .ant-spin {
   color: #a4a0f1; }
 
 .ant-spin-dot-item {
   background-color: #a4a0f1; }
+
+.p-20 {
+  padding: 20px; }
+
+.color-white {
+  color: white; }
+
+.color-black {
+  color: black; }
+
+.width-100 {
+  width: 100%; }
 
 .mb-10 {
   margin-bottom: 10px; }
@@ -218,9 +249,18 @@ code {
 .purple {
   background-color: #e4ddfe; }
 
+.dpurple {
+  background-color: #a4a0f1; }
+
 .bold {
-  font-weight: bold !important;
-  font-size: 13px; }
+  font-weight: bold !important; }
+
+.ant-page-header-heading-extra {
+  overflow: auto !important; }
+
+.scrollable {
+  width: 100%;
+  overflow-y: auto; }
 
 .ant-menu.ant-menu-dark .ant-menu-sub, .ant-layout-sider-trigger {
   background: #a4a0f1; }
@@ -234,10 +274,6 @@ span.ant-tabs-separator {
 .btn-new-team {
   float: right;
   margin-right: 15px; }
-
-.site-layout .site-layout-background {
-  background: #fff;
-  border-radius: 20px; }
 
 .ant-menu.ant-menu-dark, .ant-layout-sider-trigger {
   background-color: #a4a0f1; }
@@ -695,22 +731,18 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
     .manage-board .button-right button {
       background-color: #0d0d0e;
       color: white; }
-  .manage-board .board-items {
-    margin-bottom: 10px;
-    display: flex;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
-    .manage-board .board-items .board-icons {
-      margin: 0 10px 5px auto; }
-      .manage-board .board-items .board-icons span {
-        font-size: 15px;
-        font-weight: bold !important;
-        color: #6d7982; }
-        .manage-board .board-items .board-icons span:hover {
-          color: blue;
-          cursor: pointer; }
-      .manage-board .board-items .board-icons .text-button:hover {
-        color: #6d7982;
-        cursor: auto; }
+  .manage-board .board-items .board-icons {
+    margin: 0 10px 5px auto; }
+    .manage-board .board-items .board-icons span {
+      font-size: 15px;
+      font-weight: bold !important;
+      color: #6d7982; }
+      .manage-board .board-items .board-icons span:hover {
+        color: blue;
+        cursor: pointer; }
+    .manage-board .board-items .board-icons .text-button:hover {
+      color: #6d7982;
+      cursor: auto; }
 
 .configBoard .listColumn {
   display: flex;
@@ -807,6 +839,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   height: '100%'; }
   .healthCheckPage .team-health {
     font-family: 'inter-bold';
+    min-height: 640px;
+    overflow: auto;
     font-size: 14px;
     min-height: 600px;
     margin: 10px 0;
@@ -901,12 +935,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
         .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard {
           display: flex;
           flex-direction: row;
-          align-items: center;
-          border-radius: 5px;
-          padding: 20px;
-          background-color: white;
-          margin: 20px;
-          box-shadow: -1px 0px 2px 0 rgba(0, 0, 0, 0.02), -1px 0px 2px 0 rgba(0, 0, 0, 0.02), 0px 1px 2px 0 rgba(0, 0, 0, 0.02), 0px -1px 2px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02), 0 2px 3px 0 rgba(0, 0, 0, 0.02), 0 2px 7px 0 rgba(0, 0, 0, 0.04); }
+          align-items: center; }
           .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard .inforAssessment {
             flex: 1; }
             .personalReflectionPage .manageJudgePage .container .listOfAssessment .assessmentCard .inforAssessment .fieldInfor {
@@ -1071,9 +1100,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
 .content {
   flex: 1;
   padding: 20px;
-  background-color: white;
   border-radius: 8px;
-  margin-top: 30px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px; }
 
 .notificationPage {
@@ -1085,6 +1112,51 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
     margin-top: 10px;
     display: flex;
     flex-direction: column; }
+
+.userManagermentPage {
+  background-color: pink; }
+
+.systemConfiguration {
+  overflow: auto; }
+  .systemConfiguration img {
+    height: 250px;
+    object-fit: cover; }
+  .systemConfiguration .ant-card {
+    height: inherit; }
+
+.healthCheckConfiguration {
+  display: flex;
+  flex-direction: column;
+  height: 380px; }
+  .healthCheckConfiguration .statement {
+    font-size: 10px;
+    height: 25px;
+    line-height: 25px;
+    color: #6d7982;
+    border-radius: 5px;
+    padding: 0 10px; }
+
+.createHealthCheckModal .ant-form-item,
+.updateHealthCheckModal .ant-form-item {
+  margin-bottom: 0; }
+
+.createHealthCheckModal .dynamic-delete-button,
+.updateHealthCheckModal .dynamic-delete-button {
+  position: relative;
+  top: 4px;
+  color: #999;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s; }
+
+.createHealthCheckModal .dynamic-delete-button:hover,
+.updateHealthCheckModal .dynamic-delete-button:hover {
+  color: #777; }
+
+.createHealthCheckModal .dynamic-delete-button[disabled],
+.updateHealthCheckModal .dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5; }
 
 .sidebar .ant-layout-logo {
   height: 32px;

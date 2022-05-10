@@ -120,7 +120,6 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
           <TextArea bordered placeholder="Description of the team" rows={4} name="description" />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true, message: 'Please input images' }]}
           name="upload"
           label="Upload"
           valuePropName="file"

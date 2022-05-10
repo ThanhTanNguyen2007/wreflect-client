@@ -1,24 +1,22 @@
-import { useMutation, useQuery } from '@apollo/client';
 import React, { useEffect, useContext, useState } from 'react';
-import { AssessmentQueries, CriteriaQueries, TeamQueries } from '../../grapql-client/queries';
-import { Assessment, Team } from '../../types';
-import { Button, Input, Pagination, Select, Tooltip, Modal, Empty } from 'antd';
-import CreatingAssessmentModal from './creatingAssessmentModal';
-import { SortDescendingOutlined, SortAscendingOutlined, AimOutlined } from '@ant-design/icons';
-import { filterOfGetAssessmentList, sortType } from '../../grapql-client/queries/assessmentQueries';
+import { useMutation, useQuery } from '@apollo/client';
+import _ from 'lodash';
 import moment from 'moment';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { SortDescendingOutlined, SortAscendingOutlined, AimOutlined } from '@ant-design/icons';
+import { Button, Card, Pagination, Select, Tooltip, Modal, Empty } from 'antd';
+
+import { AssessmentQueries, CriteriaQueries, TeamQueries } from '../../grapql-client/queries';
+import CreatingAssessmentModal from './creatingAssessmentModal';
+import { filterOfGetAssessmentList, sortType } from '../../grapql-client/queries/assessmentQueries';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import UpdateAssessmentModal from './updateAssessmentModal';
-import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Loading } from '../../components/Loading';
 import selfContext from '../../contexts/selfContext';
-import _, { truncate } from 'lodash';
+import { Assessment, Team } from '../../types';
 import { AssessmentMutations } from '../../grapql-client/mutations';
-import loading from '../../components/Loading/loading';
 const { confirm } = Modal;
-
-const { Search } = Input;
 const { Option } = Select;
 
 type Props = {
@@ -91,16 +89,10 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
     pageSize && setSize(pageSize);
   };
 
-  const handleRefetch = () => {
-    teamRefetch();
-    assessmentDataRefetch();
-  };
-
   const iMember = data?.team?.members.find((member) => member.userId === me?.id);
 
   return (
     <Loading
-      refetch={handleRefetch}
       data={!_?.isNull(data) && !_?.isNull(assessmentData)}
       loading={loading}
       error={teamError || assessmentError}
@@ -175,51 +167,54 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
                 <div className="listOfAssessment">
                   {assessmentData?.getAssessmentsList?.data?.map((assessment) => (
                     <>
-                      <div
+                      <Card
                         key={assessment?.id}
-                        className={`assessmentCard ${assessment?.status == 'Complete' && 'done'}`}
+                        className={`mt-25 ${assessment?.status == 'Complete' && 'done'}`}
+                        hoverable
                       >
-                        <div className="inforAssessment">
-                          <div className="fieldInfor">
-                            <div className="upperCase">Name:</div>
-                            {assessment?.name?.toUpperCase()}
+                        <div className="assessmentCard ">
+                          <div className="inforAssessment">
+                            <div className="fieldInfor">
+                              <div className="upperCase">Name:</div>
+                              {assessment?.name?.toUpperCase()}
+                            </div>
+                            <div className="fieldInfor">
+                              <div className="upperCase">Status:</div>
+                              {assessment.status}
+                            </div>
+                            <div className="flex flex-dir-r">
+                              <h3>{moment(+assessment.startDate).format('DD/MM/YYYY')}</h3>
+                              <h3>{moment(+assessment.endDate).format('DD/MM/YYYY')}</h3>
+                            </div>
                           </div>
-                          <div className="fieldInfor">
-                            <div className="upperCase">Status:</div>
-                            {assessment.status}
-                          </div>
-                          <div className="flex flex-dir-r">
-                            <h3>{moment(+assessment.startDate).format('DD/MM/YYYY')}</h3>
-                            <h3>{moment(+assessment.endDate).format('DD/MM/YYYY')}</h3>
-                          </div>
-                        </div>
-                        <div className="actionAssessment">
-                          <Tooltip title="Do Personal Reflection">
-                            <Button
-                              type="text"
-                              onClick={() => history.push(`/personal-reflect/do/${teamId}/${assessment?.id}`)}
-                              icon={<AimOutlined />}
-                            />
-                          </Tooltip>
-                          <Tooltip title="Edit">
-                            <Button
-                              type="text"
-                              onClick={() => {
-                                setSelectedAssessment(assessment);
-                                setIsUpdateModalVisible(true);
-                              }}
-                              icon={<EditOutlined />}
-                            />
-                          </Tooltip>
-                          {/* <Tooltip title="Delete">
+                          <div className="actionAssessment">
+                            <Tooltip title="Do Personal Reflection">
+                              <Button
+                                type="text"
+                                onClick={() => history.push(`/personal-reflect/do/${teamId}/${assessment?.id}`)}
+                                icon={<AimOutlined />}
+                              />
+                            </Tooltip>
+                            <Tooltip title="Edit">
+                              <Button
+                                type="text"
+                                onClick={() => {
+                                  setSelectedAssessment(assessment);
+                                  setIsUpdateModalVisible(true);
+                                }}
+                                icon={<EditOutlined />}
+                              />
+                            </Tooltip>
+                            {/* <Tooltip title="Delete">
                         <Button onClick={(
 
                         )} type="text" icon={<DeleteOutlined/> }>
                         </Button>
                       </Tooltip> */}
-                          <DeleteAssessmentButton teamId={teamId} assessmentId={assessment?.id} />
+                            <DeleteAssessmentButton teamId={teamId} assessmentId={assessment?.id} />
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     </>
                   ))}
                 </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Button, Row, Col, Switch, Tooltip, Empty, Modal, notification } from 'antd';
+import { Button, Card, Row, Col, Switch, Tooltip, Empty, Modal, notification } from 'antd';
 import {
   PlusOutlined,
   LockTwoTone,
@@ -80,7 +80,7 @@ const ManageBoardPage = ({ teamId }: Props) => {
     <>
       <ConfigBoardModal teamId={teamId} setVisible={setIsCreateModalVisible} visible={isCreateModalVisible} />
       <TopNavBar iMember={iMember} team={data?.team} title="Manage Board" />
-      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+      <Loading data={data?.team} loading={loading} error={error}>
         <>
           <div className="manage-board">
             <div className="board-selector">
@@ -104,55 +104,52 @@ const ManageBoardPage = ({ teamId }: Props) => {
                             setVisible={setIsUpdateModalVisible}
                             visible={isUpdateModalVisible}
                           />
-                          <div
-                            className="board-items site-layout-background"
-                            key={board.id}
-                            style={{
-                              padding: 24,
-                              height: '80px',
-                              width: '100%',
-                            }}
-                          >
-                            <h1>{board.title}</h1>
-                            <div className="board-icons">
-                              <span className="text-button" style={{ marginRight: 20 }}>
-                                <Switch
-                                  style={{ marginRight: 10 }}
-                                  checkedChildren={<LockTwoTone twoToneColor="white" />}
-                                  unCheckedChildren={<UnlockTwoTone twoToneColor="white" />}
-                                  checked={board.isLocked}
-                                  loading={updatingBoard}
-                                  onClick={() => {
-                                    if (iMember?.isOwner || iMember?.isSuperOwner) {
-                                      updateBoard({
-                                        variables: {
-                                          teamId,
-                                          boardId: board?.id,
-                                          isLocked: !board?.isLocked,
-                                        },
-                                      });
-                                    }
-                                  }}
-                                />
-                                Lock Board
-                              </span>
-                              {/* <Tooltip title="Clone Board">
+
+                          <Card className="mt-25" hoverable>
+                            {/* <div className="board-items site-layout-background"> */}
+                            <div className="flex flex-dir-r  flex-jc-sb">
+                              <h1>{board.title}</h1>
+                              <div className="board-icons">
+                                <span className="text-button" style={{ marginRight: 20 }}>
+                                  <Switch
+                                    style={{ marginRight: 10 }}
+                                    checkedChildren={<LockTwoTone twoToneColor="white" />}
+                                    unCheckedChildren={<UnlockTwoTone twoToneColor="white" />}
+                                    checked={board.isLocked}
+                                    loading={updatingBoard}
+                                    onClick={() => {
+                                      if (iMember?.isOwner || iMember?.isSuperOwner) {
+                                        updateBoard({
+                                          variables: {
+                                            teamId,
+                                            boardId: board?.id,
+                                            isLocked: !board?.isLocked,
+                                          },
+                                        });
+                                      }
+                                    }}
+                                  />
+                                  Lock Board
+                                </span>
+                                {/* <Tooltip title="Clone Board">
                                 <CopyOutlined style={{ marginRight: 20 }} />
                               </Tooltip> */}
-                              <Tooltip title="Edit">
-                                <EditOutlined
-                                  onClick={() => setIsUpdateModalVisible(true)}
-                                  style={{ marginRight: 20 }}
-                                />
-                              </Tooltip>
-                              <Tooltip title="Delete">
-                                <DeleteOutlined
-                                  onClick={() => handleDeleteBoard(board.teamId, board.id)}
-                                  style={{ marginRight: 20 }}
-                                />
-                              </Tooltip>
+                                <Tooltip title="Edit">
+                                  <EditOutlined
+                                    onClick={() => setIsUpdateModalVisible(true)}
+                                    style={{ marginRight: 20 }}
+                                  />
+                                </Tooltip>
+                                <Tooltip title="Delete">
+                                  <DeleteOutlined
+                                    onClick={() => handleDeleteBoard(board.teamId, board.id)}
+                                    style={{ marginRight: 20 }}
+                                  />
+                                </Tooltip>
+                              </div>
                             </div>
-                          </div>
+                            {/* </div> */}
+                          </Card>
                         </div>
                       );
                     })}

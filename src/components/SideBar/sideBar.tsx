@@ -1,30 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 
-import { Menu, Layout, Modal, Tooltip, Button, Row, Col, Tabs, Badge } from 'antd';
-import { Link } from 'react-router-dom';
-import { Logout } from '../Logout';
-
+import { Menu, Layout, Modal, Tooltip, Row, Col, Tabs, Badge } from 'antd';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   CompassOutlined,
+  UsergroupDeleteOutlined,
   LogoutOutlined,
-  StockOutlined,
-  TeamOutlined,
-  CarryOutOutlined,
   GoldOutlined,
   BarChartOutlined,
   UserOutlined,
   BellOutlined,
   QuestionOutlined,
+  UserSwitchOutlined,
+  SlidersOutlined,
 } from '@ant-design/icons';
+import { useQuery } from '@apollo/client';
+import Avatar from 'antd/lib/avatar/avatar';
 
 import { auth } from '../../apis';
+import { Logout } from '../Logout';
 import selfContext from '../../contexts/selfContext';
-import Avatar from 'antd/lib/avatar/avatar';
-import { useQuery } from '@apollo/client';
 import { NotificationQueries } from '../../grapql-client/queries';
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
 const { TabPane } = Tabs;
 
 type Props = {
@@ -33,9 +31,13 @@ type Props = {
 };
 
 const SideBar = ({ isAdmin }: Props) => {
+  const [isSwitchAdmin, setIsSwitchAdmin] = useState(false);
   const [isCollapse, setIsCollapse] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const { path, url } = useRouteMatch();
+  const history = useHistory();
   const me = useContext(selfContext);
+  const menuComp = useRef<Menu>(null);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -44,6 +46,11 @@ const SideBar = ({ isAdmin }: Props) => {
   const handleCancel = () => {
     setShowModal(false);
   };
+
+  useEffect(() => {
+    setIsSwitchAdmin(isAdmin && location?.pathname?.includes('/admin'));
+  }, [location?.pathname]);
+
   const onClickLogout = () => {
     Modal.confirm({
       title: 'Are you sure want to sign out',
@@ -81,22 +88,23 @@ const SideBar = ({ isAdmin }: Props) => {
               <Avatar src={me?.picture} />
             </Tooltip>
           </div>
-          <Menu className="flex flex-1" theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            {isAdmin ? (
+          {isSwitchAdmin && <div className="bold flex flex-ai-c flex-jc-c white mt-10">Admin</div>}
+          <Menu className="flex flex-1" theme="dark" mode="inline">
+            {isSwitchAdmin ? (
               <>
                 <Menu.Item key="2" icon={<BarChartOutlined />}>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/admin/team-managerment">Team Managerment</Link>
                 </Menu.Item>
-                {/* <Menu.Item key="3" icon={<UsergroupDeleteOutlined />}>
-                  <Link to="/user-managements">User Managements</Link>
+                <Menu.Item key="3" icon={<UsergroupDeleteOutlined />}>
+                  <Link to="/admin/user-managerment">User Managerment</Link>
                 </Menu.Item>
-                <Menu.Item key="4" icon={<SettingOutlined />}>
-                  Settings
-                </Menu.Item> */}
+                <Menu.Item key="4" icon={<SlidersOutlined />}>
+                  <Link to="/admin/system-configuration">System Configuration</Link>
+                </Menu.Item>
               </>
             ) : (
               <>
-                <Menu.Item style={{ marginTop: 20 }} icon={<GoldOutlined />} key="Teams">
+                <Menu.Item style={{ marginTop: 10 }} icon={<GoldOutlined />} key="teams">
                   <Link to="/teams">Teams</Link>
                 </Menu.Item>
                 <Menu.Item icon={<CompassOutlined />} key="connect">
@@ -116,17 +124,6 @@ const SideBar = ({ isAdmin }: Props) => {
                 >
                   <Link to="/notifications">Notifications</Link>
                 </Menu.Item>
-                {/* <Menu.Item icon={<AimOutlined />} key="actionTracker">
-                  <Link to="/actions-tracker">Actions Tracker</Link>
-                </Menu.Item> */}
-                {/* <SubMenu className="flex-1" key="sub1" icon={<TeamOutlined />} title="Team">
-                  <Menu.Item key="5" icon={<StockOutlined />}>
-                    Health Check
-                  </Menu.Item>
-                  <Menu.Item key="6" icon={<CarryOutOutlined />}>
-                    Task
-                  </Menu.Item>
-                </SubMenu> */}
                 <Menu.Item icon={<UserOutlined />} key="account">
                   <Link to="/me">Account</Link>
                 </Menu.Item>
@@ -135,7 +132,11 @@ const SideBar = ({ isAdmin }: Props) => {
                 </Menu.Item>
               </>
             )}
-
+            {isAdmin && (
+              <Menu.Item onClick={() => setIsSwitchAdmin(!isSwitchAdmin)} key="11" icon={<UserSwitchOutlined />}>
+                <Link to={isSwitchAdmin ? '/teams' : '/admin'}>Switch to {isSwitchAdmin ? 'User' : 'Admin'}</Link>
+              </Menu.Item>
+            )}
             <Menu.Item onClick={() => onClickLogout()} style={{ marginTop: 'auto' }} key="10" icon={<LogoutOutlined />}>
               <Logout>
                 <>Sign out</>

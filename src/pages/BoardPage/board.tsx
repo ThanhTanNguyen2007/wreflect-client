@@ -233,7 +233,7 @@ export default function board({ teamId, boardId }: Props) {
         selectedBoard={board}
         setSelectedBoard={setBoard}
       />
-      <Loading refetch={refetch} data={board} loading={loading} error={error}>
+      <Loading data={board} loading={loading} error={error}>
         <>
           {data?.team && board ? (
             <>
@@ -256,88 +256,98 @@ export default function board({ teamId, boardId }: Props) {
                 setVisible={setTimeTrackingModalVisible}
                 visible={isTimeTrackingModalVisible}
               />
-              <div className="boardTools">
-                <div className="countDown">
-                  {board.timerInProgress && board.endTime ? (
-                    <CountDown startTime={moment().valueOf()} endTime={board?.endTime?.valueOf()} />
-                  ) : (
-                    '--:--:--'
-                  )}
-                </div>
-                {board?.currentPhase === 'VOTES' && (
-                  <div className="currentLimitVotes">Votes {`${currentNumVotes}/${board?.votesLimit}`}</div>
-                )}
-                <div className={`board-action ${isBoardPanelActive && 'active'}`}>
-                  <div className="boardPanel" onClick={() => setIsBoardPanelActive(!isBoardPanelActive)}>
-                    {isBoardPanelActive ? (
-                      <CloseOutlined className="boardPanelIcon" />
+              <div>
+                <div className="boardTools">
+                  <div className="countDown">
+                    {board.timerInProgress && board.endTime ? (
+                      <CountDown startTime={moment().valueOf()} endTime={board?.endTime?.valueOf()} />
                     ) : (
-                      <MenuOutlined className="boardPanelIcon" />
+                      '--:--:--'
                     )}
-                    {'\t \t '} Action
                   </div>
-                  <div className="boardActionPanel">
-                    <ul>
-                      {(iMember?.isOwner || iMember?.isSuperOwner) && (
-                        <>
-                          <li>
-                            <PlusCircleOutlined className="boardPanelIcon " />
-                            <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                              Create New Board
-                            </a>
-                          </li>
-                          <li>
-                            <EditOutlined className="boardPanelIcon " />
-                            <a className="editBoard" onClick={() => setIsUpdateModalVisible(true)}>
-                              Edit Board
-                            </a>
-                          </li>
-                        </>
+                  {board?.currentPhase === 'VOTES' && (
+                    <div className="currentLimitVotes">Votes {`${currentNumVotes}/${board?.votesLimit}`}</div>
+                  )}
+                  <div className={`board-action ${isBoardPanelActive && 'active'}`}>
+                    <div className="boardPanel" onClick={() => setIsBoardPanelActive(!isBoardPanelActive)}>
+                      {isBoardPanelActive ? (
+                        <CloseOutlined className="boardPanelIcon" />
+                      ) : (
+                        <MenuOutlined className="boardPanelIcon" />
                       )}
-                      {/* <li>
+                      {'\t \t '} Action
+                    </div>
+                    <div className="boardActionPanel">
+                      <ul>
+                        {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                          <>
+                            <li>
+                              <PlusCircleOutlined className="boardPanelIcon " />
+                              <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                                Create New Board
+                              </a>
+                            </li>
+                            <li>
+                              <EditOutlined className="boardPanelIcon " />
+                              <a className="editBoard" onClick={() => setIsUpdateModalVisible(true)}>
+                                Edit Board
+                              </a>
+                            </li>
+                          </>
+                        )}
+                        {/* <li>
                         <PlusCircleOutlined className="boardPanelIcon " />
                         <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
                           Start Timer
                         </a>
                       </li> */}
-                      {/* <li>
+                        {/* <li>
                         <PlusCircleOutlined className="boardPanelIcon " />
                         <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
                           Reset All Votes
                         </a>
                       </li> */}
-                      {/* <li>
+                        {/* <li>
                         <StarOutlined className="boardPanelIcon " />
                         <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
                           Show Bookmarks
                         </a>
                       </li> */}
-                      <li>
-                        <SnippetsOutlined className="boardPanelIcon " />
-                        <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>
-                          Meeting Notes
-                        </a>
-                      </li>
-                    </ul>
+                        <li>
+                          <SnippetsOutlined className="boardPanelIcon " />
+                          <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>
+                            Meeting Notes
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="board-header">
-                <div className="board-tracking">
-                  <div onClick={() => history.push(`/manage-members/${teamId}`)} className="board-members">
-                    <Avatar.Group
-                      maxCount={3}
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-                    >
-                      {data?.team?.members?.map((member) => (
-                        // <div onClick={() => history.push(`/manage-members/${teamId}`)} key={member?.user?.email}>
-                        <>
-                          <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
-                            {member.isOwner || member.isSuperOwner ? (
-                              <Badge offset={[-15, -3]} count={<CrownFilled style={{ color: '#F79C2D' }} />}>
+                <div className="board-header">
+                  <div className="board-tracking">
+                    <div onClick={() => history.push(`/manage-members/${teamId}`)} className="board-members">
+                      <Avatar.Group
+                        maxCount={3}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+                      >
+                        {data?.team?.members?.map((member) => (
+                          // <div onClick={() => history.push(`/manage-members/${teamId}`)} key={member?.user?.email}>
+                          <>
+                            <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
+                              {member.isOwner || member.isSuperOwner ? (
+                                <Badge offset={[-15, -3]} count={<CrownFilled style={{ color: '#F79C2D' }} />}>
+                                  <Avatar
+                                    style={{ marginRight: '1px' }}
+                                    size="default"
+                                    shape="circle"
+                                    key={member?.user?.email}
+                                    src={<img src={member?.user?.picture} referrerPolicy="no-referrer" />}
+                                  />
+                                </Badge>
+                              ) : (
                                 <Avatar
                                   style={{ marginRight: '1px' }}
                                   size="default"
@@ -345,233 +355,224 @@ export default function board({ teamId, boardId }: Props) {
                                   key={member?.user?.email}
                                   src={<img src={member?.user?.picture} referrerPolicy="no-referrer" />}
                                 />
-                              </Badge>
-                            ) : (
-                              <Avatar
-                                style={{ marginRight: '1px' }}
-                                size="default"
-                                shape="circle"
-                                key={member?.user?.email}
-                                src={<img src={member?.user?.picture} referrerPolicy="no-referrer" />}
-                              />
-                            )}
-                          </Tooltip>
-                        </>
-                        // </div>
-                      ))}
-                    </Avatar.Group>
-                  </div>
-                  {board.isAnonymous && (
-                    <div>
-                      <ExclamationCircleOutlined /> You are giving feedback anonymously
-                    </div>
-                  )}
-                  {!board.isLocked ? (
-                    board.type === 'PHASE' && (
-                      <div className="phase-header">
-                        <div className="board-phase">
-                          <div
-                            className={`phase-step ${board?.currentPhase === 'REFLECT' && 'active'}`}
-                            style={{
-                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
-                            }}
-                            onClick={() => {
-                              if (iMember?.isOwner || iMember?.isSuperOwner)
-                                updateBoard({
-                                  variables: {
-                                    teamId,
-                                    boardId,
-                                    currentPhase: 'REFLECT',
-                                    timerInProgress: false,
-                                  },
-                                });
-                              else {
-                                notification.warning({
-                                  message: 'Permission denied',
-                                  description: 'Only Super Owner and Owners can change stage of Wreflect process.',
-                                  placement: 'bottomRight',
-                                });
-                              }
-                            }}
-                          >
-                            <BulbOutlined />
-                            Reflect
-                          </div>
-                          <div
-                            className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
-                            style={{
-                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
-                            }}
-                            onClick={() => {
-                              if (iMember?.isOwner || iMember?.isSuperOwner)
-                                updateBoard({
-                                  variables: {
-                                    teamId,
-                                    boardId,
-                                    currentPhase: 'GROUP',
-                                    timerInProgress: false,
-                                  },
-                                });
-                              else {
-                                notification.warning({
-                                  message: 'Permission denied',
-                                  description: 'Only Super Owner and Owners can change stage of Wreflect process.',
-                                  placement: 'bottomRight',
-                                });
-                              }
-                            }}
-                          >
-                            <UngroupOutlined />
-                            Group
-                          </div>
-                          <div
-                            className={`phase-step ${board?.currentPhase === 'VOTES' && 'active'}`}
-                            style={{
-                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
-                            }}
-                            onClick={() => {
-                              if (iMember?.isOwner || iMember?.isSuperOwner)
-                                updateBoard({
-                                  variables: {
-                                    teamId,
-                                    boardId,
-                                    currentPhase: 'VOTES',
-                                    timerInProgress: false,
-                                  },
-                                });
-                              else {
-                                notification.warning({
-                                  message: 'Permission denied',
-                                  description: 'Only Super Owner and Owners can change stage of Wreflect process.',
-                                  placement: 'bottomRight',
-                                });
-                              }
-                            }}
-                          >
-                            <LikeOutlined />
-                            Votes
-                          </div>
-                          <div
-                            className={`phase-step ${board?.currentPhase === 'DISCUSS' && 'active'}`}
-                            style={{
-                              cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
-                            }}
-                            onClick={() => {
-                              if (iMember?.isOwner || iMember?.isSuperOwner)
-                                updateBoard({
-                                  variables: {
-                                    teamId,
-                                    boardId,
-                                    currentPhase: 'DISCUSS',
-                                    timerInProgress: false,
-                                  },
-                                });
-                              else {
-                                notification.warning({
-                                  message: 'Permission denied',
-                                  description: 'Only Admin can change stage of Wreflect process.',
-                                  placement: 'bottomRight',
-                                });
-                              }
-                            }}
-                          >
-                            <MessageOutlined />
-                            Discuss
-                          </div>
-                        </div>
-                        {(iMember?.isOwner || iMember?.isSuperOwner) && (
-                          <>
-                            {board.currentPhase === 'DISCUSS' ? (
-                              <div
-                                style={{ margin: '0px 2px 0px 2px' }}
-                                className="phase-action-btn"
-                                onClick={() => {
-                                  if (iMember?.isOwner || iMember?.isSuperOwner)
-                                    updateBoard({
-                                      variables: {
-                                        teamId,
-                                        boardId,
-                                        isLocked: true,
-                                      },
-                                    });
-                                  else {
-                                    notification.warning({
-                                      message: 'Permission denied',
-                                      description: 'Only Admin can change stage of Wreflect process.',
-                                      placement: 'bottomRight',
-                                    });
-                                  }
-                                }}
-                              >
-                                <>
-                                  <LockOutlined />
-                                  End Reflect
-                                </>
-                              </div>
-                            ) : (
-                              <div
-                                style={{ margin: '0px 2px 0px 2px' }}
-                                className="phase-action-btn"
-                                onClick={() => {
-                                  if (iMember?.isOwner || iMember?.isSuperOwner)
-                                    updateBoard({
-                                      variables: {
-                                        teamId,
-                                        boardId,
-                                        currentPhase:
-                                          board.currentPhase == 'REFLECT'
-                                            ? 'GROUP'
-                                            : board.currentPhase == 'GROUP'
-                                            ? 'VOTES'
-                                            : 'DISCUSS',
-                                        timerInProgress: false,
-                                      },
-                                    });
-                                }}
-                              >
-                                <ArrowRightOutlined />
-                                Next
-                              </div>
-                            )}
+                              )}
+                            </Tooltip>
                           </>
-                        )}
-                        {(iMember?.isOwner || iMember?.isSuperOwner) && (
-                          <>
-                            {!board?.timerInProgress ? (
-                              <div className="phase-action-btn" onClick={() => setTimeTrackingModalVisible(true)}>
-                                <>
-                                  <FieldTimeOutlined />
-                                  Start Time
-                                </>
-                              </div>
-                            ) : (
-                              <div
-                                className="phase-action-btn"
-                                onClick={() => {
+                          // </div>
+                        ))}
+                      </Avatar.Group>
+                    </div>
+                    {board.isAnonymous && (
+                      <div>
+                        <ExclamationCircleOutlined /> You are giving feedback anonymously
+                      </div>
+                    )}
+                    {!board.isLocked ? (
+                      board.type === 'PHASE' && (
+                        <div className="phase-header">
+                          <div className="board-phase">
+                            <div
+                              className={`phase-step ${board?.currentPhase === 'REFLECT' && 'active'}`}
+                              style={{
+                                cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                              }}
+                              onClick={() => {
+                                if (iMember?.isOwner || iMember?.isSuperOwner)
                                   updateBoard({
                                     variables: {
                                       teamId,
                                       boardId,
+                                      currentPhase: 'REFLECT',
                                       timerInProgress: false,
                                     },
                                   });
-                                }}
-                              >
-                                <FieldTimeOutlined />
-                                Stop Time
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    )
-                  ) : (
-                    <div className="lockedNoti">This board is locked for feedback by Admin</div>
-                  )}
+                                else {
+                                  notification.warning({
+                                    message: 'Permission denied',
+                                    description: 'Only Super Owner and Owners can change stage of Wreflect process.',
+                                    placement: 'bottomRight',
+                                  });
+                                }
+                              }}
+                            >
+                              <BulbOutlined />
+                              Reflect
+                            </div>
+                            <div
+                              className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
+                              style={{
+                                cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                              }}
+                              onClick={() => {
+                                if (iMember?.isOwner || iMember?.isSuperOwner)
+                                  updateBoard({
+                                    variables: {
+                                      teamId,
+                                      boardId,
+                                      currentPhase: 'GROUP',
+                                      timerInProgress: false,
+                                    },
+                                  });
+                                else {
+                                  notification.warning({
+                                    message: 'Permission denied',
+                                    description: 'Only Super Owner and Owners can change stage of Wreflect process.',
+                                    placement: 'bottomRight',
+                                  });
+                                }
+                              }}
+                            >
+                              <UngroupOutlined />
+                              Group
+                            </div>
+                            <div
+                              className={`phase-step ${board?.currentPhase === 'VOTES' && 'active'}`}
+                              style={{
+                                cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                              }}
+                              onClick={() => {
+                                if (iMember?.isOwner || iMember?.isSuperOwner)
+                                  updateBoard({
+                                    variables: {
+                                      teamId,
+                                      boardId,
+                                      currentPhase: 'VOTES',
+                                      timerInProgress: false,
+                                    },
+                                  });
+                                else {
+                                  notification.warning({
+                                    message: 'Permission denied',
+                                    description: 'Only Super Owner and Owners can change stage of Wreflect process.',
+                                    placement: 'bottomRight',
+                                  });
+                                }
+                              }}
+                            >
+                              <LikeOutlined />
+                              Votes
+                            </div>
+                            <div
+                              className={`phase-step ${board?.currentPhase === 'DISCUSS' && 'active'}`}
+                              style={{
+                                cursor: iMember?.isOwner || iMember?.isSuperOwner ? 'pointer' : 'not-allowed',
+                              }}
+                              onClick={() => {
+                                if (iMember?.isOwner || iMember?.isSuperOwner)
+                                  updateBoard({
+                                    variables: {
+                                      teamId,
+                                      boardId,
+                                      currentPhase: 'DISCUSS',
+                                      timerInProgress: false,
+                                    },
+                                  });
+                                else {
+                                  notification.warning({
+                                    message: 'Permission denied',
+                                    description: 'Only Admin can change stage of Wreflect process.',
+                                    placement: 'bottomRight',
+                                  });
+                                }
+                              }}
+                            >
+                              <MessageOutlined />
+                              Discuss
+                            </div>
+                          </div>
+                          {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                            <>
+                              {board.currentPhase === 'DISCUSS' ? (
+                                <div
+                                  style={{ margin: '0px 2px 0px 2px' }}
+                                  className="phase-action-btn"
+                                  onClick={() => {
+                                    if (iMember?.isOwner || iMember?.isSuperOwner)
+                                      updateBoard({
+                                        variables: {
+                                          teamId,
+                                          boardId,
+                                          isLocked: true,
+                                        },
+                                      });
+                                    else {
+                                      notification.warning({
+                                        message: 'Permission denied',
+                                        description: 'Only Admin can change stage of Wreflect process.',
+                                        placement: 'bottomRight',
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <>
+                                    <LockOutlined />
+                                    End Reflect
+                                  </>
+                                </div>
+                              ) : (
+                                <div
+                                  style={{ margin: '0px 2px 0px 2px' }}
+                                  className="phase-action-btn"
+                                  onClick={() => {
+                                    if (iMember?.isOwner || iMember?.isSuperOwner)
+                                      updateBoard({
+                                        variables: {
+                                          teamId,
+                                          boardId,
+                                          currentPhase:
+                                            board.currentPhase == 'REFLECT'
+                                              ? 'GROUP'
+                                              : board.currentPhase == 'GROUP'
+                                              ? 'VOTES'
+                                              : 'DISCUSS',
+                                          timerInProgress: false,
+                                        },
+                                      });
+                                  }}
+                                >
+                                  <ArrowRightOutlined />
+                                  Next
+                                </div>
+                              )}
+                            </>
+                          )}
+                          {(iMember?.isOwner || iMember?.isSuperOwner) && (
+                            <>
+                              {!board?.timerInProgress ? (
+                                <div className="phase-action-btn" onClick={() => setTimeTrackingModalVisible(true)}>
+                                  <>
+                                    <FieldTimeOutlined />
+                                    Start Time
+                                  </>
+                                </div>
+                              ) : (
+                                <div
+                                  className="phase-action-btn"
+                                  onClick={() => {
+                                    updateBoard({
+                                      variables: {
+                                        teamId,
+                                        boardId,
+                                        timerInProgress: false,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <FieldTimeOutlined />
+                                  Stop Time
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      )
+                    ) : (
+                      <div className="lockedNoti">This board is locked for feedback by Admin</div>
+                    )}
+                  </div>
                 </div>
               </div>
-
-              <div className="board flex flex-dir-r">
+              <div className="board flex flex-dir-r scrollable">
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                   {board?.columns?.map((column, index) => {
                     if (column.isActive) {

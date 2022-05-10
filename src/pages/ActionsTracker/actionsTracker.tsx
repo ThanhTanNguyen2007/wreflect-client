@@ -106,8 +106,8 @@ export default function actionsTracker({ teamId }: Props) {
   return (
     <>
       <TopNavBar iMember={iMember} team={data?.team} title="Actions Tracker" />
-      <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
-        <div className="actionsTracker">
+      <Loading data={data?.team} loading={loading} error={error}>
+        <div className="actionsTracker scrollable">
           <div className="header">
             <h2>Actions Tracker</h2>
             <p>Here you can create new action items & keep track of all the actions items in your teams.</p>

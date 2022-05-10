@@ -62,7 +62,7 @@ const TeamDetail = ({ teamId }: Props) => {
 
   const iMember = data?.team?.members.find((member) => member.userId === me?.id);
   return (
-    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+    <Loading data={data?.team} loading={loading} error={error}>
       <>
         <TopNavBar iMember={iMember} team={data?.team} title="Team Details" />
         <div

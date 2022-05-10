@@ -36,12 +36,12 @@ export default function manageMembers({ teamId }: Props) {
   const iMember = data?.team?.members.find((member) => member.userId === me?.id);
 
   return (
-    <Loading refetch={refetch} data={data?.team} loading={loading} error={error}>
+    <Loading data={data?.team} loading={loading} error={error}>
       <>
         <TopNavBar iMember={iMember} team={data?.team} title="Manage Members" />
-        <>
+        <div className="scrollable">
           {data && data?.team ? (
-            <div className="flex flex-1 flex-dir-r manageMembersPage card mt-10">
+            <div className="flex flex-1 flex-dir-r manageMembersPage card mt-10 scrollable">
               <>
                 <div className="flex-1 manageMembers">
                   <div className="mr-10">
@@ -64,7 +64,7 @@ export default function manageMembers({ teamId }: Props) {
           ) : (
             <Empty description="No Teams Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
           )}
-        </>
+        </div>
       </>
     </Loading>
   );

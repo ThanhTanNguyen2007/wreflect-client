@@ -6,7 +6,7 @@ export default function notFound() {
   const history = useHistory();
 
   return (
-    <div>
+    <div className="flex flex-1 flex-ai-c flex-jc-c">
       <Result
         status="404"
         title="404"

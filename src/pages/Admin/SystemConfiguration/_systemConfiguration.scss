@@ -1,0 +1,11 @@
+.systemConfiguration {
+  overflow: auto;
+
+  img {
+    height: 250px;
+    object-fit: cover;
+  }
+  .ant-card {
+    height: inherit;
+  }
+}

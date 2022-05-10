@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 
 import { User } from './types';
-// import Routes from './Routes';
-const Routes = React.lazy(() => import('./Routes'));
+import Routes from './Routes';
+// const Routes = React.lazy(() => import('./Routes'));
 
 import { setUpdateLoginState, user } from './apis';
 import SelfContext from './contexts/selfContext';
@@ -18,6 +18,7 @@ const App = (): JSX.Element => {
   const [me, setMe] = useState<null | User>(null);
   const [teamId, setTeamId] = useState<string>('');
   const [boardId, setBoardId] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
   // const [constructor, setConstructor] = useState(true);
 
   setUpdateLoginState((newMe: null | User) => {
@@ -27,7 +28,13 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     (async function () {
-      await user.me();
+      try {
+        setIsLoading(true);
+        await user.me();
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 
@@ -41,15 +48,14 @@ const App = (): JSX.Element => {
         setBoardId,
       }}
     >
-      <Suspense
-        fallback={
-          <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
-            <Spin size="large" />
-          </div>
-        }
-      >
+      {isLoading ? (
+        <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
+          <Spin size="large" />
+        </div>
+      ) : (
         <Routes me={me} />
-      </Suspense>
+      )}
+      {/* </Suspense> */}
     </SelfContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 
-import { Dropdown, Spin, Menu, Modal, Input, Badge, Avatar, Tooltip, notification } from 'antd';
+import { Dropdown, Card, Menu, Modal, Input, Badge, Avatar, Tooltip, notification } from 'antd';
 import { Draggable } from 'react-beautiful-dnd';
 import {
   StarFilled,
@@ -301,156 +301,212 @@ export default function OpinionComponent({
       key={opinion.id}
     >
       {(provided) => (
-        <div
-          className={`opinionCol ${opinion.color}`}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-        >
-          <div className="opinionHeader">
-            {opinion.isBookmarked ? (
-              <StarFilled
-                onClick={() => {
-                  // setCurrentOpinion({ ...currentOpinion, isBookmarked: false });
-                  updateOpinion({
-                    variables: {
-                      teamId: board.teamId,
-                      opinionId: opinion.id,
-                      isBookmarked: false,
-                    },
-                    optimisticResponse: {
-                      updateOpinion: {
-                        ...opinion,
+        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+          <Card className={`opinionCol ${opinion.color}`} hoverable>
+            <div className="opinionHeader">
+              {opinion.isBookmarked ? (
+                <StarFilled
+                  onClick={() => {
+                    // setCurrentOpinion({ ...currentOpinion, isBookmarked: false });
+                    updateOpinion({
+                      variables: {
+                        teamId: board.teamId,
+                        opinionId: opinion.id,
                         isBookmarked: false,
                       },
-                    },
-                  });
-                }}
-                style={{ fontSize: '20px', cursor: 'pointer' }}
-              />
-            ) : (
-              <StarOutlined
-                onClick={() => {
-                  // setCurrentOpinion({ ...currentOpinion, isBookmarked: true });
-                  updateOpinion({
-                    variables: {
-                      teamId: board.teamId,
-                      opinionId: opinion.id,
-                      isBookmarked: true,
-                    },
-                    optimisticResponse: {
-                      updateOpinion: {
-                        ...opinion,
-                        isBookmarked: true,
+                      optimisticResponse: {
+                        updateOpinion: {
+                          ...opinion,
+                          isBookmarked: false,
+                        },
                       },
-                    },
-                  });
-                }}
-                style={{ fontSize: '20px', cursor: 'pointer' }}
-              />
-            )}
-
-            <div style={{ marginRight: 'auto', marginLeft: '10px' }} className="owner-opinion">
-              {board.isAnonymous ? (
-                <h4>Anonymous</h4>
-              ) : (
-                <Avatar.Group
-                  maxCount={2}
-                  style={{
-                    cursor: 'pointer',
+                    });
                   }}
-                  maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-                >
-                  {team.members
-                    ?.filter((member) => opinion.mergedAuthors.includes(member?.id) || opinion?.authorId == member?.id)
-                    .map((member) => (
-                      <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
-                        <Avatar
-                          style={{ marginRight: '3px' }}
-                          size="default"
-                          key={member?.user?.email}
-                          src={member?.user?.picture}
-                        />
-                      </Tooltip>
-                    ))}
-                </Avatar.Group>
-              )}
-            </div>
-            <div>
-              {(!board?.isLocked &&
-                (opinion.authorId === iMember?.id || opinion?.mergedAuthors.includes(iMember?.id))) ||
-              iMember?.isSuperOwner ||
-              iMember?.isOwner ? (
-                <Dropdown overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
-                  <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
-                </Dropdown>
-              ) : (
-                <div style={{ width: '20px' }}></div>
-              )}
-            </div>
-          </div>
-
-          <div className="opinionContent">
-            <div className="opinionText">
-              {isEdit ? (
-                <TextArea
-                  style={{ textAlign: 'center', minHeight: '180px' }}
-                  autoFocus
-                  bordered
-                  onPressEnter={(e) => {
-                    if (!e.shiftKey && e.currentTarget.value && e.currentTarget.value.length > 0) {
-                      setIsEdit(false);
-                      updateOpinion({
-                        variables: {
-                          teamId: board.teamId,
-                          opinionId: opinion.id,
-                          text: e.currentTarget.value.trim(),
-                        },
-                        optimisticResponse: {
-                          updateOpinion: {
-                            ...opinion,
-                            text: e.currentTarget.value,
-                          },
-                        },
-                      });
-                    }
-                  }}
-                  defaultValue={opinion.text}
+                  style={{ fontSize: '20px', cursor: 'pointer' }}
                 />
               ) : (
-                <p>
-                  {opinion.text.split('\n').map((str) => {
-                    return (
-                      <>
-                        {str}
-                        <br />
-                      </>
-                    );
-                  })}
-                </p>
+                <StarOutlined
+                  onClick={() => {
+                    // setCurrentOpinion({ ...currentOpinion, isBookmarked: true });
+                    updateOpinion({
+                      variables: {
+                        teamId: board.teamId,
+                        opinionId: opinion.id,
+                        isBookmarked: true,
+                      },
+                      optimisticResponse: {
+                        updateOpinion: {
+                          ...opinion,
+                          isBookmarked: true,
+                        },
+                      },
+                    });
+                  }}
+                  style={{ fontSize: '20px', cursor: 'pointer' }}
+                />
               )}
-              {opinion.isAction === true && (
-                <ActionComponent iMember={iMember} team={team} board={board} column={column} opinion={opinion} />
-              )}
-            </div>
-          </div>
 
-          <div className="opinionFooter">
-            {board.currentPhase === 'VOTES' && (
-              <>
-                <div className="upvote">
-                  <Badge size="small" count={opinion.upVote.length - opinion.downVote.length}>
-                    <UpCircleOutlined
+              <div style={{ display: 'flex', marginRight: 'auto', marginLeft: '10px' }} className="owner-opinion">
+                {board.isAnonymous ? (
+                  <h4>Anonymous</h4>
+                ) : (
+                  <Avatar.Group
+                    maxCount={2}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+                  >
+                    {team.members
+                      ?.filter(
+                        (member) => opinion.mergedAuthors.includes(member?.id) || opinion?.authorId == member?.id,
+                      )
+                      .map((member) => (
+                        <Tooltip title={member?.user?.nickname} key={member?.user?.email} placement="bottom">
+                          <Avatar
+                            style={{ marginRight: '3px' }}
+                            size="default"
+                            key={member?.user?.email}
+                            src={member?.user?.picture}
+                          />
+                        </Tooltip>
+                      ))}
+                  </Avatar.Group>
+                )}
+              </div>
+              <div>
+                {(!board?.isLocked &&
+                  (opinion.authorId === iMember?.id || opinion?.mergedAuthors.includes(iMember?.id))) ||
+                iMember?.isSuperOwner ||
+                iMember?.isOwner ? (
+                  <Dropdown overlayStyle={{ width: '180px' }} overlay={menu} placement="bottomRight">
+                    <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                  </Dropdown>
+                ) : (
+                  <div style={{ width: '20px' }}></div>
+                )}
+              </div>
+            </div>
+
+            <div className="opinionContent">
+              <div className="opinionText">
+                {isEdit ? (
+                  <TextArea
+                    style={{ textAlign: 'center', minHeight: '180px' }}
+                    autoFocus
+                    bordered
+                    onPressEnter={(e) => {
+                      if (!e.shiftKey && e.currentTarget.value && e.currentTarget.value.length > 0) {
+                        setIsEdit(false);
+                        updateOpinion({
+                          variables: {
+                            teamId: board.teamId,
+                            opinionId: opinion.id,
+                            text: e.currentTarget.value.trim(),
+                          },
+                          optimisticResponse: {
+                            updateOpinion: {
+                              ...opinion,
+                              text: e.currentTarget.value,
+                            },
+                          },
+                        });
+                      }
+                    }}
+                    defaultValue={opinion.text}
+                  />
+                ) : (
+                  <p>
+                    {opinion.text.split('\n').map((str) => {
+                      return (
+                        <>
+                          {str}
+                          <br />
+                        </>
+                      );
+                    })}
+                  </p>
+                )}
+                {opinion.isAction === true && (
+                  <ActionComponent iMember={iMember} team={team} board={board} column={column} opinion={opinion} />
+                )}
+              </div>
+            </div>
+
+            <div className="opinionFooter">
+              {board.currentPhase === 'VOTES' && (
+                <>
+                  <div className="upvote">
+                    <Badge size="small" count={opinion.upVote.length - opinion.downVote.length}>
+                      <UpCircleOutlined
+                        onClick={() => {
+                          if (iMember?.id && (currentNumVotes as number) < board.votesLimit) {
+                            if (opinion.downVote.includes(iMember.id)) {
+                              let firstId = false;
+                              updateOpinion({
+                                variables: {
+                                  teamId: board?.teamId,
+                                  opinionId: opinion?.id,
+                                  downVote: opinion.downVote.filter((id) => {
+                                    if (id === iMember.id && firstId == false) {
+                                      firstId = true;
+                                      return false;
+                                    }
+                                    return true;
+                                  }),
+                                },
+                                optimisticResponse: {
+                                  updateOpinion: {
+                                    ...opinion,
+                                    downVote: opinion.downVote.filter((id) => {
+                                      if (id === iMember.id && firstId == false) {
+                                        firstId = true;
+                                        return false;
+                                      }
+                                      return true;
+                                    }),
+                                  },
+                                },
+                              });
+                              setCurrentNumVotes((currentNumVotes as number) - 1);
+                            } else {
+                              updateOpinion({
+                                variables: {
+                                  teamId: board?.teamId,
+                                  opinionId: opinion?.id,
+                                  upVote: [...opinion?.upVote, iMember.id],
+                                },
+                                optimisticResponse: {
+                                  updateOpinion: {
+                                    ...opinion,
+                                    upVote: [...opinion?.upVote, iMember.id],
+                                  },
+                                },
+                              });
+                              setCurrentNumVotes((currentNumVotes as number) + 1);
+                            }
+                          }
+                        }}
+                        style={{ fontSize: '20px', cursor: 'pointer' }}
+                      />
+                    </Badge>
+                  </div>
+                  <div className="downvote">
+                    <DownCircleOutlined
                       onClick={() => {
-                        if (iMember?.id && (currentNumVotes as number) < board.votesLimit) {
-                          if (opinion.downVote.includes(iMember.id)) {
+                        if (
+                          iMember?.id &&
+                          opinion?.upVote.length - opinion?.downVote?.length > 0 &&
+                          (currentNumVotes as number) <= board.votesLimit
+                        ) {
+                          if (opinion.upVote.includes(iMember.id)) {
                             let firstId = false;
                             updateOpinion({
                               variables: {
                                 teamId: board?.teamId,
                                 opinionId: opinion?.id,
-                                downVote: opinion.downVote.filter((id) => {
-                                  if (id === iMember.id && firstId == false) {
+                                upVote: opinion.upVote.filter((id) => {
+                                  if (id === iMember?.id && firstId == false) {
                                     firstId = true;
                                     return false;
                                   }
@@ -460,8 +516,8 @@ export default function OpinionComponent({
                               optimisticResponse: {
                                 updateOpinion: {
                                   ...opinion,
-                                  downVote: opinion.downVote.filter((id) => {
-                                    if (id === iMember.id && firstId == false) {
+                                  upVote: opinion.upVote.filter((id) => {
+                                    if (id === iMember?.id && firstId == false) {
                                       firstId = true;
                                       return false;
                                     }
@@ -476,12 +532,12 @@ export default function OpinionComponent({
                               variables: {
                                 teamId: board?.teamId,
                                 opinionId: opinion?.id,
-                                upVote: [...opinion?.upVote, iMember.id],
+                                downVote: [...opinion?.downVote, iMember.id],
                               },
                               optimisticResponse: {
                                 updateOpinion: {
                                   ...opinion,
-                                  upVote: [...opinion?.upVote, iMember.id],
+                                  downVote: [...opinion?.downVote, iMember.id],
                                 },
                               },
                             });
@@ -489,105 +545,48 @@ export default function OpinionComponent({
                           }
                         }
                       }}
-                      style={{ fontSize: '20px', cursor: 'pointer' }}
+                      style={{ fontSize: '20px', marginLeft: '5px', cursor: 'pointer' }}
                     />
+                  </div>
+                  <div style={{ marginLeft: 'auto' }} className="myVotes">
+                    [Your votes{' '}
+                    {`${
+                      opinion?.upVote.filter((voteIds) => voteIds == iMember?.id).length +
+                      opinion.downVote.filter((votesId) => votesId === iMember?.id).length
+                    }`}
+                    ]
+                  </div>
+                </>
+              )}
+
+              {board.currentPhase == 'DISCUSS' && (
+                <div className="remarks">
+                  <Badge size="small" count={opinion.remarks.length} showZero={false}>
+                    {opinion.remarks.length > 0 ? (
+                      <MessageFilled
+                        onClick={() => setIsOpenRemark(true)}
+                        style={{ fontSize: '20px', cursor: 'pointer' }}
+                      />
+                    ) : (
+                      <MessageOutlined
+                        onClick={() => setIsOpenRemark(true)}
+                        style={{ fontSize: '20px', cursor: 'pointer' }}
+                      />
+                    )}
                   </Badge>
                 </div>
-                <div className="downvote">
-                  <DownCircleOutlined
-                    onClick={() => {
-                      if (
-                        iMember?.id &&
-                        opinion?.upVote.length - opinion?.downVote?.length > 0 &&
-                        (currentNumVotes as number) <= board.votesLimit
-                      ) {
-                        if (opinion.upVote.includes(iMember.id)) {
-                          let firstId = false;
-                          updateOpinion({
-                            variables: {
-                              teamId: board?.teamId,
-                              opinionId: opinion?.id,
-                              upVote: opinion.upVote.filter((id) => {
-                                if (id === iMember?.id && firstId == false) {
-                                  firstId = true;
-                                  return false;
-                                }
-                                return true;
-                              }),
-                            },
-                            optimisticResponse: {
-                              updateOpinion: {
-                                ...opinion,
-                                upVote: opinion.upVote.filter((id) => {
-                                  if (id === iMember?.id && firstId == false) {
-                                    firstId = true;
-                                    return false;
-                                  }
-                                  return true;
-                                }),
-                              },
-                            },
-                          });
-                          setCurrentNumVotes((currentNumVotes as number) - 1);
-                        } else {
-                          updateOpinion({
-                            variables: {
-                              teamId: board?.teamId,
-                              opinionId: opinion?.id,
-                              downVote: [...opinion?.downVote, iMember.id],
-                            },
-                            optimisticResponse: {
-                              updateOpinion: {
-                                ...opinion,
-                                downVote: [...opinion?.downVote, iMember.id],
-                              },
-                            },
-                          });
-                          setCurrentNumVotes((currentNumVotes as number) + 1);
-                        }
-                      }
-                    }}
-                    style={{ fontSize: '20px', marginLeft: '5px', cursor: 'pointer' }}
-                  />
-                </div>
-                <div style={{ marginLeft: 'auto' }} className="myVotes">
-                  [Your votes{' '}
-                  {`${
-                    opinion?.upVote.filter((voteIds) => voteIds == iMember?.id).length +
-                    opinion.downVote.filter((votesId) => votesId === iMember?.id).length
-                  }`}
-                  ]
-                </div>
-              </>
-            )}
-
-            {board.currentPhase == 'DISCUSS' && (
-              <div className="remarks">
-                <Badge size="small" count={opinion.remarks.length} showZero={false}>
-                  {opinion.remarks.length > 0 ? (
-                    <MessageFilled
-                      onClick={() => setIsOpenRemark(true)}
-                      style={{ fontSize: '20px', cursor: 'pointer' }}
-                    />
-                  ) : (
-                    <MessageOutlined
-                      onClick={() => setIsOpenRemark(true)}
-                      style={{ fontSize: '20px', cursor: 'pointer' }}
-                    />
-                  )}
-                </Badge>
-              </div>
-            )}
-          </div>
-          <Remark
-            iMember={iMember}
-            team={team}
-            board={board}
-            column={column}
-            isOpenRemark={isOpenRemark}
-            setIsOpenRemark={setIsOpenRemark}
-            opinion={opinion}
-          />
+              )}
+            </div>
+            <Remark
+              iMember={iMember}
+              team={team}
+              board={board}
+              column={column}
+              isOpenRemark={isOpenRemark}
+              setIsOpenRemark={setIsOpenRemark}
+              opinion={opinion}
+            />
+          </Card>
         </div>
       )}
     </Draggable>

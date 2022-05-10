@@ -68,9 +68,9 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
       >
         {data && data?.teams?.data?.length > 0 ? (
           <>
-            <div className="flex flex-1 flex-dir-c">
+            <div className="flex flex-1 flex-dir-c scrollable">
               <Row
-                className="flex flex-dir-r"
+                className="flex flex-dir-r "
                 style={{ height: '100%', padding: '10px' }}
                 key={`row`}
                 gutter={[16, 16]}

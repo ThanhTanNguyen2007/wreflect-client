@@ -69,7 +69,7 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
     }
 
     if (partnerId || isAdmin) {
-      history.push('accounts');
+      history.push('/admin/user-managerment');
     }
   };
 

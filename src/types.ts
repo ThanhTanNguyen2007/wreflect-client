@@ -252,12 +252,41 @@ export type User = {
   skillValues: UserOnCriteria[];
 };
 
+export type Template = {
+  id: string;
+  title: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+  teamId: string | null;
+  healthCheckQuestions: TemplateQuestion[];
+};
+
+export type TemplateQuestion = {
+  id: string;
+  title: string;
+  templateId: string;
+  color: string;
+  description: string;
+  memberOnHealthCheck: MemberOnHealthCheckOnQuestion[];
+};
+
+export type MemberOnHealthCheckOnQuestion = {
+  id: string;
+  healthCheckId: string;
+  questionId: string;
+  memberId: string;
+  color: string;
+  point: string;
+  comment: string;
+};
+
 export type UserOnCriteria = {
   id: string;
   userId: string;
   criteriaId: string;
   value: number;
-  criteria: Criteria
+  criteria: Criteria;
 };
 
 export type Notification = {
