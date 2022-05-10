@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Image } from 'antd';
 import { Header } from './../../components/Header';
-import CookieConsent, { Cookies } from 'react-cookie-consent';
+import CookieConsent, { Cookies, getCookieConsentValue } from 'react-cookie-consent';
 
 type Props = {
   email: string | null;

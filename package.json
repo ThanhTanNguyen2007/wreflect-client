@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "private": true,
+  "permissions": [
+    "tabs",
+    "cookies",
+    "https://wreflect.live"
+  ],
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
