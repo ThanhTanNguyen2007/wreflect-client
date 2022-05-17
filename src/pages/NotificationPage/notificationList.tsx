@@ -5,8 +5,8 @@ import { NotificationQueries } from '../../grapql-client/queries';
 import NotificationComponent from './notification';
 
 export default function NotificationPage() {
-  const [offSet, setOffSet] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
 
   const {
     data: notificationData,
@@ -16,8 +16,8 @@ export default function NotificationPage() {
     NotificationQueries?.getNotifications,
     {
       variables: {
-        offSet: 0,
-        limit: 10,
+        page,
+        size,
       },
     },
   );
@@ -43,8 +43,8 @@ export default function NotificationPage() {
                 onClick={async () => {
                   await fetchMore({
                     variables: {
-                      offSet: offSet + limit,
-                      limit,
+                      page,
+                      size,
                     },
                     updateQuery: (previousResult, { fetchMoreResult }) => {
                       [...previousResult?.getNotifications, ...fetchMoreResult?.getNotifications];
@@ -53,7 +53,7 @@ export default function NotificationPage() {
                       };
                     },
                   });
-                  setOffSet(offSet + limit);
+                  setPage(page + 1);
                 }}
               >
                 Load more

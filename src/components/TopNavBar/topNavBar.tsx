@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, Select, PageHeader } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { Board, Member, Team } from '../../types';
@@ -17,7 +17,7 @@ const { Option } = Select;
 
 type Props = {
   title: string;
-  team?: Team;
+  team: Team;
   iMember: Member;
   boardId?: string;
   selectedBoard?: Board | null;
@@ -38,20 +38,8 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
     },
   );
 
-  if (boardId) {
-    useSubscription<BoardSubscription.updateBoardResult, BoardSubscription.updateBoardVars>(
-      BoardSubscription.updateBoard,
-      {
-        variables: {
-          meId: me?.id,
-          teamId: team?.id,
-        },
-      },
-    );
-  }
-
-  useSubscription<BoardSubscription.deleteBoardResult, BoardSubscription.deleteBoardVars>(
-    BoardSubscription?.deleteBoard,
+  useSubscription<BoardSubscription.updateBoardResult, BoardSubscription.updateBoardVars>(
+    BoardSubscription.updateBoard,
     {
       variables: {
         meId: me?.id,
@@ -59,6 +47,16 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
       },
     },
   );
+
+  // useSubscription<BoardSubscription.deleteBoardResult, BoardSubscription.deleteBoardVars>(
+  //   BoardSubscription?.deleteBoard,
+  //   {
+  //     variables: {
+  //       meId: me?.id,
+  //       teamId: team?.id,
+  //     },
+  //   },
+  // );
 
   useSubscription<ColumnSubscription.subOnUpdateColumnResults, ColumnSubscription.subOnUpdateColumnVars>(
     ColumnSubscription.subOnUpdateColumn,
@@ -81,7 +79,7 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
   );
 
   const handleSelectBoard = async (value: string) => {
-    history.push(`/board/${team?.id}/${value}`);
+    history.push(`/reflect/${team?.id}/${value}`);
   };
 
   const boardOptions = () => {
@@ -122,35 +120,37 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
       <PageHeader
         className="topNavBar"
         onBack={() => history.replace('/teams')}
-        title={title}
-        extra={[
-          ...handleRenderExtra(),
-          <Link key="1" to={`/board/${team?.id}/${boardId || team?.boards[0]?.id}`}>
-            <Button type={title == 'Do Reflect' ? 'primary' : undefined}>Reflect</Button>
-          </Link>,
-          <Link key="2" to={`/personal-reflect/manage/${team?.id}`}>
-            <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>Personal</Button>
-          </Link>,
-          <Link key="3" to={`/actions-tracker/${team?.id}`}>
-            <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>Actions Tracker</Button>
-          </Link>,
-          <Link key="4" to={`/team-health/${team?.id}/${boardId || team?.boards[0]?.id}`}>
-            <Button type={title == 'Health Check' ? 'primary' : undefined}>Health Check</Button>
-          </Link>,
-          <Link key="5" style={{ textDecoration: 'none' }} to={`/manage-members/${team?.id}`}>
-            <Button type={title == 'Manage Members' ? 'primary' : undefined}>Members</Button>
-          </Link>,
-          (iMember?.isOwner || iMember?.isSuperOwner) && (
-            <>
-              <Link key="6" style={{ textDecoration: 'none' }} to={`/manage-board/${team?.id}`}>
-                <Button type={title == 'Manage Board' ? 'primary' : undefined}>Board</Button>
-              </Link>
-            </>
-          ),
-          <Link key="7" style={{ textDecoration: 'none' }} to={`/team-details/${team?.id}`}>
-            <Button type={title == 'Setting' ? 'primary' : undefined}>Details</Button>
-          </Link>,
-        ]}
+        title={`Team ${team?.name}`}
+        extra={
+          <div className="flex flex-1 flex-dir-r flex-gap-10 flex-wrap">
+            {handleRenderExtra()}
+            <Link key="1" to={`/reflect/${team?.id}/${boardId || team?.boards[0]?.id}`}>
+              <Button type={title == 'Do Reflect' ? 'primary' : undefined}>Reflect</Button>
+            </Link>
+            <Link key="2" to={`/personal-reflect/manage/${team?.id}`}>
+              <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>Personal</Button>
+            </Link>
+            <Link key="3" to={`/actions-tracker/${team?.id}`}>
+              <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>Actions Tracker</Button>
+            </Link>
+            <Link key="4" to={`/team-health/${team?.id}/${boardId || team?.boards[0]?.id}`}>
+              <Button type={title == 'Health Check' ? 'primary' : undefined}>Health Check</Button>
+            </Link>
+            <Link key="5" style={{ textDecoration: 'none' }} to={`/manage-members/${team?.id}`}>
+              <Button type={title == 'Manage Members' ? 'primary' : undefined}>Members</Button>
+            </Link>
+            {/* {(iMember?.isOwner || iMember?.isSuperOwner) && ( */}
+            {/* <> */}
+            <Link key="6" style={{ textDecoration: 'none' }} to={`/manage-board/${team?.id}`}>
+              <Button type={title == 'Manage Board' ? 'primary' : undefined}>Board</Button>
+            </Link>
+            {/* </> */}
+            {/* )} */}
+            <Link key="7" style={{ textDecoration: 'none' }} to={`/team-details/${team?.id}`}>
+              <Button type={title == 'Setting' ? 'primary' : undefined}>Details</Button>
+            </Link>
+          </div>
+        }
       />
     </>
   );

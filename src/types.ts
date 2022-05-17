@@ -26,14 +26,9 @@ export type HealthCheck = {
   createdAt: Date;
   createdBy: string;
   updatedAt: Date;
-  updatedBy: string;
   isAnonymous: boolean;
-  isCustom: boolean;
   status: StatusHealthCheck;
-  board: Board;
-  team: Team;
-  memberAnswers: [MemberAnswer];
-  memberComments: [MemberComment];
+  memberOnHealthCheck: MemberOnHealthCheckOnQuestion[];
 };
 
 export type MemberAnswer = {
@@ -223,7 +218,7 @@ export type Criteria = {
 
 export type MemberStatus = 'PENDING_INVITATION' | 'JOINED';
 export type UserOnlineStatus = 'ONLINE' | 'OFFLINE';
-export type TeamStatus = 'DOING' | 'DONE';
+export type TeamStatus = 'ALL' | 'DOING' | 'DONE';
 export type UserStatus = 'ONLINE' | 'OFFLINE';
 export type Gender = 'UNSPECIFIED' | 'MALE' | 'FEMALE';
 export type OpinionStatus = 'NEW' | 'IN_PROGRESS' | 'DONE' | 'REJECTED';
@@ -242,6 +237,7 @@ export type User = {
   nickname: string;
   picture: string;
   gender: Gender;
+  banningUser: BanningUser;
   workplace: string | null;
   address: string | null;
   school: string | null;
@@ -250,6 +246,15 @@ export type User = {
   interests: string | null;
   notifications: Notification[];
   skillValues: UserOnCriteria[];
+};
+
+export type BanningUser = {
+  id: string;
+  isBannedForever?: boolean;
+  startBanned?: string;
+  endBanned?: string;
+  title: string;
+  description: string;
 };
 
 export type Template = {
@@ -268,7 +273,6 @@ export type TemplateQuestion = {
   templateId: string;
   color: string;
   description: string;
-  memberOnHealthCheck: MemberOnHealthCheckOnQuestion[];
 };
 
 export type MemberOnHealthCheckOnQuestion = {
@@ -277,8 +281,10 @@ export type MemberOnHealthCheckOnQuestion = {
   questionId: string;
   memberId: string;
   color: string;
-  point: string;
+  point: number;
   comment: string;
+  member: Member;
+  question: TemplateQuestion;
 };
 
 export type UserOnCriteria = {

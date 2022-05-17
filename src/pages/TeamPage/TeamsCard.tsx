@@ -41,7 +41,7 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
   );
 
   const redirect = (team: Team) => {
-    history.push(`/board/${team.id}/${team?.boards[0]?.id}`);
+    history.push(`reflect/${team.id}/${team?.boards[0]?.id}`);
   };
 
   const { error, data, loading, refetch, networkStatus } = useQuery<
@@ -62,11 +62,11 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
     <div className="flex flex-1 flex-dir-c" style={{ padding: '10px' }}>
       <LoadingSkeleton
         refetch={refetch}
-        data={data?.teams}
+        data={data?.getTeams}
         loading={loading || networkStatus === NetworkStatus.refetch}
         error={error}
       >
-        {data && data?.teams?.data?.length > 0 ? (
+        {data && data?.getTeams?.data?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-dir-c scrollable">
               <Row
@@ -75,14 +75,14 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
                 key={`row`}
                 gutter={[16, 16]}
               >
-                {data?.teams?.data?.map((team: Team) => {
+                {data?.getTeams?.data?.map((team: Team) => {
                   return (
                     <Col
                       key={team.id}
                       className="flex"
                       style={{ height: '100%', maxWidth: '500px', maxHeight: '200px' }}
                       span={(() => {
-                        switch (data?.teams?.data?.length) {
+                        switch (data?.getTeams?.data?.length) {
                           case 1:
                             return 24;
                           case 2:
@@ -164,7 +164,7 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
               <Pagination
                 defaultCurrent={1}
                 current={page}
-                total={data?.teams?.total}
+                total={data?.getTeams?.total}
                 defaultPageSize={8}
                 pageSize={size}
                 onChange={(page: number, pageSize?: number | undefined) => onPaginationChanged(page, pageSize)}

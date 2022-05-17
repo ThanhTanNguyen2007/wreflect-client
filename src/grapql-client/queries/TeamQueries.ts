@@ -23,20 +23,19 @@ const getTeam = gql`
   }
 `;
 
+enum statusOfTeam {
+  DOING,
+  DONE,
+}
+
 export type getTeamsResult = {
-  teams: {
+  getTeams: {
     data: Team[];
     total: number;
     page: number;
     size: number;
   };
 };
-
-enum statusOfTeam {
-  DOING,
-  DONE,
-}
-
 export type getTeamsVars = {
   status?: TeamStatus;
   isGettingAll?: boolean;
@@ -44,11 +43,10 @@ export type getTeamsVars = {
   page?: number;
   size?: number;
 };
-
 const getTeams = gql`
   ${TEAM_FIELDS}
-  query Teams($status: String, $isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
-    teams(status: $status, isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
+  query getTeams($status: String, $isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
+    getTeams(status: $status, isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
       data {
         ...TeamFields
       }

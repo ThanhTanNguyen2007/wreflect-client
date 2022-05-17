@@ -18,10 +18,11 @@ const LoginSection = ({ email }: Props) => {
 
 const Header = ({ email, picture }: Props) => {
   return (
-    <div className="header" style={{ backgroundColor: '#fff' }}>
+    <div className="header">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>
-        <div style={{ flexGrow: 1 }}>
-          <img height="50px" src="../../images/logo.png" alt="wReflect Logo" />{' '}
+        <div className="flex flex-dir-r flex-ai-e">
+          <img height="50px" src="../../images/shortLogo.png" alt="wReflect Logo" />{' '}
+          <div className="titlePage">WReflect</div>
         </div>
         <div style={{ flexGrow: 1, textAlign: 'right' }}>
           <LoginSection email={email} picture={picture} />

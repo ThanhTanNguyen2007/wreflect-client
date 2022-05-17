@@ -1,175 +1,51 @@
+import { TEMPLATE_FIELDS } from './../fragments/templateFragment';
+import { HEALTH_CHECK_FIELDS } from './../fragments/healthCheckFragment';
 import { MEMBER_FIELDS } from './../fragments/memberFragment';
 import { HealthCheck } from './../../types';
 import { gql } from '@apollo/client';
 import { MemberAnswer, MemberComment, StatusHealthCheck } from '../../types';
 
-export type startSurveyResult = {
-  startSurveyHealthCheck: {
-    getHealthCheck: {
-      memberAnswers: [MemberAnswer];
-      memberComments: [MemberComment];
-      healthCheck: HealthCheck;
-    };
-  };
+export type createHealthCheckResult = {
+  startSurveyHealthCheck: HealthCheck;
 };
-
-export type startSurveyVars = {
+export type createHealthCheckVars = {
   teamId: string;
   boardId: string;
   isAnonymous: boolean;
-  isCustom: boolean;
   templateId: string;
-  status: StatusHealthCheck;
 };
-
-export const startSurvey = gql`
-  ${MEMBER_FIELDS}
-  mutation Mutation(
-    $teamId: String!
-    $boardId: String!
-    $isAnonymous: Boolean!
-    $isCustom: Boolean!
-    $templateId: String!
-    $status: StatusHealthCheck!
-  ) {
-    startSurveyHealthCheck(
-      teamId: $teamId
-      boardId: $boardId
-      isAnonymous: $isAnonymous
-      isCustom: $isCustom
-      templateId: $templateId
-      status: $status
-    ) {
-      memberAnswers {
-        id
-        templateId
-        updatedAt
-        memberId
-        createdAt
-        healthCheckId
-        member {
-          ...MemberFields
-        }
-        answers {
-          questionId
-          value
-        }
-      }
-      memberComments {
-        id
-        templateId
-        healthCheckId
-        createdAt
-        updatedAt
-        memberId
-        questionId
-        text
-        member {
-          ...MemberFields
-        }
-      }
-      healthCheck {
-        id
-        teamId
-        boardId
-        templateId
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-        isAnonymous
-        isCustom
-      }
+export const createHealthCheck = gql`
+  ${HEALTH_CHECK_FIELDS}
+  mutation Mutation($teamId: String!, $boardId: String!, $isAnonymous: Boolean!, $templateId: String!) {
+    createHealthCheck(teamId: $teamId, boardId: $boardId, isAnonymous: $isAnonymous, templateId: $templateId) {
+      ...HealthCheckFields
     }
   }
 `;
 
-export type setAnswerHealthCheckResult = {
-  answerHealthCheck: {
-    getHealthCheck: {
-      memberAnswers: [MemberAnswer];
-      memberComments: [MemberComment];
-      healthCheck: HealthCheck;
-    };
-  };
+export type submitHealthCheckAnswerResult = {
+  submitHealthCheckAnswer: HealthCheck;
 };
-
-export type setAnswerHealthCheckVars = {
+export type submitHealthCheckAnswerVars = {
   teamId: string;
   boardId: string;
-  templateId: string;
-  answers: { questionId: string; value: string }[];
-  comments: { questionId: string; text: string }[];
+  answers: {
+    questionId: string;
+    point: number;
+    comment: string;
+  }[];
 };
-
-export const setAnswerHealthCheck = gql`
-  ${MEMBER_FIELDS}
-  mutation Mutation(
-    $teamId: String!
-    $boardId: String!
-    $templateId: String!
-    $answers: [answerInput!]!
-    $comments: [commentInput!]!
-  ) {
-    answerHealthCheck(
-      teamId: $teamId
-      boardId: $boardId
-      templateId: $templateId
-      answers: $answers
-      comments: $comments
-    ) {
-      memberAnswers {
-        answers {
-          questionId
-          value
-        }
-        id
-        templateId
-        healthCheckId
-        createdAt
-        updatedAt
-        member {
-          ...MemberFields
-        }
-        memberId
-      }
-      memberComments {
-        id
-        templateId
-        healthCheckId
-        createdAt
-        updatedAt
-        memberId
-        member {
-          ...MemberFields
-        }
-        questionId
-        text
-      }
-      healthCheck {
-        id
-        teamId
-        boardId
-        templateId
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-        isAnonymous
-        isCustom
-      }
+export const submitHealthCheckAnswer = gql`
+  ${HEALTH_CHECK_FIELDS}
+  mutation submitHealthCheckAnswer($teamId: String!, $boardId: String!, $answers: [healthCheckAnswer]!) {
+    submitHealthCheckAnswer(teamId: $teamId, boardId: $boardId, answers: $answers) {
+      ...HealthCheckFields
     }
   }
 `;
 
 export type reopenHealthCheckResult = {
-  reopenHealthCheck: {
-    getHealthCheck: {
-      memberAnswers: [MemberAnswer];
-      memberComments: [MemberComment];
-      healthCheck: HealthCheck;
-    };
-  };
+  reopenHealthCheck: HealthCheck;
 };
 
 export type reopenHealthCheckVars = {
@@ -178,49 +54,10 @@ export type reopenHealthCheckVars = {
 };
 
 export const reopenHealthCheck = gql`
-  ${MEMBER_FIELDS}
+  ${HEALTH_CHECK_FIELDS}
   mutation Mutation($teamId: String!, $boardId: String!) {
     reopenHealthCheck(teamId: $teamId, boardId: $boardId) {
-      memberAnswers {
-        answers {
-          questionId
-          value
-        }
-        id
-        templateId
-        healthCheckId
-        createdAt
-        member {
-          ...MemberFields
-        }
-        updatedAt
-        memberId
-      }
-      memberComments {
-        id
-        templateId
-        healthCheckId
-        createdAt
-        updatedAt
-        memberId
-        member {
-          ...MemberFields
-        }
-        questionId
-        text
-      }
-      healthCheck {
-        id
-        teamId
-        boardId
-        templateId
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-        isAnonymous
-        isCustom
-      }
+      ...HealthCheckFields
     }
   }
 `;

@@ -12,4 +12,5 @@ export * as AnswerOnCriteriaFragment from './answerOnCriteriaFragment';
 export * as NotificationFragment from './notificationFragment';
 export * as TemplateFragment from './templateFragment';
 export * as TemplateQuestionFragment from './templateQuestionFragment';
+export * as HealthCheckFragment from './healthCheckFragment';
 export * as MemberOnHealthCheckOnQuestionFragment from './memberOnHealthCheckOnQuestionFragment';

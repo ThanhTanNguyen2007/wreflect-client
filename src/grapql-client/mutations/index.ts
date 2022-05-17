@@ -9,3 +9,4 @@ export * as HealthCheckMutations from './HealthCheckMutation';
 export * as AssessmentMutations from './AssessmentMutations';
 export * as NotificationMutations from './NotificationMutations';
 export * as TemplateMutations from './TemplateMutation';
+export * as CriteriaMutations from './CriteriaMutations';

@@ -13,6 +13,7 @@ import {
   QuestionOutlined,
   UserSwitchOutlined,
   SlidersOutlined,
+  PieChartOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import Avatar from 'antd/lib/avatar/avatar';
@@ -98,7 +99,10 @@ const SideBar = ({ isAdmin }: Props) => {
                 <Menu.Item key="3" icon={<UsergroupDeleteOutlined />}>
                   <Link to="/admin/user-managerment">User Managerment</Link>
                 </Menu.Item>
-                <Menu.Item key="4" icon={<SlidersOutlined />}>
+                <Menu.Item key="4" icon={<PieChartOutlined />}>
+                  <Link to="/admin/analysis">Analysis</Link>
+                </Menu.Item>
+                <Menu.Item key="5" icon={<SlidersOutlined />}>
                   <Link to="/admin/system-configuration">System Configuration</Link>
                 </Menu.Item>
               </>
@@ -125,7 +129,7 @@ const SideBar = ({ isAdmin }: Props) => {
                   <Link to="/notifications">Notifications</Link>
                 </Menu.Item>
                 <Menu.Item icon={<UserOutlined />} key="account">
-                  <Link to="/me">Account</Link>
+                  <Link to={`/profile/me`}>Account</Link>
                 </Menu.Item>
                 <Menu.Item icon={<QuestionOutlined />} onClick={handleShowModal}>
                   Help

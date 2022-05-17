@@ -11,6 +11,7 @@ import { onError } from '@apollo/client/link/error';
 import { notification } from 'antd';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { updateLoginState } from './apis/axios';
+import { Criteria } from './types';
 
 const httpLink = new HttpLink({
   uri: `${config.SERVER_BASE_URL}/graphql`,
@@ -33,15 +34,19 @@ const splitLink = split(
   httpLink,
 );
 
-const errorLink = onError((error) => {
+const errorLink = onError(({ networkError, graphQLErrors }) => {
   try {
-    if (error.networkError) {
-      console.log(error.networkError.message);
-      if ('statusCode' in error.networkError && error.networkError.statusCode === 401) {
+    if (networkError) {
+      if ('statusCode' in networkError && networkError.statusCode === 401) {
         updateLoginState(null);
         notification.error({
           placement: 'bottomRight',
           message: `Session timeout`,
+        });
+      } else if ('statusCode' in networkError && networkError.statusCode === 400) {
+        notification.error({
+          placement: 'bottomRight',
+          message: `Bad data input request.`,
         });
       } else {
         notification.error({
@@ -51,15 +56,19 @@ const errorLink = onError((error) => {
         });
       }
     }
+    // else if (graphQLErrors) {
+    //   graphQLErrors.forEach(({ message }) =>
+    //     notification.error({
+    //       placement: 'bottomRight',
+    //       message,
+    //     }),
+    //   );
+    // }
   } catch (error) {
     notification.error({
       message: 'Something failed with server',
       placement: 'bottomRight',
     });
-  } finally {
-    if (error?.response?.errors) {
-      error.graphQLErrors = null;
-    }
   }
 });
 
@@ -69,34 +78,38 @@ const client = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: true,
     resultCaching: true,
-
     typePolicies: {
-      // Query: {
-      //   fields: {
-      //     team: {
-      //       read(_, { args, toReference }) {
-      //         return toReference({
-      //           __typename: 'Team',
-      //           id: args?.teamId,
-      //         });
-      //       },
-      //     },
-      //     board: {
-      //       read(_, { args, toReference }) {
-      //         return toReference({
-      //           __typename: 'Board',
-      //           id: args?.boardId,
-      //         });
-      //       },
-      //     },
-      //   },
-      // },
-      // Column: {
-      //   fields: {
-      //     opinion: {
-      //     }
-      //   }
-      // }
+      Query: {
+        fields: {
+          getCriteriaList: {
+            merge(existing = [], incoming) {
+              console.log(existing, incoming);
+              return incoming;
+            },
+          },
+          // team: {
+          //   read(_, { args, toReference }) {
+          //     return toReference({
+          //       __typename: 'Team',
+          //       id: args?.teamId,
+          //     });
+          //   },
+          // },
+          // board: {
+          //   read(_, { args, toReference }) {
+          //     return toReference({
+          //       __typename: 'Board',
+          //       id: args?.boardId,
+          //     });
+          //   },
+          // },
+        },
+      },
+      Column: {
+        fields: {
+          opinion: {},
+        },
+      },
       // Column: {
       //   fields: {
       //     opinions: {

@@ -3,51 +3,51 @@ import { MEMBER_FIELDS } from './../fragments/memberFragment';
 import { Assessment } from './../../types';
 import { gql } from '@apollo/client';
 
-export enum filterOfGetAssessmentList {
-  NAME = 'NAME',
-  DATE = 'DATE',
-  STATUS = 'STATUS',
+export enum sortAssessmentsByEnum {
+  name = 'name',
+  createdAt = 'createdAt',
+  status = 'status',
 }
 
-export enum sortType {
-  ASC = 'asc',
-  DESC = 'desc',
+export enum orderWithEnum {
+  asc = 'asc',
+  desc = 'desc',
 }
 
-export type getAssessmentsListResult = {
-  getAssessmentsList: { data: Assessment[]; total: number; page: number; size: number };
+export type getAssessmentsResult = {
+  getAssessments: { data: Assessment[]; total: number; page: number; size: number };
 };
 
-export type getAssessmentsListVars = {
+export type getAssessmentsVars = {
   teamId: string;
-  isGettingAll: boolean;
-  orderBy: filterOfGetAssessmentList;
-  sort: sortType;
-  offSet: number;
-  limit: number;
+  sortBy: sortAssessmentsByEnum;
+  orderWith: orderWithEnum;
+  isGettingAll?: boolean;
+  page?: number;
+  size?: number;
   search?: string;
 };
 
-export const getAssessmentsList = gql`
+export const getAssessments = gql`
   ${ASSESSMENT_FIELDS}
   ${MEMBER_FIELDS}
-  query getAssessmentsList(
+  query getAssessments(
     $teamId: String!
-    $isGettingAll: Boolean!
-    $orderBy: filterOfAssessmentList!
-    $sort: sortType!
-    $offSet: Int!
-    $limit: Int!
+    $sortBy: sortBy
+    $orderWith: orderWith
+    $isGettingAll: Boolean
+    $page: Int
+    $size: Int
     $search: String
   ) {
-    getAssessmentsList(
+    getAssessments(
       teamId: $teamId
       isGettingAll: $isGettingAll
-      orderBy: $orderBy
-      sort: $sort
-      offSet: $offSet
-      limit: $limit
       search: $search
+      sortBy: $sortBy
+      orderWith: $orderWith
+      page: $page
+      size: $size
     ) {
       data {
         ...AssessmentFields

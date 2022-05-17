@@ -1,5 +1,6 @@
+import { User } from './../../types';
+import { PageHeader } from 'antd';
 import { gql } from '@apollo/client';
-import { User } from '../../types';
 import { USER_FIELDS } from '../fragments/userFragment';
 
 const login = gql`
@@ -36,21 +37,32 @@ const getUser = gql`
   }
 `;
 
-const getUsers = gql`
+export type getUsersResult = {
+  getUsers: {
+    data: User[];
+    total: number;
+    page: number;
+    size: number;
+  };
+};
+export type getUsersVars = {
+  isGettingAll?: boolean;
+  search?: string;
+  page?: number;
+  size?: number;
+};
+export const getUsers = gql`
+  ${USER_FIELDS}
   query getUsers($isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
-    users(isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
+    getUsers(isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
       data {
-        id
-        name
-        email
-        createdAt
-        updatedAt
-        isAdmin
-        status
+        ...UserFields
       }
       total
+      page
+      size
     }
   }
 `;
 
-export { login, me, getUsers, getUser };
+export { login, me, getUser };

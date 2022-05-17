@@ -14,13 +14,15 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sass:build": " node-sass src/styles/sass/style.sass -o public/css",
-    "sass:watch": "node-sass src/styles/sass/style.sass -o src/styles/css && node-sass src/styles/sass/style.sass -wo src/styles/css"
+    "sass:watch": "node-sass src/styles/sass/style.sass -o src/styles/css && node-sass src/styles/sass/style.sass -wo src/styles/css",
+    "lessc": "lessc src/styles/less/main.less src/styles/css/antd.css --js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
     "@apollo/client": "^3.5.5",
+    "@craco/craco": "^6.4.3",
     "@giphy/js-fetch-api": "^4.1.2",
     "@giphy/react-components": "^5.6.1",
     "@reduxjs/toolkit": "^1.6.2",
@@ -36,6 +38,7 @@
     "emoji-picker-react": "^3.5.0",
     "graphql": "15.7.2",
     "http-status-codes": "2.1.4",
+    "less": "^4.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
@@ -43,7 +46,6 @@
     "rc-tween-one": "^3.0.3",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
-    "react-cookie-consent": "^7.4.1",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "5.2.0",
@@ -68,7 +70,9 @@
     "@typescript-eslint/eslint-plugin": "4.13.0",
     "@typescript-eslint/parser": "4.13.0",
     "eslint": "7.18.0",
-    "eslint-plugin-react": "7.22.0"
+    "eslint-plugin-react": "7.22.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "less-loader": "^10.2.0"
   },
   "eslintConfig": {
     "extends": [

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Modal, Form, Input, Button, FormInstance } from 'antd';
+import { Modal, Form, Input, Button, FormInstance, notification } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 import { useMutation } from '@apollo/client';
@@ -24,7 +24,10 @@ export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refe
     TemplateMutations.createTemplateHealthCheck,
     {
       onError: (error) => {
-        console.log(error);
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
       },
     },
   );
@@ -62,6 +65,7 @@ export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refe
       visible={isVisible}
       destroyOnClose
       maskClosable
+      okText="Create"
       onOk={async () => await onHandleCreate()}
       onCancel={() => setIsVisible(false)}
       width={1000}
@@ -70,8 +74,26 @@ export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refe
         <Form.Item label="Name" name={'name'} rules={[{ required: true, message: 'Missing Name' }]}>
           <Input />
         </Form.Item>
-        <Form.List name="questions">
-          {(fields, { add, remove }) => (
+        <Form.List
+          name="questions"
+          rules={[
+            {
+              validator: async (_, questions) => {
+                if (!questions || questions.length < 5) {
+                  return Promise.reject(new Error('At least 5 questions'));
+                }
+              },
+            },
+            {
+              validator: async (_, questions) => {
+                if (questions && questions.length > 20) {
+                  return Promise.reject(new Error('At maxium 20 questions'));
+                }
+              },
+            },
+          ]}
+        >
+          {(fields, { add, remove }, { errors }) => (
             <>
               <Form.Item>
                 <Button
@@ -82,9 +104,10 @@ export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refe
                   block
                   icon={<PlusOutlined />}
                 >
-                  Add sights
+                  Add Question
                 </Button>
               </Form.Item>
+              <Form.ErrorList errors={errors} />
               {fields.map((field, index) => {
                 const colorOfQuestion = onHandleGenerateColor(index);
                 return (

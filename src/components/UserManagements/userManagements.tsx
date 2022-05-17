@@ -5,6 +5,7 @@ import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { UserQueries } from '../../grapql-client/queries';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import moment from 'moment';
 
 const UserManagements = () => {
   const [searchText, setSearchText] = useState('');
@@ -49,7 +50,8 @@ const UserManagements = () => {
       key: 'createdAt',
       render: function createdAt(createdAt: string) {
         if (!createdAt) return;
-        return <>{format(new Date(+createdAt), 'dd MM yyyy')}</>;
+        // return <>{format(new Date(+createdAt), 'dd MM yyyy')}</>;
+        return <>{moment(+createdAt).format('DD/MM/YYYY')}</>;
       },
     },
   ];

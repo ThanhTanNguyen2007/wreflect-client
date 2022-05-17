@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal, Form, Input, Button, FormInstance } from 'antd';
+import { Modal, Form, Input, Button, FormInstance, notification } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 import { useMutation } from '@apollo/client';
@@ -25,7 +25,10 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
     updateTemplateHealthCheckVars
   >(TemplateMutations?.updateTemplateHealthCheck, {
     onError: (error) => {
-      console.log(error);
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
     },
   });
 
@@ -105,6 +108,22 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
               description: q?.description,
             }))}
             name="questions"
+            rules={[
+              {
+                validator: async (_, questions) => {
+                  if (!questions || questions.length < 5) {
+                    return Promise.reject(new Error('At least 5 questions'));
+                  }
+                },
+              },
+              {
+                validator: async (_, questions) => {
+                  if (questions && questions.length > 20) {
+                    return Promise.reject(new Error('At maxium 20 questions'));
+                  }
+                },
+              },
+            ]}
           >
             {(fields, { add, remove }) => (
               <>

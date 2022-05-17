@@ -1,13 +1,14 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { User } from './types';
 import Routes from './Routes';
 // const Routes = React.lazy(() => import('./Routes'));
 
-import { setUpdateLoginState, user } from './apis';
+import { auth, setUpdateLoginState, user } from './apis';
 import SelfContext from './contexts/selfContext';
-import './styles/less/ant.less';
 import { Spin } from 'antd';
+import './styles/css/antd.css';
+import _ from 'lodash';
 
 const App = (): JSX.Element => {
   const [me, setMe] = useState<null | User>(null);
@@ -20,6 +21,17 @@ const App = (): JSX.Element => {
     setMe(newMe);
     localStorage.setItem('email', newMe?.email || '');
   });
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (!!me?.id) {
+  //       window.addEventListener('beforeunload', (ev) => {
+  //         ev.preventDefault();
+  //         return auth.logout();
+  //       });
+  //     }
+  //   };
+  // });
 
   useEffect(() => {
     (async function () {

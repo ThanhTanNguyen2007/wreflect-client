@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import HealthCheckConfiguration from './HealthCheckConfiguration/HealthCheckConfiguration';
-import CriteriaConfiguration from './SystemConfiguration/CriteriaConfiguration';
+import CriteriaConfiguration from './CriteriaConfiguration/CriteriaConfiguration';
 import SystemConfiguration from './SystemConfiguration/SystemConfiguration';
 import TeamManagerment from './TeamManagerment/TeamManagerment';
 import UserManagementPage from './UserManagerment/UserManagerment';
+import AnalysisAdmin from './Analysis/AnalysisAdmin';
 
 type Props = {
   isAdmin: boolean;
@@ -17,6 +18,7 @@ export default function AdminPage({ isAdmin }: Props) {
         <Switch>
           <Route path="/admin/user-managerment" render={({ match }) => <UserManagementPage isAdmin={isAdmin} />} />
           <Route path="/admin/team-managerment" render={({ match }) => <TeamManagerment isAdmin={isAdmin} />} />
+          <Route path={`/admin/analysis`} render={({ match }) => <AnalysisAdmin isAdmin={isAdmin} />} />
           <Route path="/admin/system-configuration" render={({ match }) => <SystemConfiguration isAdmin={isAdmin} />} />
           <Redirect from="/admin" to="/admin/user-managerment" />
         </Switch>

@@ -7,14 +7,14 @@ export type getNotificationResult = {
 };
 
 export type getNotificationVars = {
-  offSet: number;
-  limit: number;
+  page: number;
+  size: number;
 };
 
 export const getNotifications = gql`
   ${NOTIFICATION_FIELDS}
-  query getNotifications($offSet: Int!, $limit: Int!) {
-    getNotifications(offSet: $offSet, limit: $limit) {
+  query getNotifications($page: Int!, $size: Int!) {
+    getNotifications(page: $page, size: $size) {
       ...NotificationFields
     }
   }
