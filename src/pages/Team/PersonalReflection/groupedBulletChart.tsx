@@ -57,7 +57,7 @@ export default function GroupedBulletChart({ rosePlotData }: Props) {
 
   return (
     <>
-      <h2 className="flex flex-ai-c flex-jc-c mb-14">Grouped Bullet Chart</h2>
+      <h2 className="flex flex-ai-c flex-jc-c mb-14">Maximum and Minimum Of Criteria Value</h2>
       <Bullet
         {...config}
         legend={{

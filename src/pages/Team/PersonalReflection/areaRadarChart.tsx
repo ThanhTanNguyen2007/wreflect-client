@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Radar } from '@ant-design/plots';
-import { Criteria, Member } from '../../../types';
+import { Criteria, Evaluation, Member } from '../../../types';
 
 type areaRadarChartData = {
   isSubmit: boolean;
@@ -10,10 +10,11 @@ type areaRadarChartData = {
 };
 
 type Props = {
+  evaluation: Evaluation;
   areaRadarData: areaRadarChartData[];
 };
 
-export default function AreaRadarChart({ areaRadarData }: Props) {
+export default function AreaRadarChart({ areaRadarData, evaluation }: Props) {
   const [data, setData] = useState<{ criteria: string; point: number; member: string }[]>([]);
 
   useEffect(() => {
@@ -70,7 +71,12 @@ export default function AreaRadarChart({ areaRadarData }: Props) {
 
   return (
     <>
-      <h2 className="flex flex-ai-c flex-jc-c mb-14">Radar Chart</h2>
+      <h2 className="flex flex-ai-c flex-jc-c ">
+        Summary Evaluate {evaluation?.assessor?.user?.nickname?.toUpperCase()}
+      </h2>
+      <div className="flex flex-ai-c flex-jc-c mb-14">
+        This Chart showing all Assessor evaluate {evaluation?.assessor?.user?.nickname?.toUpperCase()}
+      </div>
       <Radar {...config} />
     </>
   );

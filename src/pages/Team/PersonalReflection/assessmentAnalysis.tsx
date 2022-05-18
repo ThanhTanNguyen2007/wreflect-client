@@ -1,5 +1,5 @@
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { Avatar, Button, notification, Select } from 'antd';
+import { Avatar, Button, Card, notification, Select } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { AnalysisQueries, AssessmentQueries, TeamQueries } from '../../../grapql-client/queries';
 import { Evaluation, Team } from '../../../types';
@@ -133,17 +133,21 @@ export default function AssessmentAnalysis({ teamId, assessmentId, setTeam }: Pr
           <h2 style={{ color: '#a4a0f1' }}>{_?.startCase(evaluation?.assessor?.user?.nickname)}</h2>
         </div> */}
 
-        <div className="content">
-          <div className="areaRadarChart ">
-            <AreaRadarChart areaRadarData={test?.getAnalysisAssessment?.areaRadarChartData} />
+        <Card>
+          <div>
+            <AreaRadarChart evaluation={evaluation} areaRadarData={test?.getAnalysisAssessment?.areaRadarChartData} />
           </div>
-        </div>
-        <div className="rosePlotChart content">
-          <RosePlotChart rosePlotData={test?.getAnalysisAssessment?.rosePlotChartData} />
-        </div>
-        <div className="groupedBulletChart content">
-          <GroupedBulletChart rosePlotData={test?.getAnalysisAssessment?.rosePlotChartData} />
-        </div>
+        </Card>
+        <Card>
+          <div className="rosePlotChart">
+            <RosePlotChart rosePlotData={test?.getAnalysisAssessment?.rosePlotChartData} />
+          </div>
+        </Card>
+        <Card>
+          <div className="groupedBulletChart">
+            <GroupedBulletChart rosePlotData={test?.getAnalysisAssessment?.rosePlotChartData} />
+          </div>
+        </Card>
       </div>
     </div>
   );
