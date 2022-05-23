@@ -5,10 +5,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useMutation } from '@apollo/client';
 import { Template } from '../../../types';
 import { TemplateMutations } from '../../../grapql-client/mutations';
-import {
-  updateTemplateHealthCheckResult,
-  updateTemplateHealthCheckVars,
-} from '../../../grapql-client/mutations/TemplateMutation';
+import { updateTemplateResult, updateTemplateVars } from '../../../grapql-client/mutations/TemplateMutation';
 
 type Props = {
   template: Template;
@@ -20,17 +17,18 @@ const { TextArea } = Input;
 export default function EditTemplateHealthCheck({ template, setTemplate }: Props) {
   const form = useRef<FormInstance>(null);
 
-  const [updateTemplate, { loading: updateLoading }] = useMutation<
-    updateTemplateHealthCheckResult,
-    updateTemplateHealthCheckVars
-  >(TemplateMutations?.updateTemplateHealthCheck, {
-    onError: (error) => {
-      notification.error({
-        placement: 'bottomRight',
-        message: error?.message,
-      });
+
+  const [updateTemplate, { loading: updateLoading }] = useMutation<updateTemplateResult, updateTemplateVars>(
+    TemplateMutations?.updateTemplate,
+    {
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
     },
-  });
+  );
 
   const onHandleUpdate = () => {
     form.current.validateFields().then(async (values: any) => {
@@ -103,6 +101,7 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
           </Form.Item>
           <Form.List
             initialValue={template?.healthCheckQuestions?.map((q) => ({
+              is: q?.id,
               title: q?.title,
               color: q?.color,
               description: q?.description,
@@ -127,22 +126,11 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
           >
             {(fields, { add, remove }) => (
               <>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                  }}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add sights
-                </Button>
                 {fields.map((field, index) => (
                   <div
                     key={field.name}
                     className={`flex flex-1 flex-dir-r flex-ai-bl flex-gap-10 p-20 ${onHandleGenerateColor(index)}`}
                   >
-                    {console.log(field)}
                     <Form.Item name={[field.name, 'color']} style={{ width: 0 }} />
                     <Form.Item
                       label="Title"
@@ -168,6 +156,16 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
                     />
                   </div>
                 ))}
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    add();
+                  }}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add sights
+                </Button>
               </>
             )}
           </Form.List>

@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+// import App from './App';
+const App = React?.lazy(() => import('./App'));
 import reportWebVitals from './reportWebVitals';
-import './styles/css/style.css';
 
 import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink, from, split } from '@apollo/client';
 import config from './config';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { onError } from '@apollo/client/link/error';
-import { notification } from 'antd';
+import { notification, Spin } from 'antd';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { updateLoginState } from './apis/axios';
 import { Criteria } from './types';
+import './i18n';
 
 const httpLink = new HttpLink({
   uri: `${config.SERVER_BASE_URL}/graphql`,
@@ -135,7 +136,15 @@ const client = new ApolloClient({
 ReactDOM.render(
   // <React.StrictMode>
   <ApolloProvider client={client}>
-    <App />
+    <Suspense
+      fallback={
+        <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
+          <Spin size="large" />
+        </div>
+      }
+    >
+      <App />
+    </Suspense>
   </ApolloProvider>,
   // </React.StrictMode>,
   document.getElementById('root'),

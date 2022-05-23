@@ -19,7 +19,10 @@ export default function AdminPage({ isAdmin }: Props) {
           <Route path="/admin/user-managerment" render={({ match }) => <UserManagementPage isAdmin={isAdmin} />} />
           <Route path="/admin/team-managerment" render={({ match }) => <TeamManagerment isAdmin={isAdmin} />} />
           <Route path={`/admin/analysis`} render={({ match }) => <AnalysisAdmin isAdmin={isAdmin} />} />
-          <Route path="/admin/system-configuration" render={({ match }) => <SystemConfiguration isAdmin={isAdmin} />} />
+          <Route
+            path="/admin/variables-configuration"
+            render={({ match }) => <SystemConfiguration isAdmin={isAdmin} />}
+          />
           <Redirect from="/admin" to="/admin/user-managerment" />
         </Switch>
       ) : (

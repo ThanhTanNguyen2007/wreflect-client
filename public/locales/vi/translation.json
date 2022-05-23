@@ -1,0 +1,29 @@
+{
+  "txt_all": "Tất cả",
+  "txt_doing": "Đang thực hiện",
+  "txt_done": "Đã xong",
+
+  "txt_default": "Mặc Định",
+
+  "txt_createTeam": "Tạo team mới",
+  "txt_reflectTeam": "Nhìn lại team",
+  "txt_reflectPersonal": "Nhìn lại cá nhân",
+  "txt_actionTracker": "Theo dõi quyết định",
+  "txt_healthCheck": "Sức khỏe nhóm",
+  "txt_members": "Thành viên",
+  "txt_boards": "Bảng",
+  "txt_setting": "Cài đặt",
+
+  "txt_teams": "Nhóm",
+  "txt_notifications": "Thông báo",
+  "txt_account": "Tài khoản",
+  "txt_help": "Trợ giúp",
+  "txt_signout": "Đăng xuất",
+  "txt_admin": "Quản trị viên",
+  "txt_switchAdminToUser": "Chuyển sang user",
+  "txt_switchUserToAdmin": "Chuyển sang admin",
+  "txt_teamsManagement": "Quản lý nhóm",
+  "txt_usersManagement": "Quản lý người dùng",
+  "txt_variablesConfiguration": "Điều chỉnh giá trị",
+  "txt_analysis": "Phân tích"
+}

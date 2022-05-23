@@ -27,7 +27,7 @@ import {
 } from '@ant-design/icons';
 import _ from 'lodash';
 import selfContext from '../../../contexts/selfContext';
-import { ConfigBoardModal } from './configBoardModal';
+import { ConfigBoardModal } from './CreateBoard';
 import { Loading } from '../../../components/Loading';
 import { TopNavBar } from '../../../components/TopNavBar';
 import ConfigTimeTrackingModal from './configTimeTrackingModal';
@@ -304,18 +304,18 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                           Start Timer
                         </a>
                       </li> */}
-                          {/* <li>
-                        <PlusCircleOutlined className="boardPanelIcon " />
-                        <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                          Reset All Votes
-                        </a>
-                      </li> */}
-                          {/* <li>
-                        <StarOutlined className="boardPanelIcon " />
-                        <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                          Show Bookmarks
-                        </a>
-                      </li> */}
+                          <li>
+                            <PlusCircleOutlined className="boardPanelIcon " />
+                            <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                              Reset All Votes
+                            </a>
+                          </li>
+                          <li>
+                            <StarOutlined className="boardPanelIcon " />
+                            <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
+                              Show Bookmarks
+                            </a>
+                          </li>
                           <li>
                             <SnippetsOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>

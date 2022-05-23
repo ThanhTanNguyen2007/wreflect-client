@@ -14,10 +14,7 @@ import EditTemplateHealthCheck from './EditTemplateHealthCheck';
 import { Template } from '../../../types';
 import Loading from '../../../components/Loading/loading';
 import { TemplateMutations } from '../../../grapql-client/mutations';
-import {
-  deleteTemplateHealthCheckResult,
-  deleteTemplateHealthCheckVars,
-} from '../../../grapql-client/mutations/TemplateMutation';
+import { deleteTemplateRusult, deleteTemplateVars } from '../../../grapql-client/mutations/TemplateMutation';
 
 type Props = {
   isAdmin: boolean;
@@ -45,24 +42,21 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
     fetchPolicy: 'network-only',
   });
 
-  const [deleteTemplate] = useMutation<deleteTemplateHealthCheckResult, deleteTemplateHealthCheckVars>(
-    TemplateMutations.deleteTemplateHealthCheck,
-    {
-      onError: (error) => {
-        notification.error({
-          placement: 'bottomRight',
-          message: error?.message,
-        });
-      },
-      onCompleted: () => {
-        notification.success({
-          placement: 'bottomRight',
-          message: `Delete Template Success`,
-        });
-      },
-      refetchQueries: ['getTemplates'],
+  const [deleteTemplate] = useMutation<deleteTemplateRusult, deleteTemplateVars>(TemplateMutations.deleteTemplate, {
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
     },
-  );
+    onCompleted: () => {
+      notification.success({
+        placement: 'bottomRight',
+        message: `Delete Template Success`,
+      });
+    },
+    refetchQueries: ['getTemplates'],
+  });
 
   const onHandleSearch = (searchText: string) => {
     setSearchText(searchText);
@@ -158,7 +152,7 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
                           </div>
                         </div>
                         <div className="flex flex-dir-r flex-jc-sb flex-ai-bl  mt-10">
-                          <div className="flex flex-dir-r flex-gap-5">
+                          <div className="flex flex-dir-r flex-gap-5 flex-wrap">
                             {template?.healthCheckQuestions?.map((question) => (
                               <Tooltip title={question?.description} key={question?.id} placement={'bottom'}>
                                 <span className={`statement ${question?.color}`}>{question?.title}</span>

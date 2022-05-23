@@ -1,0 +1,29 @@
+{
+  "txt_all": "All",
+  "txt_doing": "Doing",
+  "txt_done": "Done",
+
+  "txt_default": "Default",
+
+  "txt_createTeam": "New Team",
+  "txt_reflectTeam": "Reflect Team",
+  "txt_reflectPersonal": "Reflect Personal",
+  "txt_actionTracker": "Action Tracker",
+  "txt_healthCheck": "Health Check",
+  "txt_members": "Members",
+  "txt_boards": "Boards",
+  "txt_setting": "Setting",
+
+  "txt_teams": "Teams",
+  "txt_notifications": "Notifications",
+  "txt_account": "Account",
+  "txt_help": "Help",
+  "txt_signout": "Sign Out",
+  "txt_admin": "Admin",
+  "txt_switchAdminToUser": "Switch to user interface",
+  "txt_switchUserToAdmin": "Switch to admin interface",
+  "txt_teamsManagement": "Teams Management",
+  "txt_usersManagement": "Users Management",
+  "txt_variablesConfiguration": "Variables Configuration",
+  "txt_analysis": "Analysis"
+}

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Modal, notification, Select, Switch, Spin, Card } from 'antd';
+import { CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, notification, Select, Switch, Badge, Card } from 'antd';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 import { Board, Member, Template } from '../../../types';
 import { TopNavBar } from '../../../components/TopNavBar';
@@ -21,7 +22,9 @@ import {
 } from '../../../grapql-client/mutations/HealthCheckMutation';
 import _, { get } from 'lodash';
 import { Loading } from '../../../components/Loading';
-import CreateCustomHealthCheckModal from './CreateCustomHealthCheckModal';
+import CreateCustomTemplate from './Template/CreateCustomTemplate';
+import BadgeComponent from '../../../components/Badge/Badge';
+import TemplateComponent from './Template/TemplateComponent';
 
 type Props = {
   teamId: string;
@@ -43,7 +46,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
   const [selecteTemplate, setSelectedTemplate] = useState<Template>();
   const [answers, setAnswers] = useState<answerType[]>([]);
   const [numOfMemberDoHealthCheck, setNumMembersDoHealthCheck] = useState<number>(0);
-  // const [comments, setComments] = useState<{ questionId: string; text: string }[]>([]);
+  const { t, i18n } = useTranslation();
 
   const { data } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(TeamQueries.getTeam, {
     variables: {
@@ -209,11 +212,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
 
   return (
     <>
-      <CreateCustomHealthCheckModal
-        teamId={teamId}
-        isVisible={isVisibleCreateCustom}
-        setIsVisible={setIsVisibleCreateCustom}
-      />
+      <CreateCustomTemplate teamId={teamId} isVisible={isVisibleCreateCustom} setIsVisible={setIsVisibleCreateCustom} />
       <TopNavBar iMember={iMember} team={data?.team} boardId={boardId} title="Health Check" />
       <div className="flex flex-dir-c flex-1 scrollable">
         <Card className="healthCheckPage flex flex-1 flex-ai-c flex-jc-c">
@@ -348,6 +347,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           {renderListOptionBoard}
                         </Select>
                         <div>
+                          <Button onClick={() => i18n.changeLanguage('vi')}>Translate to Vn</Button>
                           <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
                             Go To Board
                           </Button>
@@ -359,7 +359,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                             style={{ justifyContent: 'space-between' }}
                             className="flex flex-1 flex-dir-c flex-gap-10 poll-center-items"
                           >
-                            <h3>Create Custom Health Check</h3>
+                            <h3>{t('Create Custom Health Check')}</h3>
                             <Button
                               onClick={() => setIsVisibleCreateCustom(true)}
                               type="primary"
@@ -367,37 +367,13 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           </div>
                         </Card>
                         {templates?.getTemplatesOfTeam?.map((template) => (
-                          <Card
-                            bodyStyle={{ display: 'flex', flex: '1', flexDirection: 'column' }}
-                            hoverable
-                            key={template?.id}
-                            className=" templates-overview-card"
-                          >
-                            <div
-                              onClick={() => {
-                                if (iMember?.isOwner || iMember?.isSuperOwner) {
-                                  setSelectedTemplate(template);
-                                } else {
-                                  notification.warning({
-                                    message: 'Permission denied',
-                                    description: 'Only Super Owner and Owners can access HeathCheck templates.',
-                                    placement: 'bottomRight',
-                                  });
-                                }
-                              }}
-                              className="flex flex-1 flex-dir-c flex-gap-24 poll-center-items"
-                            >
-                              <h3>{template?.title}</h3>
-                              <div className="statement-wrapper poll-center-items">
-                                {template?.healthCheckQuestions?.map((questions) => (
-                                  <span className={`statement ${questions.color}`} key={questions?.id}>
-                                    {questions?.title}
-                                  </span>
-                                ))}
-                              </div>
-                              <Button type="primary">Show Details</Button>
-                            </div>
-                          </Card>
+                          <>
+                            <TemplateComponent
+                              template={template}
+                              setSelectedTemplate={setSelectedTemplate}
+                              iMember={iMember}
+                            />
+                          </>
                         ))}
                       </div>
                     </>
@@ -432,8 +408,8 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           defaultChecked
                         />
                       </div>
-                      <Card className="flex flex-ai-c flex-jc-c templates-overview-card">
-                        <h3>{selecteTemplate?.title}</h3>
+                      <Card className="flex flex-ai-c flex-jc-c">
+                        <h3 className="flex flex-ai-c flex-jc-c">{selecteTemplate?.title}</h3>
                       </Card>
                       <div className="templates-overview poll-center-items flex-wrap">
                         {selecteTemplate?.healthCheckQuestions?.map((question) => (

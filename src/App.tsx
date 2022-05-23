@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 
 import { User } from './types';
 import Routes from './Routes';
@@ -8,6 +8,8 @@ import { auth, setUpdateLoginState, user } from './apis';
 import SelfContext from './contexts/selfContext';
 import { Spin } from 'antd';
 import './styles/css/antd.css';
+import './styles/css/style.css';
+import 'flag-icon-css/css/flag-icons.min.css';
 import _ from 'lodash';
 
 const App = (): JSX.Element => {

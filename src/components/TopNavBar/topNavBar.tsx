@@ -12,6 +12,7 @@ import {
 } from '../../grapql-client/subcriptions';
 import selfContext from '../../contexts/selfContext';
 import { MemberMutations } from '../../grapql-client/mutations';
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
@@ -27,6 +28,7 @@ type Props = {
 const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
   const history = useHistory();
   const me = useContext(selfContext);
+  const { t, i18n } = useTranslation();
 
   useSubscription<TeamSubscription.subOnUpdateTeamResult, TeamSubscription.subOnUpdateTeamVars>(
     TeamSubscription.subOnUpdateTeam,
@@ -125,29 +127,29 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
           <div className="flex flex-1 flex-dir-r flex-gap-10 flex-wrap">
             {handleRenderExtra()}
             <Link key="1" to={`/reflect/${team?.id}/${boardId || team?.boards[0]?.id}`}>
-              <Button type={title == 'Do Reflect' ? 'primary' : undefined}>Reflect</Button>
+              <Button type={title == 'Do Reflect' ? 'primary' : undefined}>{t(`txt_reflectTeam`)}</Button>
             </Link>
             <Link key="2" to={`/personal-reflect/manage/${team?.id}`}>
-              <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>Personal</Button>
+              <Button type={title == 'Personal Reflection' ? 'primary' : undefined}>{t(`txt_reflectPersonal`)}</Button>
             </Link>
             <Link key="3" to={`/actions-tracker/${team?.id}`}>
-              <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>Actions Tracker</Button>
+              <Button type={title == 'Actions Tracker' ? 'primary' : undefined}>{t(`txt_actionTracker`)}</Button>
             </Link>
             <Link key="4" to={`/team-health/${team?.id}/${boardId || team?.boards[0]?.id}`}>
-              <Button type={title == 'Health Check' ? 'primary' : undefined}>Health Check</Button>
+              <Button type={title == 'Health Check' ? 'primary' : undefined}>{t(`txt_healthCheck`)}</Button>
             </Link>
             <Link key="5" style={{ textDecoration: 'none' }} to={`/manage-members/${team?.id}`}>
-              <Button type={title == 'Manage Members' ? 'primary' : undefined}>Members</Button>
+              <Button type={title == 'Manage Members' ? 'primary' : undefined}>{t(`txt_members`)}</Button>
             </Link>
             {/* {(iMember?.isOwner || iMember?.isSuperOwner) && ( */}
             {/* <> */}
             <Link key="6" style={{ textDecoration: 'none' }} to={`/manage-board/${team?.id}`}>
-              <Button type={title == 'Manage Board' ? 'primary' : undefined}>Board</Button>
+              <Button type={title == 'Manage Board' ? 'primary' : undefined}>{t(`txt_boards`)}</Button>
             </Link>
             {/* </> */}
             {/* )} */}
             <Link key="7" style={{ textDecoration: 'none' }} to={`/team-details/${team?.id}`}>
-              <Button type={title == 'Setting' ? 'primary' : undefined}>Details</Button>
+              <Button type={title == 'Setting' ? 'primary' : undefined}>{t(`txt_setting`)}</Button>
             </Link>
           </div>
         }

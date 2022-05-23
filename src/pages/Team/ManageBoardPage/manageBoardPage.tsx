@@ -14,7 +14,7 @@ import { TeamQueries } from '../../../grapql-client/queries';
 import { TopNavBar } from '../../../components/TopNavBar';
 import { Loading } from '../../../components/Loading';
 import { BoardMutations } from '../../../grapql-client/mutations';
-import { ConfigBoardModal } from '../BoardPage/configBoardModal';
+import { ConfigBoardModal } from '../BoardPage/CreateBoard';
 import selfContext from '../../../contexts/selfContext';
 
 type Props = {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Card, Tabs } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import TeamsCard from './TeamsCard';
+import { useTranslation } from 'react-i18next';
 
+import TeamsCard from './TeamsCard';
 import CreateTeamModal from './createTeamModal';
 import SearchBar from '../../components/SearchBar/SearchBar';
 
@@ -15,6 +16,7 @@ const Team = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(8);
   const [loading, setIsLoading] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const onHandleSearch = (searchText: string) => {
     setSearchText(searchText);
@@ -32,7 +34,7 @@ const Team = () => {
           size="middle"
           onClick={() => setIsModalVisible(true)}
         >
-          New Team
+          {t('txt_createTeam')}
         </Button>
         <SearchBar placeholder="What are you looking for ?" isLoading={loading} onHandleSearch={onHandleSearch} />
       </div>
@@ -53,7 +55,9 @@ const Team = () => {
       >
         <TabPane
           tab={
-            <div style={activeKey == '1' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>All</div>
+            <div style={activeKey == '1' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>
+              {t('txt_all')}
+            </div>
           }
           key="1"
           className="flex flex-1"
@@ -69,7 +73,9 @@ const Team = () => {
         </TabPane>
         <TabPane
           tab={
-            <div style={activeKey == '2' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>Doing</div>
+            <div style={activeKey == '2' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>
+              {t(`txt_doing`)}
+            </div>
           }
           key="2"
           className="flex flex-1"
@@ -86,7 +92,9 @@ const Team = () => {
         </TabPane>
         <TabPane
           tab={
-            <div style={activeKey == '3' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>Done</div>
+            <div style={activeKey == '3' ? { fontSize: '15px', fontWeight: 'bold' } : { fontSize: '14px' }}>
+              {t('txt_done')}
+            </div>
           }
           key="3"
           className="flex flex-1"

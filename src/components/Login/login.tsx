@@ -40,7 +40,6 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
   ) => {
     setLoading(true);
     const res = await auth.login(code, state);
-    setLoading(false);
     if (!res) {
       return;
     }
@@ -64,6 +63,7 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
     window.history.replaceState({}, '', clearedUrl);
 
     const { partnerId, isAdmin } = await user.me();
+    setLoading(false);
     if (location.pathname.includes('wa-client')) {
       return;
     }

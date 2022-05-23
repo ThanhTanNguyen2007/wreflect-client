@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 
-import { Menu, Layout, Modal, Tooltip, Row, Col, Tabs, Badge } from 'antd';
+import { Menu, Layout, Modal, Tooltip, Row, Col, Tabs, Badge, Select, Button } from 'antd';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   CompassOutlined,
@@ -17,6 +17,7 @@ import {
 } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import Avatar from 'antd/lib/avatar/avatar';
+import { useTranslation } from 'react-i18next';
 
 import { auth } from '../../apis';
 import { Logout } from '../Logout';
@@ -38,7 +39,10 @@ const SideBar = ({ isAdmin }: Props) => {
   const { path, url } = useRouteMatch();
   const history = useHistory();
   const me = useContext(selfContext);
-  const menuComp = useRef<Menu>(null);
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState<'en' | 'vi'>(i18n?.language as 'en' | 'vi');
+
+  console.log(i18n);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -69,6 +73,10 @@ const SideBar = ({ isAdmin }: Props) => {
     NotificationQueries?.getNumOfUnSeenNoti,
   );
 
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
+
   return (
     <>
       {me && (
@@ -89,30 +97,34 @@ const SideBar = ({ isAdmin }: Props) => {
               <Avatar src={me?.picture} />
             </Tooltip>
           </div>
-          {isSwitchAdmin && <div className="bold flex flex-ai-c flex-jc-c white mt-10">Admin</div>}
+          {isSwitchAdmin && (
+            <div style={{ textAlign: 'center' }} className="bold white mt-10">
+              {t(`txt_admin`)}
+            </div>
+          )}
           <Menu className="flex flex-1" theme="dark" mode="inline">
             {isSwitchAdmin ? (
               <>
                 <Menu.Item key="2" icon={<BarChartOutlined />}>
-                  <Link to="/admin/team-managerment">Team Managerment</Link>
+                  <Link to="/admin/team-managerment">{t(`txt_teamsManagement`)}</Link>
                 </Menu.Item>
                 <Menu.Item key="3" icon={<UsergroupDeleteOutlined />}>
-                  <Link to="/admin/user-managerment">User Managerment</Link>
+                  <Link to="/admin/user-managerment">{t(`txt_usersManagement`)}</Link>
                 </Menu.Item>
                 <Menu.Item key="4" icon={<PieChartOutlined />}>
-                  <Link to="/admin/analysis">Analysis</Link>
+                  <Link to="/admin/analysis">{t('txt_analysis')}</Link>
                 </Menu.Item>
                 <Menu.Item key="5" icon={<SlidersOutlined />}>
-                  <Link to="/admin/system-configuration">System Configuration</Link>
+                  <Link to="/admin/variables-configuration">{t(`txt_variablesConfiguration`)}</Link>
                 </Menu.Item>
               </>
             ) : (
               <>
                 <Menu.Item style={{ marginTop: 10 }} icon={<GoldOutlined />} key="teams">
-                  <Link to="/teams">Teams</Link>
+                  <Link to="/teams">{t('txt_teams')}</Link>
                 </Menu.Item>
                 <Menu.Item icon={<CompassOutlined />} key="connect">
-                  <Link to="/connect">Connect</Link>
+                  <Link to="/connect">{t('txt_connect')}</Link>
                 </Menu.Item>
                 <Menu.Item
                   icon={
@@ -126,25 +138,33 @@ const SideBar = ({ isAdmin }: Props) => {
                   }
                   key="notification"
                 >
-                  <Link to="/notifications">Notifications</Link>
+                  <Link to="/notifications">{t('txt_notifications')}</Link>
                 </Menu.Item>
                 <Menu.Item icon={<UserOutlined />} key="account">
-                  <Link to={`/profile/me`}>Account</Link>
+                  <Link to={`/profile/me`}>{t('txt_account')}</Link>
                 </Menu.Item>
                 <Menu.Item icon={<QuestionOutlined />} onClick={handleShowModal}>
-                  Help
+                  {t('txt_help')}
                 </Menu.Item>
               </>
             )}
             {isAdmin && (
               <Menu.Item onClick={() => setIsSwitchAdmin(!isSwitchAdmin)} key="11" icon={<UserSwitchOutlined />}>
-                <Link to={isSwitchAdmin ? '/teams' : '/admin'}>Switch to {isSwitchAdmin ? 'User' : 'Admin'}</Link>
+                <Link to={isSwitchAdmin ? '/teams' : '/admin'}>
+                  {t(`${isSwitchAdmin ? 'txt_switchAdminToUser' : 'txt_switchUserToAdmin'}`)}
+                </Link>
               </Menu.Item>
             )}
+            <Menu.Item
+              onClick={() => setLanguage(language == 'vi' ? 'en' : 'vi')}
+              unselectable="on"
+              key="12"
+              icon={<span className={`flag-icon flag-icon-${language == 'vi' ? 'vn' : 'us'}`}></span>}
+            >
+              {`${language == 'en' ? 'English' : 'Vietnam'} Language`}
+            </Menu.Item>
             <Menu.Item onClick={() => onClickLogout()} style={{ marginTop: 'auto' }} key="10" icon={<LogoutOutlined />}>
-              <Logout>
-                <>Sign out</>
-              </Logout>
+              <Logout>{t('txt_signout')}</Logout>
             </Menu.Item>
           </Menu>
           <Modal className="modal-userguide" title="User Guide" visible={showModal} onCancel={handleCancel}>

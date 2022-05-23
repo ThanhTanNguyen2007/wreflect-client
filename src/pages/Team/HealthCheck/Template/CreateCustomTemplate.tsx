@@ -3,39 +3,42 @@ import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, notification } from 'antd';
 import { useMutation } from '@apollo/client';
 import {
-  createCustomTemplateForTeamVars,
-  createCustomTemplateForTeamResult,
-  createTemplateHealthCheckResult,
-  createTemplateHealthCheckVars,
-} from '../../../grapql-client/mutations/TemplateMutation';
-import { TemplateMutations } from '../../../grapql-client/mutations';
+  createCustomTemplateVars,
+  createCustomTemplateResult,
+  createTemplateResult,
+  createTemplateVars,
+} from '../../../../grapql-client/mutations/TemplateMutation';
+import { TemplateMutations } from '../../../../grapql-client/mutations';
 
-const { TextArea } = Input;
 type Props = {
   teamId: string;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
 };
-
+const { TextArea } = Input;
 const colorPicker = ['pink', 'lpink', 'orange', 'lblue', 'blue', 'green', 'purple'];
 
-export default function CreateCustomHealthCheckModal({ teamId, isVisible, setIsVisible }: Props) {
+export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }: Props) {
   const [form] = Form?.useForm();
 
-  const [createCustomTemplate] = useMutation<createCustomTemplateForTeamResult, createCustomTemplateForTeamVars>(
-    TemplateMutations.createCustomTemplateForTeam,
-    {
-      onCompleted: () => {
-        setIsVisible(false);
-      },
-      onError: (error) => {
-        notification.error({
-          placement: 'bottomRight',
-          message: error?.message,
-        });
-      },
+  const [createCustomTemplate, { loading: isCreating }] = useMutation<
+    createCustomTemplateResult,
+    createCustomTemplateVars
+  >(TemplateMutations.createCustomTemplate, {
+    onCompleted: () => {
+      setIsVisible(false);
+      notification.success({
+        placement: 'bottomRight',
+        message: 'Create Successfully',
+      });
     },
-  );
+    onError: (error) => {
+      notification.error({
+        placement: 'bottomRight',
+        message: error?.message,
+      });
+    },
+  });
 
   const onHanldeCreate = async () => {
     form?.validateFields().then(async (values) => {
@@ -67,10 +70,11 @@ export default function CreateCustomHealthCheckModal({ teamId, isVisible, setIsV
       centered
       destroyOnClose
       maskClosable
+      confirmLoading={isCreating}
       onOk={async () => await onHanldeCreate()}
       visible={isVisible}
       onCancel={() => setIsVisible(false)}
-      width={1000}
+      width={800}
     >
       <Form preserve={false} className="flex flex-gap-24" form={form}>
         <Form.Item label="Name" name={'name'} rules={[{ required: true, message: 'Missing Name' }]}>
@@ -97,18 +101,6 @@ export default function CreateCustomHealthCheckModal({ teamId, isVisible, setIsV
         >
           {(fields, { add, remove }, { errors }) => (
             <>
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                  }}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add Question
-                </Button>
-              </Form.Item>
               <Form.ErrorList errors={errors} />
               {fields.map((field, index) => {
                 const colorOfQuestion = onHandleGenerateColor(index);
@@ -149,6 +141,16 @@ export default function CreateCustomHealthCheckModal({ teamId, isVisible, setIsV
                   </>
                 );
               })}
+              <Button
+                type="dashed"
+                onClick={() => {
+                  add();
+                }}
+                block
+                icon={<PlusOutlined />}
+              >
+                Add Question
+              </Button>
             </>
           )}
         </Form.List>
