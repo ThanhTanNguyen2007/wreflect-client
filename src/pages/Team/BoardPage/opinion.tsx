@@ -295,7 +295,7 @@ export default function OpinionComponent({
 
   return (
     <Draggable
-      isDragDisabled={board.isLocked || board.currentPhase === 'REFLECT'}
+      isDragDisabled={board.isLocked || board.currentPhase === 'VOTES'}
       draggableId={opinion.id}
       index={index}
       key={opinion.id}

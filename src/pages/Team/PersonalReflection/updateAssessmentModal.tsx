@@ -26,7 +26,7 @@ export default function UpdateAssessmentModal({ assessment, criteriaData, team, 
     criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5),
   );
 
-  const [updateAssessment] = useMutation<
+  const [updateAssessment, { loading: isUpdating }] = useMutation<
     AssessmentMutations.updateAssessmentResult,
     AssessmentMutations.updateAssessmentVars
   >(AssessmentMutations.updateAssessment, {
@@ -63,6 +63,7 @@ export default function UpdateAssessmentModal({ assessment, criteriaData, team, 
           assessmentId: assessment?.id,
           assessmentName: nameAssessment,
         },
+        refetchQueries: ['getAssessments'],
         onCompleted: () => {
           setVisible(false);
           setSelectedCriteria(criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5));
@@ -95,6 +96,7 @@ export default function UpdateAssessmentModal({ assessment, criteriaData, team, 
       width="1000px"
       visible={isVisible}
       closable
+      confirmLoading={isUpdating}
       centered
       bodyStyle={{ marginTop: '20px' }}
       destroyOnClose

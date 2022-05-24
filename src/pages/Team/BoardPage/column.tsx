@@ -146,9 +146,11 @@ export default function ColumnComponent({
             )}
           </div>
           <div className="colContent">
-            {column?.opinions?.length > 3 && !board?.isLocked && board?.currentPhase === 'REFLECT' && (
-              <CreateTicket isCreateBottom={false} board={board} column={column} index={index} />
-            )}
+            {column?.opinions?.length > 3 &&
+              !board?.isLocked &&
+              (board?.currentPhase == 'REFLECT' || board?.currentPhase == 'DISCUSS') && (
+                <CreateTicket isCreateBottom={false} board={board} column={column} index={index} />
+              )}
             {column?.opinions.map((opinion, index) => (
               <div key={opinion?.id}>
                 <OpinionComponent
@@ -165,7 +167,7 @@ export default function ColumnComponent({
             ))}
             {provided.placeholder}
 
-            {!board?.isLocked && board?.currentPhase === 'REFLECT' && (
+            {!board?.isLocked && (board?.currentPhase == 'REFLECT' || board?.currentPhase == 'DISCUSS') && (
               <CreateTicket isCreateBottom={true} board={board} column={column} index={index} />
             )}
           </div>

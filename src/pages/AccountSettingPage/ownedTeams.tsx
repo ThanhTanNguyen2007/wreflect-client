@@ -121,8 +121,8 @@ export default function OwnedTeams() {
     },
   ];
 
-  const { data, loading } = useQuery<TeamQueries.getOwnedTeamsResult, TeamQueries.getOwnedTeamsVars>(
-    TeamQueries.getOwnedTeams,
+  const { data, loading } = useQuery<TeamQueries.getTeamsOfUserResult, TeamQueries.getTeamsOfUserVars>(
+    TeamQueries.getTeamsOfUser,
     {
       variables: {
         isGettingAll: false,
@@ -154,12 +154,12 @@ export default function OwnedTeams() {
 
       <Table
         columns={columns}
-        dataSource={data?.getOwnedTeams?.data}
+        dataSource={data?.getTeamsOfUser?.data}
         bordered
         pagination={{
           defaultCurrent: 1,
           current: page,
-          total: data?.getOwnedTeams?.total,
+          total: data?.getTeamsOfUser?.total,
           showSizeChanger: true,
           defaultPageSize: 4,
           pageSize: size,

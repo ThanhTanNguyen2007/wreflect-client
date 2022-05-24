@@ -134,7 +134,14 @@ export default function UpdateBoardModal({ teamId, board, visible, setVisible }:
               name="votesLimit"
               initialValue={board?.votesLimit ?? 25}
             >
-              <InputNumber min={1} max={25} style={{ width: '100%' }} value={board?.votesLimit ?? 25} />
+              <InputNumber
+                aria-disabled
+                readOnly
+                min={1}
+                max={25}
+                style={{ width: '100%' }}
+                value={board?.votesLimit ?? 25}
+              />
             </Form.Item>
           </div>
           <div className="setting-board-modal">

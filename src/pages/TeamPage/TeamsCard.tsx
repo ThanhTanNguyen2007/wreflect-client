@@ -9,6 +9,7 @@ import { Member, Team, TeamStatus } from '../../types';
 import { LoadingSkeleton } from '../../components/Loading';
 import { TeamSubscription } from '../../grapql-client/subcriptions';
 import selfContext from '../../contexts/selfContext';
+import { getTeamsOfUserResult, getTeamsOfUserVars } from '../../grapql-client/queries/TeamQueries';
 
 const { Meta } = Card;
 
@@ -44,14 +45,14 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
     history.push(`reflect/${team.id}/${team?.boards[0]?.id}`);
   };
 
-  const { error, data, loading, refetch, networkStatus } = useQuery<
-    TeamQueries.getTeamsResult,
-    TeamQueries.getTeamsVars
-  >(TeamQueries.getTeams, {
-    variables: { isGettingAll: false, search: searchText, page, size, status },
-    fetchPolicy: 'network-only', // Used for first execution
-    notifyOnNetworkStatusChange: true,
-  });
+  const { error, data, loading, refetch, networkStatus } = useQuery<getTeamsOfUserResult, getTeamsOfUserVars>(
+    TeamQueries.getTeamsOfUser,
+    {
+      variables: { isGettingAll: false, search: searchText, page, size, status },
+      fetchPolicy: 'network-only', // Used for first execution
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
   const onPaginationChanged = (page: number, pageSize: number | undefined) => {
     setPage(page);
@@ -62,11 +63,11 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
     <div className="flex flex-1 flex-dir-c" style={{ padding: '10px' }}>
       <LoadingSkeleton
         refetch={refetch}
-        data={data?.getTeams}
+        data={data?.getTeamsOfUser}
         loading={loading || networkStatus === NetworkStatus.refetch}
         error={error}
       >
-        {data && data?.getTeams?.data?.length > 0 ? (
+        {data && data?.getTeamsOfUser?.data?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-dir-c scrollable">
               <Row
@@ -75,14 +76,14 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
                 key={`row`}
                 gutter={[16, 16]}
               >
-                {data?.getTeams?.data?.map((team: Team) => {
+                {data?.getTeamsOfUser?.data?.map((team: Team) => {
                   return (
                     <Col
                       key={team.id}
                       className="flex"
                       style={{ height: '100%', maxWidth: '500px', maxHeight: '200px' }}
                       span={(() => {
-                        switch (data?.getTeams?.data?.length) {
+                        switch (data?.getTeamsOfUser?.data?.length) {
                           case 1:
                             return 24;
                           case 2:
@@ -164,7 +165,7 @@ const TeamsCard = ({ searchText, page, size, setPage, setSize, status }: Props) 
               <Pagination
                 defaultCurrent={1}
                 current={page}
-                total={data?.getTeams?.total}
+                total={data?.getTeamsOfUser?.total}
                 defaultPageSize={8}
                 pageSize={size}
                 onChange={(page: number, pageSize?: number | undefined) => onPaginationChanged(page, pageSize)}

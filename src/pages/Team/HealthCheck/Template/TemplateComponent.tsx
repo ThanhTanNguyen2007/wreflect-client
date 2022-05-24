@@ -56,7 +56,7 @@ export default function TemplateComponent({ iMember, setSelectedTemplate, templa
               >
                 Show Details
               </Button>
-              {!template?.isDefault && (
+              {!template?.isDefault && (iMember?.isSuperOwner || iMember?.isOwner) && (
                 <>
                   <Button icon={<EditOutlined onClick={() => setIsUpdating(true)} />}></Button>
                   <Button icon={<DeleteOutlined onClick={() => setIsDeleting(true)} />}></Button>

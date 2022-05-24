@@ -52,23 +52,19 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
     },
   });
 
-  const {
-    data: assessmentData,
-    refetch: assessmentDataRefetch,
-    error: assessmentError,
-  } = useQuery<AssessmentQueries.getAssessmentsResult, AssessmentQueries.getAssessmentsVars>(
-    AssessmentQueries.getAssessments,
-    {
-      variables: {
-        teamId,
-        search: searchText,
-        sortBy,
-        orderWith,
-        page,
-        size,
-      },
+  const { data: assessmentData, error: assessmentError } = useQuery<
+    AssessmentQueries.getAssessmentsResult,
+    AssessmentQueries.getAssessmentsVars
+  >(AssessmentQueries.getAssessments, {
+    variables: {
+      teamId,
+      search: searchText,
+      sortBy,
+      orderWith,
+      page,
+      size,
     },
-  );
+  });
 
   useEffect(() => {
     setTeam(data?.team);
@@ -99,16 +95,14 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
       error={teamError || assessmentError}
     >
       <>
-        <div>
-          <div className="personalSection">
-            <div className={`manageJudge primary`}>Manage</div>
-            <div onClick={() => history?.push(`/personal-reflect/analysis/${data?.team?.id}`)} className={`analysis`}>
-              Analysis
-            </div>
+        <div className="personalSection" style={{ margin: '10px' }}>
+          <div className={`manageJudge primary`}>Manage</div>
+          <div onClick={() => history?.push(`/personal-reflect/analysis/${data?.team?.id}`)} className={`analysis`}>
+            Analysis
           </div>
         </div>
-        <div className="manageJudgePage content">
-          <div className="actionSection">
+        <Card className="manageJudgePage mt-10 non-scroll">
+          <div className="actionSection non-scroll">
             <SearchBar placeholder="What are you looking for ?" isLoading={loading} onHandleSearch={onHandleSearch} />
             <Select defaultValue="createdAt_desc" onSelect={onHandleSort}>
               <Option key="NAME_ASC" value="createdAt_desc">
@@ -138,7 +132,6 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
               </div>
             )}
           </div>
-          <div className="assessmentContainer"></div>
           <CreatingAssessmentModal
             criteriaData={criteriaListData?.getEssential?.criteriaList}
             team={data?.team}
@@ -152,7 +145,7 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
             isVisible={isUpdateModalVisible}
             setVisible={setIsUpdateModalVisible}
           />
-          <div className="container">
+          <div className="container scrollable">
             {assessmentData?.getAssessments?.data?.length != 0 ? (
               <>
                 <div style={{ marginTop: '50px' }} className="flex flex-ai-c flex-jc-c mt-25">
@@ -165,7 +158,7 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
                     onChange={(page: number, pageSize?: number | undefined) => onPaginationChanged(page, pageSize)}
                   />
                 </div>
-                <div className="listOfAssessment">
+                <div className="listOfAssessment scrollable">
                   {assessmentData?.getAssessments?.data?.map((assessment) => (
                     <>
                       <Card
@@ -224,7 +217,8 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
               <Empty description="No Assessments Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
             )}
           </div>
-        </div>
+          {/* <div>total: {assessmentData?.getAssessments?.total}</div> */}
+        </Card>
       </>
     </Loading>
   );
@@ -235,7 +229,7 @@ function DeleteAssessmentButton({ teamId, assessmentId }: { teamId: string; asse
     AssessmentMutations.deleteAssessmentResult,
     AssessmentMutations.deleteAssessmentVars
   >(AssessmentMutations?.deleteAssessment, {
-    refetchQueries: ['getAssessmentsList'],
+    refetchQueries: ['getAssessments'],
   });
 
   return (
@@ -244,10 +238,10 @@ function DeleteAssessmentButton({ teamId, assessmentId }: { teamId: string; asse
         loading={loading}
         onClick={async () =>
           confirm({
-            title: 'Do you Want to delete these items?',
+            title: 'Do you Want to delete this assessment?',
             centered: true,
             icon: <ExclamationCircleOutlined />,
-            content: 'Some descriptions',
+            okText: 'Delete',
             onOk: async () => {
               await deleteAssessment({
                 variables: {

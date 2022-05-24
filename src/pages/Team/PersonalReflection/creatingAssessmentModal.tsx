@@ -27,7 +27,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
     criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5),
   );
 
-  const [createAssessment] = useMutation<
+  const [createAssessment, { loading: isCreating }] = useMutation<
     AssessmentMutations.createAssessmentResult,
     AssessmentMutations.createAssessmentVars
   >(AssessmentMutations.createAssessment, {
@@ -73,7 +73,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
           setVisible(false);
           setSelectedCriteria(criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5));
         },
-        refetchQueries: ['getAssessmentsList'],
+        refetchQueries: ['getAssessments'],
         updateQueries: {
           getAssessmentsList: (previousData, { mutationResult }) => {
             return { getAssessmentsList: [mutationResult?.data?.createAssessment] };
@@ -114,6 +114,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
       visible={isVisible}
       closable
       centered
+      confirmLoading={isCreating}
       bodyStyle={{ marginTop: '20px' }}
       destroyOnClose
       maskClosable={false}

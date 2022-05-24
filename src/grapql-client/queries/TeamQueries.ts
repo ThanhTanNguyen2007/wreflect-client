@@ -55,8 +55,8 @@ const getTeams = gql`
   }
 `;
 
-export type getOwnedTeamsResult = {
-  getOwnedTeams: {
+export type getTeamsOfUserResult = {
+  getTeamsOfUser: {
     data: Team[];
     total: number;
     page: number;
@@ -64,7 +64,7 @@ export type getOwnedTeamsResult = {
   };
 };
 
-export type getOwnedTeamsVars = {
+export type getTeamsOfUserVars = {
   status?: TeamStatus;
   isGettingAll?: boolean;
   search?: string;
@@ -72,10 +72,10 @@ export type getOwnedTeamsVars = {
   size?: number;
 };
 
-export const getOwnedTeams = gql`
+export const getTeamsOfUser = gql`
   ${TEAM_FIELDS}
-  query getOwnedTeams($isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
-    getOwnedTeams(isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
+  query getTeamsOfUser($isGettingAll: Boolean, $search: String, $page: Int, $size: Int) {
+    getTeamsOfUser(isGettingAll: $isGettingAll, search: $search, page: $page, size: $size) {
       data {
         ...TeamFields
       }

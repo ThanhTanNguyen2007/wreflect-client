@@ -347,7 +347,6 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           {renderListOptionBoard}
                         </Select>
                         <div>
-                          <Button onClick={() => i18n.changeLanguage('vi')}>Translate to Vn</Button>
                           <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
                             Go To Board
                           </Button>

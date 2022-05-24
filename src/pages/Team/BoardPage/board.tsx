@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Avatar, Tooltip, Empty, Badge, Spin, notification } from 'antd';
+import { Avatar, Tooltip, Empty, Badge, Modal, notification } from 'antd';
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
@@ -41,6 +41,7 @@ type Props = {
   teamId: string;
   boardId: string;
 };
+const { confirm } = Modal;
 
 export default function BoardComponent({ teamId, boardId }: Props) {
   const [board, setBoard] = useState<Board | null>(null);
@@ -127,54 +128,63 @@ export default function BoardComponent({ teamId, boardId }: Props) {
     const prevList = _.cloneDeep(board?.columns);
     const tempList = _.cloneDeep(board?.columns);
     if (result.combine) {
-      let combineText = '';
-      const currentColumn = tempList?.find((column) => column.id === result.combine?.droppableId);
-      if (!currentColumn?.opinions) return;
-      const sourceOpinion = tempList
-        ?.find((column) => column.id == result.source?.droppableId)
-        ?.opinions.splice(result.source.index, 1);
-      if (!sourceOpinion || sourceOpinion.length <= 0) return;
-      currentColumn.opinions = currentColumn?.opinions.map((opinion) => {
-        if (opinion.id === result.combine?.draggableId) {
-          combineText = `${opinion?.text}\n${sourceOpinion[0]?.text}`;
-          return {
-            ...opinion,
-            text: combineText,
-            upVote: [...opinion.upVote, ...sourceOpinion[0].upVote],
-            mergedAuthors: [...opinion.mergedAuthors, sourceOpinion[0]?.authorId],
-            remarks: [...opinion.remarks, ...sourceOpinion[0]?.remarks],
-          };
-        }
-        return opinion;
-      });
+      confirm({
+        title: 'Are you sure want to merge these opinion/action?',
+        icon: <ExclamationCircleOutlined />,
+        content: "If these opinion/action combined you can't split it, be careful to do that",
+        centered: true,
+        okText: 'Combine',
+        onOk: async () => {
+          let combineText = '';
+          const currentColumn = tempList?.find((column) => column.id === result.combine?.droppableId);
+          if (!currentColumn?.opinions) return;
+          const sourceOpinion = tempList
+            ?.find((column) => column.id == result.source?.droppableId)
+            ?.opinions.splice(result.source.index, 1);
+          if (!sourceOpinion || sourceOpinion.length <= 0) return;
+          currentColumn.opinions = currentColumn?.opinions.map((opinion) => {
+            if (opinion.id === result.combine?.draggableId) {
+              combineText = `${opinion?.text}\n${sourceOpinion[0]?.text}`;
+              return {
+                ...opinion,
+                text: combineText,
+                upVote: [...opinion.upVote, ...sourceOpinion[0].upVote],
+                mergedAuthors: [...opinion.mergedAuthors, sourceOpinion[0]?.authorId],
+                remarks: [...opinion.remarks, ...sourceOpinion[0]?.remarks],
+              };
+            }
+            return opinion;
+          });
 
-      client.cache.writeQuery({
-        query: BoardQueries.getBoard,
-        variables: {
-          boardId,
-        },
-        data: {
-          board: { ...board, columns: tempList },
-        },
-      });
-
-      combineOpinion({
-        variables: {
-          teamId: data?.team?.id,
-          boardId: board?.id,
-          combine: result?.combine,
-          source: result?.source,
-          draggableId: result?.draggableId,
-          text: combineText,
-        },
-        onError: () => {
           client.cache.writeQuery({
-            query: BoardQueries?.getBoard,
+            query: BoardQueries.getBoard,
             variables: {
               boardId,
             },
             data: {
-              board: prevList,
+              board: { ...board, columns: tempList },
+            },
+          });
+
+          await combineOpinion({
+            variables: {
+              teamId: data?.team?.id,
+              boardId: board?.id,
+              combine: result?.combine,
+              source: result?.source,
+              draggableId: result?.draggableId,
+              text: combineText,
+            },
+            onError: () => {
+              client.cache.writeQuery({
+                query: BoardQueries?.getBoard,
+                variables: {
+                  boardId,
+                },
+                data: {
+                  board: prevList,
+                },
+              });
             },
           });
         },
@@ -399,7 +409,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <BulbOutlined />
-                                Reflect
+                                Collect
                               </div>
                               <div
                                 className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
