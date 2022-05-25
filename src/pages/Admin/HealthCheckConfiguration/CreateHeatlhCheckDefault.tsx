@@ -4,8 +4,8 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 import { useMutation } from '@apollo/client';
 import {
-  createTemplateHealthCheckResult,
-  createTemplateHealthCheckVars,
+  createHealthCheckTemplateResult,
+  createHealthCheckTemplateVars,
 } from '../../../grapql-client/mutations/TemplateMutation';
 import { TemplateMutations } from '../../../grapql-client/mutations';
 
@@ -20,8 +20,8 @@ const { TextArea } = Input;
 export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refetch }: Props) {
   const form = useRef<FormInstance>(null);
   // const [selectedColor, setSelectedColor] = useState<string>('pink');
-  const [createTemplate] = useMutation<createTemplateHealthCheckResult, createTemplateHealthCheckVars>(
-    TemplateMutations.createTemplateHealthCheck,
+  const [createTemplate] = useMutation<createHealthCheckTemplateResult, createHealthCheckTemplateVars>(
+    TemplateMutations.createHealthCheckTemplate,
     {
       onError: (error) => {
         notification.error({

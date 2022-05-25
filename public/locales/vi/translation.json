@@ -3,6 +3,8 @@
   "txt_doing": "Đang thực hiện",
   "txt_done": "Đã xong",
 
+  "txt_default": "Mặc Định",
+
   "txt_createTeam": "Tạo team mới",
   "txt_reflectTeam": "Nhìn lại team",
   "txt_reflectPersonal": "Nhìn lại cá nhân",
@@ -11,9 +13,8 @@
   "txt_members": "Thành viên",
   "txt_boards": "Bảng",
   "txt_setting": "Cài đặt",
-  "txt_action": "Công cụ",
 
-  "txt_boards_reflect": "Phản ánh",
+  "txt_boards_collect": "Thu thập",
   "txt_boards_group": "Gộp ý kiến",
   "txt_boards_votes": "Bỏ phiếu",
   "txt_boards_discuss": "Thảo luận",
@@ -23,27 +24,25 @@
   "txt_boards_intro_text3": "- Ngoài phần nhìn nhận ra chúng ta còn có phần gộp ý kiến, đánh giá ý kiến, trao đổi về ý kiến và các hoạt động trong tương lai của nhóm",
   "txt_boards_intro_text4": "- Nếu muốn biết chi tiết hơn vui lòng chọn vào các mục ở trên . Xin cảm ơn ",
 
-  "txt_boards_reflect_text": "- Ở phần này, chúng ta sẽ đi sâu hơn về cách thực hiện nhìn lại quá trình làm việc của nhóm",
-  "txt_boards_reflect_text1": "- Nếu như các bạn chưa chỉnh sửa bảng, thì các bảng mặc định lần lượt sẽ là  Went well(đã làm tốt), To improve(Cần cải thiện), Action items(Các hoạt động trong tương lai).",
-  "txt_boards_reflect_text2": "- Các bạn có thể thêm những bảng khác vào trong phần nhìn lại team của mình ở phần chỉnh sửa bảng trong mục 'Lựa chọn thêm' , Nếu như không có thay đổi gì các bạn có thể thực hiện quá trình.",
-  "txt_boards_reflect_text3": "- Cách thực hiện rất đơn giản, trong các ô đã có sẵn tiêu đề các bạn hãy điền phần làm tốt và chưa tốt của mình vào, trong cột các bạn có thể thấy được hai cột là Opinion và Action",
-  "txt_boards_reflect_text4": "- Ở Opinion, cái này được hiểu như ý kiến riêng của bạn.",
-  "txt_boards_reflect_text5": "- Ở Action, khi phần này được tạo có nghĩa là sẽ có một hoạt động nào đó sẽ được thực hiện trong tương lai và ở phần này bạn sẽ phải gán người thực hiện cho nó. ",
-  "txt_boards_reflect_text6": "- Vào mỗi cột, chúng ta sẽ có phần mục lựa chọn phía bên phải cột, trong này sẽ có những lựa chọn giúp chúng ta có thể tương tác dễ dàng hơn trong lúc thực hiện quá trình.",
+  "txt_boards_collect_text": "- Ở phần này, chúng ta sẽ đi sâu hơn về cách thực hiện nhìn lại quá trình làm việc của nhóm",
+  "txt_boards_collect_text1": "- Nếu như các bạn chưa chỉnh sửa bảng, thì các bảng mặc định lần lượt sẽ là  Went well(đã làm tốt), To improve(Cần cải thiện), Action items(Các hoạt động trong tương lai).",
+  "txt_boards_collect_text2": "- Các bạn có thể thêm những bảng khác vào trong phần nhìn lại team của mình ở phần chỉnh sửa bảng trong mục 'Lựa chọn thêm' , Nếu như không có thay đổi gì các bạn có thể thực hiện quá trình.",
+  "txt_boards_collect_text3": "- Cách thực hiện rất đơn giản, trong các ô đã có sẵn tiêu đề các bạn hãy điền phần làm tốt và chưa tốt của mình vào, trong cột các bạn có thể thấy được hai cột là Opinion và Action",
+  "txt_boards_collect_text4": "- Ở Opinion, cái này được hiểu như ý kiến riêng của bạn.",
+  "txt_boards_collect_text5": "- Ở Action, khi phần này được tạo có nghĩa là sẽ có một hoạt động nào đó sẽ được thực hiện trong tương lai và ở phần này bạn sẽ phải gán người thực hiện cho nó. ",
+  "txt_boards_collect_text6": "- Vào mỗi cột, chúng ta sẽ có phần mục lựa chọn phía bên phải cột, trong này sẽ có những lựa chọn giúp chúng ta có thể tương tác dễ dàng hơn trong lúc thực hiện quá trình.",
 
   "txt_boards_group_text": "- Ở phần này, các bạn hãy lọc những ý kiến giống nhau để gộp lại với nhau , tạo thành 1 ý kiến đồng nhất",
   "txt_boards_group_text2": "- Cách gộp như sau: Nhấn giữ một ý kiến đồng quan điểm sau đó thực hiện kéo thả đến một ý kiến khác",
   "txt_boards_group_text3": "- Ngoài ra, bạn có thể kéo các Opinion từ cột này sang cột khác với cách tương tự.",
 
-  "txt_boards_votes_text":"- Ở phần này, các bạn có thể chọn các ý kiến các bạn cho là vấn đề của nhóm hoặc ý kiến giúp nhóm phát triển , sau đó tiến hành bình chọn.",
-  "txt_boards_votes_text2":"- Ở phía dưới các Opinion, có nút Thích hoặc không thích các bạn có thể chọn, mỗi bạn sẽ có giới hạn lượt bình chọn (Lượt đánh giá sẽ do trưởng nhóm đặt). ",
+  "txt_boards_votes_text": "- Ở phần này, các bạn có thể chọn các ý kiến các bạn cho là vấn đề của nhóm hoặc ý kiến giúp nhóm phát triển , sau đó tiến hành bình chọn.",
+  "txt_boards_votes_text2": "- Ở phía dưới các Opinion, có nút Thích hoặc không thích các bạn có thể chọn, mỗi bạn sẽ có giới hạn lượt bình chọn (Lượt đánh giá sẽ do trưởng nhóm đặt). ",
 
   "txt_boards_discuss_text": "- Ở phần này, các bạn dựa trên các ý kiến của các nhân mỗi thành viên trong nhóm sau đó tiến hành thảo luận.",
   "txt_boards_discuss_text1": "- Các bạn có thể ghi bình luận vào phía bên trong các ý kiến hoặc các hành động mà các bạn đã tạo.",
   "txt_boards_discuss_text2": "- Bước này rất quan trọng trong việc giúp nhóm có thể phát triển tốt hơn thông qua cách giao tiếp với các thành viên trong nhóm.",
 
-
-  
   "txt_boards_end_reflect": "Ngừng phản ánh",
   "txt_boards_next": "Tiếp Theo",
   "txt_boards_start_time": "Bắt đầu thời gian",

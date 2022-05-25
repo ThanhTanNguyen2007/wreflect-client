@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Avatar, Tooltip, Empty, Badge, Spin, notification, Modal, Tabs, Row } from 'antd';
+import { Avatar, Tooltip, Empty, Badge, Spin, notification, Modal, Tabs, Row, Button } from 'antd';
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
@@ -25,6 +25,7 @@ import {
   LockOutlined,
   SnippetsOutlined,
   StarOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import _ from 'lodash';
 import selfContext from '../../../contexts/selfContext';
@@ -295,31 +296,35 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                       <div className="currentLimitVotes">Votes {`${currentNumVotes}/${board?.votesLimit}`}</div>
                     )}
                     <div className="board-action" style={{ right: 620, position: 'relative' }}>
-                      <div className="boardPanel" onClick={handleShowModal}>
-                        {t('txt_boards_turtorial')}
-                      </div>
                       <Modal
                         className="modal-userguide"
-                        title={`${t(`txt_boards_turtorial`)}`}
+                        maskStyle={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        title={<div className="flex flex-ai-c flex-jc-c">{t(`txt_boards_turtorial`)}</div>}
+                        centered
                         visible={showModal}
                         onCancel={handleCancel}
                       >
                         <Row>
-                          <Tabs defaultActiveKey="1">
+                          <Tabs centered tabPosition="top" defaultActiveKey="1">
                             <TabPane tab={`${t(`txt_boards_intro`)}`} key="1">
                               <p>{`${t(`txt_boards_intro_text`)}`}</p>
                               <p>{`${t(`txt_boards_intro_text2`)}`}</p>
                               <p>{`${t(`txt_boards_intro_text3`)}`}</p>
                               <p>{`${t(`txt_boards_intro_text4`)}`}</p>
                             </TabPane>
-                            <TabPane tab={`${t(`txt_boards_reflect`)}`} key="2">
-                              <p>{`${t(`txt_boards_reflect_text`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text1`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text2`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text3`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text4`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text5`)}`}</p>
-                              <p>{`${t(`txt_boards_reflect_text3`)}`}</p>
+                            <TabPane tab={`${t(`txt_boards_collect`)}`} key="2">
+                              <p>{`${t(`txt_boards_collect_text`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text1`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text2`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text3`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text4`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text5`)}`}</p>
+                              <p>{`${t(`txt_boards_collect_text3`)}`}</p>
                             </TabPane>
                             <TabPane tab={`${t(`txt_boards_group`)}`} key="3">
                               <p>{`${t(`txt_boards_group_text`)}`}</p>
@@ -441,6 +446,8 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                       {!board.isLocked ? (
                         board.type === 'PHASE' && (
                           <div className="phase-header">
+                            {/* <Button  size type="text" icon={<QuestionCircleOutlined onClick={handleShowModal} />} /> */}
+                            <QuestionCircleOutlined style={{ fontSize: '25px' }} onClick={handleShowModal} />
                             <div className="board-phase">
                               <div
                                 className={`phase-step ${board?.currentPhase === 'REFLECT' && 'active'}`}
@@ -467,7 +474,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <BulbOutlined />
-                                {t(`txt_boards_reflect`)}
+                                {t(`txt_boards_collect`)}
                               </div>
                               <div
                                 className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}

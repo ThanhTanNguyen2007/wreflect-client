@@ -3,7 +3,7 @@ import { Button, Card, Form, Input, Modal, notification } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 import { Member, Template } from '../../../../types';
-import BadgeComponent from '../../../../components/Badge/Badge';
+import BadgeComponent from '../../../../components/Badge/BadgeComponent';
 import { CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import DeleteCustomTemplate from './DeleteCustomTemplate';
 import UpdateCustomTemplate from './UpdateCustomTemplate';

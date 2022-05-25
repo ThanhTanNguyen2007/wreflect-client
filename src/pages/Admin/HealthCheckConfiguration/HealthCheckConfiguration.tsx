@@ -15,8 +15,8 @@ import { Template } from '../../../types';
 import Loading from '../../../components/Loading/loading';
 import { TemplateMutations } from '../../../grapql-client/mutations';
 import {
-  deleteTemplateHealthCheckResult,
-  deleteTemplateHealthCheckVars,
+  deleteHealthCheckTemplateRusult,
+  deleteHealthCheckTemplateVars,
 } from '../../../grapql-client/mutations/TemplateMutation';
 
 type Props = {
@@ -45,8 +45,8 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
     fetchPolicy: 'network-only',
   });
 
-  const [deleteTemplate] = useMutation<deleteTemplateHealthCheckResult, deleteTemplateHealthCheckVars>(
-    TemplateMutations.deleteTemplateHealthCheck,
+  const [deleteTemplate] = useMutation<deleteHealthCheckTemplateRusult, deleteHealthCheckTemplateVars>(
+    TemplateMutations.deleteTemplate,
     {
       onError: (error) => {
         notification.error({

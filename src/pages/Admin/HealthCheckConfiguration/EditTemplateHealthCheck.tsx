@@ -6,8 +6,8 @@ import { useMutation } from '@apollo/client';
 import { Template } from '../../../types';
 import { TemplateMutations } from '../../../grapql-client/mutations';
 import {
-  updateTemplateHealthCheckResult,
-  updateTemplateHealthCheckVars,
+  updateHealthCheckTemplateResult,
+  updateHealthCheckTemplateVars,
 } from '../../../grapql-client/mutations/TemplateMutation';
 
 type Props = {
@@ -21,9 +21,9 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
   const form = useRef<FormInstance>(null);
 
   const [updateTemplate, { loading: updateLoading }] = useMutation<
-    updateTemplateHealthCheckResult,
-    updateTemplateHealthCheckVars
-  >(TemplateMutations?.updateTemplateHealthCheck, {
+    updateHealthCheckTemplateResult,
+    updateHealthCheckTemplateVars
+  >(TemplateMutations?.updateTemplate, {
     onError: (error) => {
       notification.error({
         placement: 'bottomRight',
@@ -103,6 +103,7 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
           </Form.Item>
           <Form.List
             initialValue={template?.healthCheckQuestions?.map((q) => ({
+              is: q?.id,
               title: q?.title,
               color: q?.color,
               description: q?.description,
@@ -127,22 +128,11 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
           >
             {(fields, { add, remove }) => (
               <>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                  }}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add sights
-                </Button>
                 {fields.map((field, index) => (
                   <div
                     key={field.name}
                     className={`flex flex-1 flex-dir-r flex-ai-bl flex-gap-10 p-20 ${onHandleGenerateColor(index)}`}
                   >
-                    {console.log(field)}
                     <Form.Item name={[field.name, 'color']} style={{ width: 0 }} />
                     <Form.Item
                       label="Title"
@@ -168,6 +158,16 @@ export default function EditTemplateHealthCheck({ template, setTemplate }: Props
                     />
                   </div>
                 ))}
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    add();
+                  }}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add sights
+                </Button>
               </>
             )}
           </Form.List>

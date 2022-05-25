@@ -3,6 +3,8 @@
   "txt_doing": "Doing",
   "txt_done": "Done",
 
+  "txt_default": "Default",
+
   "txt_createTeam": "New Team",
   "txt_reflectTeam": "Reflect Team",
   "txt_reflectPersonal": "Reflect Personal",
@@ -11,9 +13,8 @@
   "txt_members": "Members",
   "txt_boards": "Boards",
   "txt_setting": "Setting",
-  "txt_action": "Action",
 
-  "txt_boards_reflect": "Reflect",
+  "txt_boards_collect": "Collect",
   "txt_boards_group": "Group",
   "txt_boards_votes": "Votes",
   "txt_boards_discuss": "Discuss",
@@ -23,13 +24,13 @@
   "txt_boards_intro_text3": "- In addition to the recognition part, we also have a group of opinions, evaluation of opinions, exchange of ideas and future activities of the group.",
   "txt_boards_intro_text4": "- If you want to know more details, please select the items above. Thank you",
 
-  "txt_boards_reflect_text": "- In this section, we will go into more detail on how to do a team review.",
-  "txt_boards_reflect_text1": "- If you have not edited the table, the default tables will be Went well (done well), To improve (Need to improve), Action items (Future activities).",
-  "txt_boards_reflect_text2": "- You can add other boards to your team's review in the board editing section under 'Additional options' , If nothing changes you can go through the process.",
-  "txt_boards_reflect_text3": "- The way to do it is very simple, in the cells that have the title, please fill in your good and bad parts, in the column you can see two columns, Opinion and Action.",
-  "txt_boards_reflect_text4": "- In Opinion, this is understood as your own opinion.",
-  "txt_boards_reflect_text5": "- In Action, when this part is created, it means that there will be a certain action to be performed in the future and in this part you will have to assign the performer to it.",
-  "txt_boards_reflect_text6": "- In each column, we will have a selection section to the right of the column, in which there will be options to help us interact more easily while performing the process.",
+  "txt_boards_collect_text": "- In this section, we will go into more detail on how to do a team review.",
+  "txt_boards_collect_text1": "- If you have not edited the table, the default tables will be Went well (done well), To improve (Need to improve), Action items (Future activities).",
+  "txt_boards_collect_text2": "- You can add other boards to your team's review in the board editing section under 'Additional options' , If nothing changes you can go through the process.",
+  "txt_boards_collect_text3": "- The way to do it is very simple, in the cells that have the title, please fill in your good and bad parts, in the column you can see two columns, Opinion and Action.",
+  "txt_boards_collect_text4": "- In Opinion, this is understood as your own opinion.",
+  "txt_boards_collect_text5": "- In Action, when this part is created, it means that there will be a certain action to be performed in the future and in this part you will have to assign the performer to it.",
+  "txt_boards_collect_text6": "- In each column, we will have a selection section to the right of the column, in which there will be options to help us interact more easily while performing the process.",
 
   "txt_boards_group_text": "- In this section, please filter the similar opinions to combine them together, forming 1 consensus",
   "txt_boards_group_text2": "- The method of grouping is as follows: Long press on a consensus opinion then drag and drop to another opinion",
