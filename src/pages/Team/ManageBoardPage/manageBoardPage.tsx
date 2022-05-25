@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Card, Row, Col, Switch, Tooltip, Empty, Modal, notification } from 'antd';
 import {
   PlusOutlined,
@@ -25,6 +26,7 @@ const ManageBoardPage = ({ teamId }: Props) => {
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const me = useContext(selfContext);
+  const { t } = useTranslation();
 
   const { loading, data, error, refetch } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -86,7 +88,7 @@ const ManageBoardPage = ({ teamId }: Props) => {
             <div className="board-selector">
               <div className="button-right">
                 <Button onClick={() => setIsCreateModalVisible(true)} icon={<PlusOutlined />}>
-                  Create Board
+                  {t(`txt_boards_create`)}
                 </Button>
               </div>
             </div>
@@ -129,7 +131,7 @@ const ManageBoardPage = ({ teamId }: Props) => {
                                       }
                                     }}
                                   />
-                                  Lock Board
+                                  {t(`txt_boards_lock`)}
                                 </span>
                                 {/* <Tooltip title="Clone Board">
                                 <CopyOutlined style={{ marginRight: 20 }} />

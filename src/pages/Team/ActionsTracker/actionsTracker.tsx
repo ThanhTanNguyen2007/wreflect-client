@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Select, Button, notification, Card } from 'antd';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { OpinionStatus } from '../../../types';
@@ -11,6 +12,7 @@ import ActionSelect from './actionSelect';
 import CreateAction from './createAction';
 import selfContext from '../../../contexts/selfContext';
 import { Loading } from '../../../components/Loading';
+import { P } from '@antv/g2plot';
 
 const { Option } = Select;
 
@@ -22,6 +24,7 @@ export default function ActionsTracker({ teamId }: Props) {
   const [selectedBoards, setSelectedBoards] = useState<string[]>([]);
   const [selectedAssigners, setSelectedAssigners] = useState<string[]>([]);
   const me = useContext(selfContext);
+  const { t } = useTranslation();
 
   const { data, refetch, error, loading } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -110,16 +113,16 @@ export default function ActionsTracker({ teamId }: Props) {
         <div className="actionsTracker flex flex-1 scrollable ">
           <Card className="fullBoard flex flex-1 p-10">
             <div className="header mb-10">
-              <h2>Actions Tracker</h2>
+              <h2>{t(`txt_action_tracker`)}</h2>
               <p className="mt-10">
-                Here you can create new action items & keep track of all the actions items in your teams.
+                {t(`txt_action_tracker_desc`)}
               </p>
             </div>
             <CreateAction team={data?.team} selectedBoards={selectedBoards} />
             <Card hoverable>
               <div className="flex flex-1 flex-dir-r flex-gap-24">
                 <div className="flex flex-1 flex-dir-c">
-                  <label>Board(s)</label>
+                  <label>{t(`txt_action_tracker_board`)}</label>
                   <Select
                     onSelect={handleOnSelectBoards}
                     onDeselect={handleOnDeselectBoards}
@@ -132,13 +135,13 @@ export default function ActionsTracker({ teamId }: Props) {
                     value={selectedBoards}
                   >
                     <Option key="selectAll" value="selectAll">
-                      Select All
+                      {t(`txt_assessment_create_select`)}
                     </Option>
                     {optionChildBoard}
                   </Select>
                 </div>
                 <div className="flex flex-1 flex-dir-c">
-                  <label>Assignee(s)</label>
+                  <label>{t(`txt_action_tracker_assignee`)}</label>
                   <Select
                     onSelect={handleOnSelectAssigners}
                     onDeselect={handleOnDeselectAssigners}
@@ -151,10 +154,10 @@ export default function ActionsTracker({ teamId }: Props) {
                     style={{ width: '100%' }}
                   >
                     <Option key="selectAll" value="selectAll">
-                      Select All
+                      {t(`txt_assessment_create_select`)}
                     </Option>
                     <Option key="notAssigned" value="not-assigned">
-                      Not Assigned
+                      {t(`txt_action_tracker_not_assginee`)}
                     </Option>
                     {optionChildAssignees}
                   </Select>

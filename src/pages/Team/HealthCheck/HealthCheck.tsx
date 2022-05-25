@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, notification, Select, Switch, Badge, Card } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, notification, Select, Switch, Spin, Card } from 'antd';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -22,9 +22,7 @@ import {
 } from '../../../grapql-client/mutations/HealthCheckMutation';
 import _, { get } from 'lodash';
 import { Loading } from '../../../components/Loading';
-import CreateCustomTemplate from './Template/CreateCustomTemplate';
-import BadgeComponent from '../../../components/Badge/Badge';
-import TemplateComponent from './Template/TemplateComponent';
+import CreateCustomHealthCheckModal from './CreateCustomHealthCheckModal';
 
 type Props = {
   teamId: string;
@@ -212,7 +210,11 @@ export default function HealthCheck({ teamId, boardId }: Props) {
 
   return (
     <>
-      <CreateCustomTemplate teamId={teamId} isVisible={isVisibleCreateCustom} setIsVisible={setIsVisibleCreateCustom} />
+      <CreateCustomHealthCheckModal
+        teamId={teamId}
+        isVisible={isVisibleCreateCustom}
+        setIsVisible={setIsVisibleCreateCustom}
+      />
       <TopNavBar iMember={iMember} team={data?.team} boardId={boardId} title="Health Check" />
       <div className="flex flex-dir-c flex-1 scrollable">
         <Card className="healthCheckPage flex flex-1 flex-ai-c flex-jc-c">
@@ -232,7 +234,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                     </Select>
                     <div className="templates-overview poll-center-items">
                       <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
-                        Go To Board
+                        {t(`txt_heal_check_go_to`)}
                       </Button>
                       {!answerOfMembers ? (
                         <>
@@ -260,7 +262,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                               // }}
                               type="ghost"
                             >
-                              Reopen
+                              {t(`txt_heal_check_reopen`)}
                             </Button>
                           )}
                         </>
@@ -288,7 +290,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                         <div className="templates-overview poll-center-items">
                           <Card className="templates-overview-card poll-center-items">
                             <h3 className="flex flex-ai-c flex-jc-c">
-                              Response Rate{' '}
+                              {t(`txt_heal_check_response`)}
                               {`${numOfMemberDoHealthCheck}/${data?.team?.members.length} (${
                                 (numOfMemberDoHealthCheck * 100) / data?.team?.members.length
                               }%)`}
@@ -325,7 +327,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                         </div>
                         <div className="flex flex-jc-c flex-ai-c">
                           <Button onClick={handleSubmitHealthCheck} size="large">
-                            Submit
+                            {t(`txt_heal_check_submit`)}
                           </Button>
                         </div>
                       </>
@@ -347,8 +349,9 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           {renderListOptionBoard}
                         </Select>
                         <div>
+                          <Button onClick={() => i18n.changeLanguage('vi')}>{t(`txt_heal_check_traslate`)}</Button>
                           <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
-                            Go To Board
+                            {t(`txt_heal_check_go_to`)}
                           </Button>
                         </div>
                       </div>
@@ -358,21 +361,45 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                             style={{ justifyContent: 'space-between' }}
                             className="flex flex-1 flex-dir-c flex-gap-10 poll-center-items"
                           >
-                            <h3>{t('Create Custom Health Check')}</h3>
+                            <h3>{t(`txt_heal_check_create`)}</h3>
                             <Button
                               onClick={() => setIsVisibleCreateCustom(true)}
                               type="primary"
-                            >{`Let's Do It`}</Button>
+                            >{t(`txt_heal_check_let`)}</Button>
                           </div>
                         </Card>
                         {templates?.getTemplatesOfTeam?.map((template) => (
-                          <>
-                            <TemplateComponent
-                              template={template}
-                              setSelectedTemplate={setSelectedTemplate}
-                              iMember={iMember}
-                            />
-                          </>
+                          <Card
+                            bodyStyle={{ display: 'flex', flex: '1', flexDirection: 'column' }}
+                            hoverable
+                            key={template?.id}
+                            className=" templates-overview-card"
+                          >
+                            <div
+                              onClick={() => {
+                                if (iMember?.isOwner || iMember?.isSuperOwner) {
+                                  setSelectedTemplate(template);
+                                } else {
+                                  notification.warning({
+                                    message: 'Permission denied',
+                                    description: 'Only Super Owner and Owners can access HeathCheck templates.',
+                                    placement: 'bottomRight',
+                                  });
+                                }
+                              }}
+                              className="flex flex-1 flex-dir-c flex-gap-24 poll-center-items"
+                            >
+                              <h3>{t(template?.title)}</h3>
+                              <div className="statement-wrapper poll-center-items">
+                                {template?.healthCheckQuestions?.map((questions) => (
+                                  <span className={`statement ${questions.color}`} key={questions?.id}>
+                                    {questions?.title}
+                                  </span>
+                                ))}
+                              </div>
+                              <Button type="primary">{t(`txt_heal_check_detail`)}</Button>
+                            </div>
+                          </Card>
                         ))}
                       </div>
                     </>
@@ -380,7 +407,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                     <div>
                       {/* <Button onClick={() => setSelectedTemplate(null)}>Go Back</Button> */}
                       <div className="flex flex-dir-r flex-gap-10 flex-jc-c flex-ai-c">
-                        <Button onClick={() => setSelectedTemplate(null)}>Go Back</Button>
+                        <Button onClick={() => setSelectedTemplate(null)}>{t(`txt_heal_check_back`)}</Button>
                         <Button
                           type="primary"
                           onClick={() =>
@@ -394,12 +421,13 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                             })
                           }
                         >
-                          Start Survey
+                          {t(`txt_heal_check_survey`)}
                         </Button>
                       </div>
                       <div className="templates-overview poll-center-items">
                         <span style={{ marginRight: '10px' }} className="anonymous-label">
-                          Collect Feedback Anonymously{' '}
+                         
+                         {t(`txt_heal_check_secret`)}
                         </span>
                         <Switch
                           checkedChildren={<CheckOutlined />}
@@ -407,8 +435,8 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           defaultChecked
                         />
                       </div>
-                      <Card className="flex flex-ai-c flex-jc-c">
-                        <h3 className="flex flex-ai-c flex-jc-c">{selecteTemplate?.title}</h3>
+                      <Card className="flex flex-ai-c flex-jc-c templates-overview-card">
+                        <h3>{selecteTemplate?.title}</h3>
                       </Card>
                       <div className="templates-overview poll-center-items flex-wrap">
                         {selecteTemplate?.healthCheckQuestions?.map((question) => (

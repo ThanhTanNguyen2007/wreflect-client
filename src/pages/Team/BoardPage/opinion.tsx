@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Dropdown, Card, Menu, Modal, Input, Badge, Avatar, Tooltip, notification } from 'antd';
 import { Draggable } from 'react-beautiful-dnd';
@@ -55,6 +56,7 @@ export default function OpinionComponent({
   const [isOpenRemark, setIsOpenRemark] = useState(false);
   const [loadingIcon, setLoadingIcon] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const { t } = useTranslation();
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -105,17 +107,17 @@ export default function OpinionComponent({
           key="3"
           icon={<FireFilled />}
         >
-          {opinion?.isAction ? 'Convert to Opinion' : 'Convert to Action'}
+          {opinion?.isAction ? `${t(`txt_boards_option_convert_opinion`)}` : `${t(`txt_boards_option_convert_action`)}`}
         </Menu.Item>
       )}
       <Menu.Item onClick={() => setIsEdit(true)} key="2" icon={<EditFilled />}>
-        Edit
+        {t(`txt_boards_option_edit`)}
       </Menu.Item>
       <Menu.Item
         key="1"
         onClick={() => {
           confirm({
-            title: 'Do you want to delete these items?',
+            title: `${t(`txt_boards_option_confirm`)}`,
             centered: true,
             icon: <ExclamationCircleOutlined />,
             onOk: async () => {
@@ -157,7 +159,7 @@ export default function OpinionComponent({
         }}
         icon={<DeleteFilled />}
       >
-        Remove
+        {t(`txt_boards_option_remove`)}
       </Menu.Item>
 
       <Menu.Item>

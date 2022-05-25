@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   MenuOutlined,
   EditFilled,
@@ -39,6 +40,7 @@ export default function ColumnComponent({
   setCurrentNumVotes,
   setIsUpdateModalVisible,
 }: Props) {
+  const { t } = useTranslation();
   const [convertOpinions] = useMutation<ColumnMutations.convertColumnResult, ColumnMutations.convertColumnVars>(
     ColumnMutations.convertColumn,
     {
@@ -66,7 +68,7 @@ export default function ColumnComponent({
   const menu = (
     <Menu key={column.id}>
       <Menu.Item onClick={() => setIsUpdateModalVisible(true)} key="1" icon={<EditFilled />}>
-        Edit
+        {t(`txt_boards_option_edit`)}
       </Menu.Item>
       <Menu.Item
         key="2"
@@ -82,7 +84,7 @@ export default function ColumnComponent({
         }
         icon={<MessageFilled />}
       >
-        Convert all to opinions
+        {t(`txt_boards_option_convert_opinion`)}
       </Menu.Item>
       <Menu.Item
         key="3"
@@ -98,7 +100,7 @@ export default function ColumnComponent({
         }
         icon={<CarryOutFilled />}
       >
-        Convert all to actions
+        {t(`txt_boards_option_convert_action`)}
       </Menu.Item>
       <Menu.Item
         onClick={() => {
@@ -120,7 +122,7 @@ export default function ColumnComponent({
         key="4"
         icon={<DeleteFilled />}
       >
-        Empty this Column
+        {t(`txt_boards_option_empty`)}
       </Menu.Item>
     </Menu>
   );

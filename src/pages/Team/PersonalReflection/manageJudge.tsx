@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import _ from 'lodash';
 import moment from 'moment';
@@ -36,6 +37,7 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const me = useContext(selfContext);
+  const { t } = useTranslation();
 
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>();
 
@@ -95,10 +97,12 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
       error={teamError || assessmentError}
     >
       <>
-        <div className="personalSection" style={{ margin: '10px' }}>
-          <div className={`manageJudge primary`}>Manage</div>
-          <div onClick={() => history?.push(`/personal-reflect/analysis/${data?.team?.id}`)} className={`analysis`}>
-            Analysis
+        <div>
+          <div className="personalSection">
+            <div className={`manageJudge primary`}>{t(`txt_assessment_manage`)}</div>
+            <div onClick={() => history?.push(`/personal-reflect/analysis/${data?.team?.id}`)} className={`analysis`}>
+              {t(`txt_assessment_analysis`)}
+            </div>
           </div>
         </div>
         <Card className="manageJudgePage mt-10 non-scroll">
@@ -106,28 +110,29 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
             <SearchBar placeholder="What are you looking for ?" isLoading={loading} onHandleSearch={onHandleSearch} />
             <Select defaultValue="createdAt_desc" onSelect={onHandleSort}>
               <Option key="NAME_ASC" value="createdAt_desc">
-                <SortAscendingOutlined /> Sort By Descending Date
+                <SortAscendingOutlined />
+                {t(`txt_assessment_sort_desc_date`)}
               </Option>
               <Option key="NAME_DESC" value="createdAt_asc">
-                <SortDescendingOutlined /> Sort By Ascending Date
+                <SortDescendingOutlined /> {t(`txt_assessment_sort_asc_date`)}
               </Option>
               <Option key="DATE_ASC" value="name_desc">
-                <SortAscendingOutlined /> Sort By Descending Name
+                <SortAscendingOutlined /> {t(`txt_assessment_sort_desc_name`)}
               </Option>
               <Option key="DATE_DESC" value="name_asc">
-                <SortDescendingOutlined /> Sort By Ascending Name
+                <SortDescendingOutlined /> {t(`txt_assessment_sort_asc_name`)}
               </Option>
               <Option key="STATUS_ASC" value="status_desc">
-                <SortAscendingOutlined /> Sort By Descending Status
+                <SortAscendingOutlined /> {t(`txt_assessment_sort_desc_status`)}
               </Option>
               <Option key="STATUS_DESC" value="status_asc">
-                <SortDescendingOutlined /> Sort By Ascending Status
+                <SortDescendingOutlined /> {t(`txt_assessment_sort_asc_status`)}
               </Option>
             </Select>
             {(iMember?.isSuperOwner || iMember?.isOwner) && (
               <div>
                 <Button onClick={() => setIsCreateModalVisible(true)} type="primary">
-                  Create Assessment
+                  {t(`txt_assessment_create`)}
                 </Button>
               </div>
             )}
@@ -189,7 +194,7 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
                                 icon={<AimOutlined />}
                               />
                             </Tooltip>
-                            <Tooltip title="Edit">
+                            <Tooltip title={`${t(`txt_assessment_edit`)}`}>
                               <Button
                                 type="text"
                                 onClick={() => {
@@ -214,7 +219,7 @@ export default function ManageJudge({ teamId, setTeam }: Props) {
                 </div>
               </>
             ) : (
-              <Empty description="No Assessments Data" className="flex flex-dir-c flex-ai-c flex-jc-c" />
+              <Empty description={`${t(`txt_assessment_no_data`)}`} className="flex flex-dir-c flex-ai-c flex-jc-c" />
             )}
           </div>
           {/* <div>total: {assessmentData?.getAssessments?.total}</div> */}
@@ -232,16 +237,18 @@ function DeleteAssessmentButton({ teamId, assessmentId }: { teamId: string; asse
     refetchQueries: ['getAssessments'],
   });
 
+  const { t } = useTranslation();
+
   return (
-    <Tooltip title="Delete">
+    <Tooltip title={`${t(`txt_assessment_detele_title`)}`}>
       <Button
         loading={loading}
         onClick={async () =>
           confirm({
-            title: 'Do you Want to delete this assessment?',
+            title: `${t(`txt_assessment_detele`)}`,
             centered: true,
             icon: <ExclamationCircleOutlined />,
-            okText: 'Delete',
+            content: `${t(`txt_assessment_desc`)}`,
             onOk: async () => {
               await deleteAssessment({
                 variables: {

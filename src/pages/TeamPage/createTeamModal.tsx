@@ -21,9 +21,9 @@ type Props = {
 const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
   const [form] = Form.useForm();
 
-  const [addNewTeam] = useMutation(TeamMutations.createTeam, {
+  const [createNewTeam, { loading: isCreating }] = useMutation(TeamMutations.createTeam, {
     // refetchQueries: [TeamQueries.getTeams, TeamQueries.getTeamIds],
-    refetchQueries: [TeamQueries.getTeams],
+    refetchQueries: [TeamQueries.getTeamsOfUser],
     onError: (error) => {
       notification.error({
         placement: 'bottomRight',
@@ -47,7 +47,7 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
       const teamDescription = values['teamDescription'];
       const isPublic = values['select'] === 'public' ? true : false;
       const picture = values['upload'][0]?.response || values['upload'];
-      addNewTeam({
+      createNewTeam({
         variables: {
           startDate,
           endDate,
@@ -86,6 +86,7 @@ const CreateTeamModal = ({ isVisible, setIsVisible }: Props) => {
       centered
       title="Create Your Team"
       visible={isVisible}
+      confirmLoading={isCreating}
       okText="Create"
       onOk={onFinish}
       onCancel={() => setIsVisible(false)}

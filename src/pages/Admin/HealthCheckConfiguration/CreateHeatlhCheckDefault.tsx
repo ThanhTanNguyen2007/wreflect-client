@@ -3,7 +3,10 @@ import { Modal, Form, Input, Button, FormInstance, notification } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 import { useMutation } from '@apollo/client';
-import { createTemplateResult, createTemplateVars } from '../../../grapql-client/mutations/TemplateMutation';
+import {
+  createTemplateHealthCheckResult,
+  createTemplateHealthCheckVars,
+} from '../../../grapql-client/mutations/TemplateMutation';
 import { TemplateMutations } from '../../../grapql-client/mutations';
 
 type Props = {
@@ -17,14 +20,17 @@ const { TextArea } = Input;
 export default function CreateHeatlhCheckDefault({ isVisible, setIsVisible, refetch }: Props) {
   const form = useRef<FormInstance>(null);
   // const [selectedColor, setSelectedColor] = useState<string>('pink');
-  const [createTemplate] = useMutation<createTemplateResult, createTemplateVars>(TemplateMutations.createTemplate, {
-    onError: (error) => {
-      notification.error({
-        placement: 'bottomRight',
-        message: error?.message,
-      });
+  const [createTemplate] = useMutation<createTemplateHealthCheckResult, createTemplateHealthCheckVars>(
+    TemplateMutations.createTemplateHealthCheck,
+    {
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
     },
-  });
+  );
 
   const onHandleCreate = async () => {
     form.current.validateFields().then(async (values: any) => {

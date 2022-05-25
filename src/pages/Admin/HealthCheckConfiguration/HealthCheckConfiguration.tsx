@@ -14,7 +14,10 @@ import EditTemplateHealthCheck from './EditTemplateHealthCheck';
 import { Template } from '../../../types';
 import Loading from '../../../components/Loading/loading';
 import { TemplateMutations } from '../../../grapql-client/mutations';
-import { deleteTemplateRusult, deleteTemplateVars } from '../../../grapql-client/mutations/TemplateMutation';
+import {
+  deleteTemplateHealthCheckResult,
+  deleteTemplateHealthCheckVars,
+} from '../../../grapql-client/mutations/TemplateMutation';
 
 type Props = {
   isAdmin: boolean;
@@ -42,21 +45,24 @@ export default function HealthCheckConfiguration({ isAdmin }: Props) {
     fetchPolicy: 'network-only',
   });
 
-  const [deleteTemplate] = useMutation<deleteTemplateRusult, deleteTemplateVars>(TemplateMutations.deleteTemplate, {
-    onError: (error) => {
-      notification.error({
-        placement: 'bottomRight',
-        message: error?.message,
-      });
+  const [deleteTemplate] = useMutation<deleteTemplateHealthCheckResult, deleteTemplateHealthCheckVars>(
+    TemplateMutations.deleteTemplateHealthCheck,
+    {
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
+      onCompleted: () => {
+        notification.success({
+          placement: 'bottomRight',
+          message: `Delete Template Success`,
+        });
+      },
+      refetchQueries: ['getTemplates'],
     },
-    onCompleted: () => {
-      notification.success({
-        placement: 'bottomRight',
-        message: `Delete Template Success`,
-      });
-    },
-    refetchQueries: ['getTemplates'],
-  });
+  );
 
   const onHandleSearch = (searchText: string) => {
     setSearchText(searchText);

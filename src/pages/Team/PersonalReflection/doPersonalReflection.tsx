@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Tabs, Avatar, Tooltip, Button, Badge, Select } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import { AssessmentQueries, TeamQueries } from '../../../grapql-client/queries';
@@ -30,6 +31,7 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
   const [isAllowEdit, setIsAllowEdit] = useState(false);
   const history = useHistory();
   const me = useContext(selfContext);
+  const { t } = useTranslation();
 
   const { data: teamData } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(TeamQueries.getTeam, {
     variables: {
@@ -125,9 +127,9 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
       {iMember?.id !== assessmentData?.getAssessment?.evaluations[0]?.assessorId &&
       !(iMember?.isSuperOwner || iMember?.isOwner) ? (
         <div className="flex flex-1 flex-ai-c flex-jc-c">
-          <h3>Uh oh! You are not evaluator of this Assessment</h3>
+          <h3>{t(`txt_assessment_create_evaluator`)}</h3>
           <div className="mt-12">
-            <Button onClick={() => history?.push(`/personal-reflect/manage/${teamId}`)}>Back to Manage</Button>
+            <Button onClick={() => history?.push(`/personal-reflect/manage/${teamId}`)}>{t(`txt_assessment_create_back`)}</Button>
           </div>
         </div>
       ) : (
@@ -136,12 +138,12 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
             <div className="assessmentTitle">{assessmentData?.getAssessment?.name}</div>
             <div className="actionDoPersionalReflection">
               <Button onClick={() => history?.push(`/personal-reflect/manage/${teamData?.team?.id}`)}>
-                Back to Manage{' '}
+              {t(`txt_assessment_create_back`)}
               </Button>
               <Button onClick={() => history?.push(`/personal-reflect/analysis-assessment/${teamId}/${assessmentId}`)}>
-                Analysis
+                {t(`txt_assessment_analysis`)}
               </Button>
-              <Button type="primary">Evaluation(s)</Button>
+              <Button type="primary">{t(`txt_assessment_create_eva`)}</Button>
             </div>
           </div>
           <div className="content scrollable flex mt-10">
@@ -159,7 +161,7 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
               </div>
               {assessmentData?.getAssessment?.status == 'Doing' && (
                 <div className="bold  ">
-                  End after{' '}
+                  {t(`txt_assessment_create_after`)}
                   <Countdown
                     startTime={+assessmentData?.getAssessment?.startDate || moment().valueOf()}
                     endTime={+assessmentData?.getAssessment?.endDate || moment().valueOf()}
@@ -168,16 +170,16 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
               )}
               {assessmentData?.getAssessment?.status == 'Planned' && (
                 <div className="bold">
-                  Starting at {moment(+assessmentData?.getAssessment?.startDate).format('DD/MM/YYYY')}
+                  {t(`txt_assessment_create_start`)} {moment(+assessmentData?.getAssessment?.startDate).format('DD/MM/YYYY')}
                 </div>
               )}
 
               <div className="bold">
-                <div className="bold">Status: {evaluation?.isSubmit ? 'Submited' : 'Unsubmit'}</div>
+                <div className="bold">Status: {evaluation?.isSubmit ? `${t(`txt_assessment_create_submited`)}` : `${t(`txt_assessment_create_unsubmit`)}`}</div>
               </div>
             </div>
             {assessmentData?.getAssessment?.status == 'Planned' ? (
-              <div className="flex flex-ai-c flex-jc-c flex-1">Not Started Yet</div>
+              <div className="flex flex-ai-c flex-jc-c flex-1">{t(`txt_assessment_create_started`)}</div>
             ) : (
               <Tabs
                 style={{ height: '100%' }}
@@ -216,7 +218,7 @@ export default function DoPersonalReflection({ teamId, assessmentId, setTeam }: 
                                 }}
                                 disabled={!isChanged || !isCompleted}
                               >
-                                Submit
+                                {t(`txt_assessment_create_submit`)}
                               </Button>
                             </>
                           }

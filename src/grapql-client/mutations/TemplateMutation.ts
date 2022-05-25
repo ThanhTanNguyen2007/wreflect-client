@@ -1,5 +1,5 @@
 import { TEMPLATE_FIELDS } from './../fragments/templateFragment';
-import { gql, useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { Template } from '../../types';
 
 type questionTypes = {
@@ -7,10 +7,10 @@ type questionTypes = {
   description: string;
 };
 
-export type createTemplateResult = {
+export type createTemplateHealthCheckResult = {
   createTemplateHealthCheck: Template;
 };
-export type createTemplateVars = {
+export type createTemplateHealthCheckVars = {
   name: string;
   questions: {
     title: string;
@@ -18,19 +18,19 @@ export type createTemplateVars = {
     color: string;
   }[];
 };
-export const createTemplate = gql`
+export const createTemplateHealthCheck = gql`
   ${TEMPLATE_FIELDS}
   mutation createTemplateHealthCheck($name: String!, $questions: [questionsInput!]!) {
-    createTemplate(name: $name, questions: $questions) {
+    createTemplateHealthCheck(name: $name, questions: $questions) {
       ...TemplateFields
     }
   }
 `;
 
-export type createCustomTemplateResult = {
-  createCustomTemplate: Template;
+export type createCustomTemplateForTeamResult = {
+  createCustomTemplateForTeam: Template;
 };
-export type createCustomTemplateVars = {
+export type createCustomTemplateForTeamVars = {
   teamId: string;
   name: string;
   questions: {
@@ -39,63 +39,19 @@ export type createCustomTemplateVars = {
     color: string;
   }[];
 };
-export const createCustomTemplate = gql`
+export const createCustomTemplateForTeam = gql`
   ${TEMPLATE_FIELDS}
-  mutation createCustomTemplate($teamId: String!, $name: String!, $questions: [questionsInput!]!) {
-    createCustomTemplate(teamId: $teamId, name: $name, questions: $questions) {
+  mutation createCustomTemplateForTeam($teamId: String!, $name: String!, $questions: [questionsInput!]!) {
+    createCustomTemplateForTeam(teamId: $teamId, name: $name, questions: $questions) {
       ...TemplateFields
     }
   }
 `;
 
-export type updateCustomTemplateResult = {
-  updateCustomTemplate: Template;
-};
-export type updateCustomTemplateVars = {
-  teamId: string;
-  templateId: string;
-  name: string;
-  questions: {
-    id: string;
-    title: string;
-    description: string;
-    color: string;
-  };
-};
-export const updateCustomTemplate = gql`
-  ${TEMPLATE_FIELDS}
-  mutation updateCustomTemplate(
-    $teamId: String!
-    $templateId: String!
-    $name: String!
-    $questions: [questionsWithIdInput!]!
-  ) {
-    updateCustomTemplate(teamId: $teamId, templateId: $templateId, name: $name, questions: $questions) {
-      ...TemplateFields
-    }
-  }
-`;
-
-export type deleteCustomTemplateResult = {
-  deleteCustomTemplate: Template;
-};
-export type deleteCustomTemplateVars = {
-  teamId: string;
-  templateId: string;
-};
-export const deleteCustomTemplate = gql`
-  ${TEMPLATE_FIELDS}
-  mutation deleteCustomTemplate($teamId: String!, $templateId: String!) {
-    deleteCustomTemplate(teamId: $teamId, templateId: $templateId) {
-      ...TemplateFields
-    }
-  }
-`;
-
-export type updateTemplateResult = {
+export type updateTemplateHealthCheckResult = {
   updateTemplateHealthCheck: Template;
 };
-export type updateTemplateVars = {
+export type updateTemplateHealthCheckVars = {
   templateId: string;
   name: string;
   questions: {
@@ -104,25 +60,25 @@ export type updateTemplateVars = {
     description: string;
   }[];
 };
-export const updateTemplate = gql`
+export const updateTemplateHealthCheck = gql`
   ${TEMPLATE_FIELDS}
   mutation updateTemplateHealthCheck($templateId: String!, $name: String!, $questions: [questionsInput!]!) {
-    updateTemplate(templateId: $templateId, name: $name, questions: $questions) {
+    updateTemplateHealthCheck(templateId: $templateId, name: $name, questions: $questions) {
       ...TemplateFields
     }
   }
 `;
 
-export type deleteTemplateRusult = {
+export type deleteTemplateHealthCheckResult = {
   deleteTemplateHealthCheck: Template;
 };
-export type deleteTemplateVars = {
+export type deleteTemplateHealthCheckVars = {
   templateId: string;
 };
-export const deleteTemplate = gql`
+export const deleteTemplateHealthCheck = gql`
   ${TEMPLATE_FIELDS}
   mutation deleteTemplateHealthCheck($templateId: String!) {
-    deleteTemplate(templateId: $templateId) {
+    deleteTemplateHealthCheck(templateId: $templateId) {
       ...TemplateFields
     }
   }

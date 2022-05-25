@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Input, Button, Tabs, Avatar, Upload, message, Row, Col, Select, DatePicker, Modal } from 'antd';
 import { EditFilled, UploadOutlined, DeleteFilled, SaveFilled } from '@ant-design/icons';
 
@@ -34,6 +35,7 @@ const TeamDetail = ({ teamId }: Props) => {
   );
 
   const [disabled, setDisabled] = useState(true);
+  const { t } = useTranslation();
 
   const key = 'updatable';
   const handleSave = () => {
@@ -127,15 +129,24 @@ const TeamDetail = ({ teamId }: Props) => {
                   <Col span={18}>
                     <div
                       className="team-name"
-                      style={{ display: 'flex', padding: 30, alignItems: 'baseline', height: 50 }}
+                      style={{
+                        display: 'flex',
+                        padding: 30,
+                        alignItems: 'baseline',
+                        height: 50,
+                        justifyContent: 'space-around',
+                      }}
                     >
-                      <h3 style={{ whiteSpace: 'nowrap', marginRight: 100 }}>Team name</h3>
-                      <Input disabled={disabled} defaultValue={data?.team?.name} />{' '}
+                      <h3 style={{ whiteSpace: 'nowrap' }}>{t(`txt_team_detail_name`)}</h3>
+                      <Input style={{ width: 500 }} disabled={disabled} defaultValue={data?.team?.name} />{' '}
                     </div>
-                    <div className="team-desc" style={{ display: 'flex', padding: 30, alignItems: 'baseline' }}>
-                      <h3 style={{ whiteSpace: 'nowrap', marginRight: 100 }}>Description</h3>
+                    <div
+                      className="team-desc"
+                      style={{ display: 'flex', padding: 30, alignItems: 'baseline', justifyContent: 'space-around' }}
+                    >
+                      <h3 style={{ whiteSpace: 'nowrap' }}>{t(`txt_team_detail_desc`)}</h3>
                       <TextArea
-                        style={{ height: 108, transition: 'none', resize: 'none' }}
+                        style={{ height: 108, transition: 'none', resize: 'none', width: 500 }}
                         disabled={disabled}
                         defaultValue={data?.team?.description || undefined}
                       />
@@ -143,10 +154,7 @@ const TeamDetail = ({ teamId }: Props) => {
                   </Col>
 
                   <Col span={6}>
-                    <div
-                      className="avatar"
-                      style={{ display: 'grid', textAlign: 'center', justifyItems: 'center', marginTop: 20 }}
-                    >
+                    <div className="avatar" style={{ display: 'grid', textAlign: 'center', justifyItems: 'center' }}>
                       <Avatar shape="circle" size={150} src={data?.team?.picture}></Avatar>
                       <Upload
                         action={`${config.SERVER_BASE_URL}/api/upload`}
@@ -158,7 +166,7 @@ const TeamDetail = ({ teamId }: Props) => {
                         {...props}
                       >
                         <Button style={{ marginTop: 20 }} size="large" shape="round" icon={<UploadOutlined />}>
-                          Upload
+                          {t(`txt_team_detail_upload`)}
                         </Button>
                       </Upload>
                     </div>
@@ -176,42 +184,70 @@ const TeamDetail = ({ teamId }: Props) => {
                 }}
               >
                 <Row style={{ paddingTop: 0, marginRight: 0 }}>
-                  <Col span={24}>
+                  <Col span={18}>
                     <div
                       className="duration"
-                      style={{ padding: 30, display: 'flex', alignItems: 'baseline', height: 50 }}
+                      style={{
+                        padding: 30,
+                        display: 'flex',
+                        alignItems: 'baseline',
+                        height: 50,
+                        justifyContent: 'space-around',
+                        position: 'relative',
+                        right: 58,
+                      }}
                     >
-                      <h3 style={{ marginRight: 120 }}>Duration</h3>
+                      <h3>{t(`txt_team_detail_duration`)}</h3>
                       {/* console.log() */}
                       {/* {console.log(startDate, endDate)} */}
                       <RangePicker
+                        style={{ right: 114 }}
                         disabled={disabled}
                         defaultValue={[moment(new Date(+startDate)), moment(new Date(+endDate))]}
                       />
                     </div>
                     <div
                       className="status"
-                      style={{ padding: 30, display: 'flex', alignItems: 'baseline', height: 50 }}
+                      style={{
+                        padding: 30,
+                        display: 'flex',
+                        alignItems: 'baseline',
+                        height: 50,
+                        justifyContent: 'space-around',
+                      }}
                     >
-                      <h3 style={{ marginRight: 135 }}>Status</h3>
-                      <Select disabled={disabled} defaultValue={data?.team.status} style={{ width: 720 }}>
-                        <Option value="DOING">DOING</Option>
-                        <Option value="DONE">DONE</Option>
+                      <h3>{t(`txt_team_detail_status`)}</h3>
+                      <Select disabled={disabled} defaultValue={data?.team.status} style={{ width: 500, left: 5 }}>
+                        <Option value="DOING">{t(`txt_team_detail_doing`)}</Option>
+                        <Option value="DONE">{t(`txt_team_detail_done`)}</Option>
                       </Select>
                     </div>
-                    <div className="scope" style={{ padding: 30, display: 'flex', alignItems: 'baseline', height: 50 }}>
-                      <h3 style={{ marginRight: 135 }}>Scope</h3>
+                    <div
+                      className="scope"
+                      style={{
+                        padding: 30,
+                        display: 'flex',
+                        alignItems: 'baseline',
+                        height: 50,
+                        justifyContent: 'space-around',
+                      }}
+                    >
+                      <h3>{t(`txt_team_detail_scope`)}</h3>
                       <Select
                         disabled={disabled}
                         defaultValue={data?.team.isPublic === false ? 'PRIVATE' : 'PUBLIC'}
-                        style={{ width: 720 }}
+                        style={{ width: 500, left: 7 }}
                       >
-                        <Option value="PRIVATE">PRIVATE</Option>
-                        <Option value="PUBLIC">PUBLIC</Option>
+                        <Option value="PRIVATE">{t(`txt_team_detail_private`)}</Option>
+                        <Option value="PUBLIC">{t(`txt_team_detail_public`)}</Option>
                       </Select>
                     </div>
-                    <div className="scope" style={{ padding: 30, display: 'flex' }}>
-                      <h3 style={{ marginRight: 120 }}>Member</h3>
+
+                    <div
+                      className="scope"
+                      style={{ padding: 30, display: 'flex', justifyContent: 'space-around', position: 'relative', right: 115 }}
+                    >
+                      <h3>{t(`txt_team_detail_member`)}</h3>
                       <div>
                         <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
                           {data?.team.members.map((member: Member) => {
@@ -229,6 +265,7 @@ const TeamDetail = ({ teamId }: Props) => {
                       </div>
                     </div>
                   </Col>
+                  <Col span={6}></Col>
                 </Row>
               </div>
             </div>

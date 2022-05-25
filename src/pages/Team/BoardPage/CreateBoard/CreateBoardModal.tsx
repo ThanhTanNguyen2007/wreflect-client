@@ -5,6 +5,7 @@ import { Board } from '../../../../types';
 import boardTemplate from '../../../../const/boardTemplateOption';
 import ConfigColumn from './configColumn';
 import { useMutation } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { BoardMutations } from '../../../../grapql-client/mutations';
 
 type Props = {
@@ -30,6 +31,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
   const [currentTemplate, setBoardTemplate] = useState<boardTemplateType>();
   // boardTemplate.map((template, index) => boardOption.set(index, template));
   const form = useRef<FormInstance>(null);
+  const { t } = useTranslation();
 
   const handleSelectTemplate = (value: string) => {
     setTemplateSelect(`${value}`);
@@ -149,29 +151,29 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
       <Form onFinish={handleSubmitBoard} ref={form}>
         <div className="config-board-modal">
           <div className="edit-board-modal">
-            <h2>{board ? 'Edit board' : 'Create board'}</h2>
-            <h4>Board Title</h4>
-            <div>You can run a retrospective with phases</div>
+            <h2>{board ? `${t(`txt_boards_edit`)}` : `${t(`txt_boards_create`)}`}</h2>
+            <h4>{t(`txt_boards_title`)}</h4>
+            <div>{t(`txt_boards_desc`)}</div>
             <Form.Item
-              rules={[{ required: true, message: 'Please input your board title' }]}
+              rules={[{ required: true, message: `${t(`txt_boards_message`)}` }]}
               name="title"
               initialValue={board?.title}
             >
-              <Input defaultValue={board?.title} placeholder="Board Title" />
+              <Input defaultValue={board?.title} placeholder={t(`txt_boards_placeholder`)} />
             </Form.Item>
 
-            <h4>Board Type</h4>
-            <div>You can run a retrospective with phases</div>
+            <h4>{t(`txt_boards_type`)}</h4>
+            <div>{t(`txt_boards_desc`)}</div>
             <Form.Item name="type" initialValue={board?.type ?? 'PHASE'}>
               <Select disabled defaultValue={board?.type ?? 'PHASE'}>
-                <Option value="PHASE">Phase (Reflect, Group, Votes, Discuss)</Option>
-                <Option value="DEFAULT">No Phase</Option>
+                <Option value="PHASE">{t(`txt_boards_phase`)}</Option>
+                <Option value="DEFAULT">{t(`txt_boards_phase_default`)}</Option>
               </Select>
             </Form.Item>
-            <h4>Max Votes</h4>
-            <div>{'The number of votes per participant '}</div>
+            <h4>{t(`txt_boards_max_votes`)}</h4>
+            <div>{t(`txt_boards_number_vote`)}</div>
             <Form.Item
-              rules={[{ required: true, message: 'Please input limit votes' }]}
+              rules={[{ required: true, message: `${t(`txt_boards_message_limit`)}` }]}
               name="votesLimit"
               initialValue={board?.votesLimit ?? 25}
             >
@@ -179,18 +181,18 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
             </Form.Item>
           </div>
           <div className="setting-board-modal">
-            <h2>Configurations</h2>
+            <h2>{t(`txt_boards_configuration`)}</h2>
             <div>
-              <h4>Public Board</h4>
-              <div>Anyone with the link to board can access it</div>
+              <h4>{t(`txt_boards_public`)}</h4>
+              <div>{t(`txt_boards_public_desc`)}</div>
               <Form.Item name="isPublic" initialValue={board?.isPublic ?? false}>
                 <Switch defaultChecked={board?.isPublic} />
               </Form.Item>
             </div>
 
             <div>
-              <h4>Run Retrospective Anonymously</h4>
-              <div>All the participants will give feedback anonymously</div>
+              <h4>{t(`txt_boards_run`)}</h4>
+              <div>{t(`txt_boards_run_desc`)}</div>
               <Form.Item name="isAnonymous" initialValue={board?.isAnonymous ?? false}>
                 <Switch defaultChecked={board?.isAnonymous} />
               </Form.Item>
@@ -211,7 +213,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
             </div> */}
           </div>
           <div className="config-column-board-modal">
-            <h2>Columns</h2>
+            <h2>{t(`txt_boards_columns`)}</h2>
             <div style={{ marginTop: '10px', width: '100%' }}>
               <Select
                 onSelect={handleSelectTemplate}
@@ -219,7 +221,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
                 defaultValue="defaultBoard"
               >
                 <Option key="defaultBoard" value="defaultBoard">
-                  -- Board Templates --
+                  {t(`txt_boards_template`)}
                 </Option>
                 {[
                   ...boardTemplate.map((template, index) => (
@@ -300,7 +302,7 @@ export default function ConfigBoardModal({ teamId, board, visible, setVisible }:
                   {board ? 'Update Board' : 'Create Board'}
                 </Button> */}
                 <Button loading={creatingBoard || updatingBoard} htmlType="submit" size="large">
-                  {board ? 'Update Board' : 'Create Board'}
+                  {board ? `${t(`txt_boards_update`)}` : `${t(`txt_boards_create`)}`}
                 </Button>
               </div>
             </div>

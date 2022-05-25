@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TweenOneGroup } from 'rc-tween-one';
 import { Form, notification, message, Button, FormInstance, Input, Tag, Switch, Tooltip } from 'antd';
 import { useMutation } from '@apollo/client';
@@ -45,6 +46,7 @@ const showNotification = (data: listStatusAddMembers) => {
 const AddMembersModal = ({ teamData }: Props) => {
   const [listEmails, setListEmails] = useState<string[]>([]);
   const formRef = useRef<FormInstance>(null);
+  const { t } = useTranslation();
 
   const [addNewMember] = useMutation<MemberMutations.addMembersResult, MemberMutations.addMembersVars>(
     MemberMutations.addMembers,
@@ -136,9 +138,9 @@ const AddMembersModal = ({ teamData }: Props) => {
 
   return (
     <div>
-      <h3>Add Team Members</h3>
+      <h3>{t(`txt_member_add`)}</h3>
       <h4 className="flex flex-dir-r mt-25">
-        Invite via URL
+        {t(`txt_member_URL`)}
         <Switch
           loading={loading}
           disabled={loading}
@@ -149,7 +151,7 @@ const AddMembersModal = ({ teamData }: Props) => {
           checked={teamData?.isPublic}
         />
       </h4>
-      <p>Anyone with the link can join your team.</p>
+      <p>{t(`txt_member_join_link`)}</p>
       <div>
         <Input.Group compact>
           <Input disabled={true} style={{ width: 'calc(100% - 80px)' }} defaultValue={'http://localhost:3000'} />
@@ -163,19 +165,19 @@ const AddMembersModal = ({ teamData }: Props) => {
           </Tooltip>
         </Input.Group>
       </div>
-      <p>{'(This feature still developing)'}</p>
-      <h4 className="mt-25">Invite via Email</h4>
+      <p>{t(`txt_member_feature`)}</p>
+      <h4 className="mt-25">{t(`txt_member_email`)}</h4>
       <Form onFinish={(value) => onAddEmail(value)} ref={formRef}>
         <Input.Group compact className="flex flex-dir-r">
           <Form.Item
             style={{ width: 'calc(100% - 30px)' }}
             name="email"
             rules={[
-              { required: true, message: 'Input is empty' },
-              { type: 'email', message: 'The input is not valid E-mail!' },
+              { required: true, message: `${t(`txt_member_error_input`)}` },
+              { type: 'email', message: `${t(`txt_member_error`)}` },
             ]}
           >
-            <Input allowClear autoFocus placeholder="Please input email to add member in Team" />
+            <Input allowClear autoFocus placeholder={`${t(`txt_member_placeholder`)}`} />
           </Form.Item>
           <Form.Item>
             <Button
@@ -186,7 +188,7 @@ const AddMembersModal = ({ teamData }: Props) => {
               title="Add"
               type="primary"
             >
-              Add
+              {t(`txt_member_add_button`)}
             </Button>
             <Button
               className="ml-10"
@@ -198,7 +200,7 @@ const AddMembersModal = ({ teamData }: Props) => {
               type="primary"
               onClick={handleCreate}
             >
-              Send
+              {t(`txt_member_send`)}
             </Button>
           </Form.Item>
         </Input.Group>

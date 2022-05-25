@@ -4,6 +4,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import React, { useState } from 'react';
 import { MemberMutations } from '../../../grapql-client/mutations';
 import { Member, Team } from '../../../types';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   iMember: Member;
@@ -14,6 +15,7 @@ type Props = {
 
 export default function ModalMeetingNote({ iMember, team, visible, setVisible }: Props) {
   const [text, setText] = useState(iMember?.meetingNote);
+  const { t } = useTranslation();
 
   const [updateMeetingNote] = useMutation<
     MemberMutations.updateMeetingNoteResult,
@@ -57,12 +59,12 @@ export default function ModalMeetingNote({ iMember, team, visible, setVisible }:
           });
         }}
       >
-        <h3>Meeting Note</h3>
-        <p>Here you can write your personal meeting notes. They are only visible to you.</p>
+        <h3>{t(`txt_meeting_notes`)}</h3>
+        <p>{t(`txt_meeting_notes_desc`)}</p>
         <TextArea
           style={{ height: '300px' }}
           value={text}
-          placeholder="Write your personal notes here"
+          placeholder={`${t(`txt_meeting_notes_placeholder`)}`}
           onChange={handleOnTextAreaChange}
         />
       </Modal>

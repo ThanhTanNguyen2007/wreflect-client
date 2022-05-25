@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Image, Col, Row, Tabs, Modal, Button } from 'antd';
 import { QuestionOutlined, UserOutlined } from '@ant-design/icons';
 
-
 import { Header } from './../../components/Header';
 
 type Props = {
@@ -18,7 +17,6 @@ const HomePage = ({ email, picture }: Props) => {
   const handleShowModal = () => {
     setShowModal(true);
   };
-  console.log(showModal);
 
   const handleCancel = () => {
     setShowModal(false);
@@ -45,9 +43,10 @@ const HomePage = ({ email, picture }: Props) => {
           />
         </Col>
       </Row>
+      <div className="height-30" />
       <Row>
         <Col style={{ marginLeft: 80, textAlign: 'center' }} span={24}>
-          <h1 style={{ fontSize: 40 }}>REFLECT LÀ GÌ ?</h1>
+          <h1 style={{ fontSize: 40 }}>wREFLECT LÀ GÌ ?</h1>
           <p style={{ color: 'gray', letterSpacing: 1 }}>
             Reflect là một phương pháp được áp dụng trong giáo dục từ rất lâu đời. Bằng cách nhìn nhận lại quá trình để
             chiêm nghiệm và học hỏi . Vì trong ngành IT chúng mình thường hay được tiếp xúc với phương pháp này và nhận
@@ -57,12 +56,13 @@ const HomePage = ({ email, picture }: Props) => {
           </p>
         </Col>
       </Row>
+      <div className="height-30" />
       <Row>
         <Col span={10}>
           <Image preview={false} src="/images/teamwork-gif2.gif" height={390} style={{ objectFit: 'cover' }} />
         </Col>
         <Col style={{ marginLeft: 80 }} span={8}>
-          <h1 style={{ fontSize: 40 }}>Tại sao lại Reflect ?</h1>
+          <h1 style={{ fontSize: 40 }}>Tại sao lại wReflect ?</h1>
           <p style={{ color: 'gray', letterSpacing: 1 }}>
             Để phát triển bản thân thì mình tin rằng điều khó nhất là nhìn nhận lại chính bản thân mình và thành thật
             với nó trong suốt quãng đường . Chính vì điều đó mà khi có thể nhìn nhận lại bản thân bằng cách soi mình
@@ -73,9 +73,10 @@ const HomePage = ({ email, picture }: Props) => {
           </p>
         </Col>
       </Row>
+      <div className="height-30" />
       <Row>
         <Col style={{ marginLeft: 80 }} span={24}>
-          <h1 style={{ fontSize: 40, textAlign: 'center' }}>GIÁ TRỊ CỦA REFLECT ĐEM LẠI CHO NHÓM ? </h1>
+          <h1 style={{ fontSize: 40, textAlign: 'center' }}>GIÁ TRỊ CỦA wREFLECT ĐEM LẠI CHO NHÓM ? </h1>
           <div style={{ color: 'gray', letterSpacing: 1 }}>
             <p>
               - Với Member : giúp cho người dùng có thể tạo được một team như ý muốn và giúp Leader dễ dàng quản lí các
@@ -106,9 +107,10 @@ const HomePage = ({ email, picture }: Props) => {
           </div>
         </Col>
       </Row>
+      <div className="height-30" />
       <Row>
         <Col style={{ marginLeft: 80 }} span={24}>
-          <h1 style={{ fontSize: 40, textAlign: 'center' }}>GIÁ TRỊ CỦA REFLECT ĐEM LẠI CHO NGƯỜI DÙNG ? </h1>
+          <h1 style={{ fontSize: 40, textAlign: 'center' }}>GIÁ TRỊ CỦA wREFLECT ĐEM LẠI CHO NGƯỜI DÙNG ? </h1>
           <div style={{ color: 'gray', letterSpacing: 1 }}>
             <p>
               - Với Reflection Board : Đây là nơi mọi người được lắng nghe và thoải mái đưa ra ý kiến cá nhân giúp team
@@ -147,6 +149,7 @@ const HomePage = ({ email, picture }: Props) => {
           </div>
         </Col>
       </Row>
+      <div className="height-30" />
       <Row>
         <Col span={11}>
           <h1 style={{ fontSize: 40 }}>TÓM LẠI</h1>

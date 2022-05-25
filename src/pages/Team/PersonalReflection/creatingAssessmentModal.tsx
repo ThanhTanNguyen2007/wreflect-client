@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, DatePicker, Form, Steps, message, Button, FormInstance, Input, Select, Tooltip } from 'antd';
 import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -22,6 +23,7 @@ const { Option } = Select;
 
 export default function CreatingAssessmentModal({ assessment, criteriaData, team, isVisible, setVisible }: Props) {
   const [form] = Form.useForm();
+  const { t } = useTranslation();
 
   const [selectedCriteria, setSelectedCriteria] = useState(
     criteriaData?.map((criteriaData) => criteriaData.id).slice(0, 5),
@@ -120,14 +122,14 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
       maskClosable={false}
       footer={
         <>
-          <Button onClick={() => setVisible(false)}>Cancle</Button>
+          <Button onClick={() => setVisible(false)}>{t(`txt_assessment_create_cancle`)}</Button>
           {assessment ? (
             <Button onClick={() => console.log('updated')} type="primary" htmlType="submit">
-              Update
+              {t(`txt_assessment_create_update`)}
             </Button>
           ) : (
             <Button onClick={() => handleCreate()} type="primary" htmlType="submit">
-              Create
+              {t(`txt_assessment_create_confirm`)}
             </Button>
           )}
         </>
@@ -137,7 +139,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
         <div className="containerModal">
           <div className="settingEssentialInfor">
             <Form.Item
-              label="Name"
+              label={`${t(`txt_assessment_create_name`)}`}
               name={'name'}
               style={{ textAlign: 'start' }}
               rules={[
@@ -146,7 +148,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                 },
               ]}
             >
-              <Input placeholder="Please input name of assessment" />
+              <Input placeholder={`${t(`txt_assessment_create_placeholder`)}`} />
             </Form.Item>
             <Form.Item
               rules={[
@@ -156,7 +158,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
               ]}
               style={{ textAlign: 'start' }}
               name="range-picker"
-              label="Start Date - End Date"
+              label={`${t(`txt_assessment_create_data`)}`}
             >
               <RangePicker disabledDate={disabledDate} defaultValue={[moment(), null]} format="DD-MM-YYYY" />
             </Form.Item>
@@ -168,7 +170,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
               ]}
               style={{ textAlign: 'start' }}
               name="memberDoAssessment"
-              label="Members"
+              label={`${t(`txt_assessment_create_member`)}`}
               initialValue={
                 team?.members?.map((member) => {
                   if (!member?.isPendingInvitation) return member?.id;
@@ -185,14 +187,14 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                 style={{ width: '100%' }}
               >
                 <Option key="selectAll" value="selectAll">
-                  Select All
+                  {t(`txt_assessment_create_select`)}
                 </Option>
                 {optionChildAssignees}
               </Select>
             </Form.Item>
           </div>
           <div className="setting-criteria">
-            <h3>Criteria List:</h3>
+            <h3>{t(`txt_assessment_create_criteria`)}</h3>
             <Form.List
               name="names"
               initialValue={selectedCriteria}
@@ -200,14 +202,14 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                 {
                   validator: async (_, names) => {
                     if (!names || names.length < 5) {
-                      return Promise.reject(new Error('At least 5 criteria'));
+                      return Promise.reject(new Error(`${t(`txt_assessment_create_criteria_least`)}`));
                     }
                   },
                 },
                 {
                   validator: async (_, names) => {
                     if (names && names.length > 9) {
-                      return Promise.reject(new Error('At maxium 9 criteria'));
+                      return Promise.reject(new Error(`${t(`txt_assessment_create_criteria_max`)}`));
                     }
                   },
                 },
@@ -225,7 +227,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                           rules={[
                             {
                               required: true,
-                              message: "Please select criteria's name or delete this field.",
+                              message: `${t(`txt_assessment_create_message`)}`,
                             },
                           ]}
                           noStyle
@@ -295,7 +297,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                         }}
                         icon={<PlusOutlined />}
                       >
-                        Add field
+                        {t(`txt_assessment_create_add`)}
                       </Button>
                       <Button
                         type="dashed"
@@ -311,7 +313,7 @@ export default function CreatingAssessmentModal({ assessment, criteriaData, team
                         }}
                         icon={<PlusOutlined />}
                       >
-                        Add field at head
+                        {t(`txt_assessment_create_add_ahead`)}
                       </Button>
                     </div>
                   </div>

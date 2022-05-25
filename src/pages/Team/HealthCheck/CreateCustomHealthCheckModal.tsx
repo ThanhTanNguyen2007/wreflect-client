@@ -1,44 +1,43 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, notification } from 'antd';
 import { useMutation } from '@apollo/client';
 import {
-  createCustomTemplateVars,
-  createCustomTemplateResult,
-  createTemplateResult,
-  createTemplateVars,
-} from '../../../../grapql-client/mutations/TemplateMutation';
-import { TemplateMutations } from '../../../../grapql-client/mutations';
+  createCustomTemplateForTeamVars,
+  createCustomTemplateForTeamResult,
+  createTemplateHealthCheckResult,
+  createTemplateHealthCheckVars,
+} from '../../../grapql-client/mutations/TemplateMutation';
+import { TemplateMutations } from '../../../grapql-client/mutations';
 
+const { TextArea } = Input;
 type Props = {
   teamId: string;
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
 };
-const { TextArea } = Input;
+
 const colorPicker = ['pink', 'lpink', 'orange', 'lblue', 'blue', 'green', 'purple'];
 
-export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }: Props) {
+export default function CreateCustomHealthCheckModal({ teamId, isVisible, setIsVisible }: Props) {
   const [form] = Form?.useForm();
+  const { t } = useTranslation();
 
-  const [createCustomTemplate, { loading: isCreating }] = useMutation<
-    createCustomTemplateResult,
-    createCustomTemplateVars
-  >(TemplateMutations.createCustomTemplate, {
-    onCompleted: () => {
-      setIsVisible(false);
-      notification.success({
-        placement: 'bottomRight',
-        message: 'Create Successfully',
-      });
+  const [createCustomTemplate] = useMutation<createCustomTemplateForTeamResult, createCustomTemplateForTeamVars>(
+    TemplateMutations.createCustomTemplateForTeam,
+    {
+      onCompleted: () => {
+        setIsVisible(false);
+      },
+      onError: (error) => {
+        notification.error({
+          placement: 'bottomRight',
+          message: error?.message,
+        });
+      },
     },
-    onError: (error) => {
-      notification.error({
-        placement: 'bottomRight',
-        message: error?.message,
-      });
-    },
-  });
+  );
 
   const onHanldeCreate = async () => {
     form?.validateFields().then(async (values) => {
@@ -66,18 +65,17 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
   return (
     <Modal
       className="createHealthCheckModal flex-jc-c "
-      title={<h3 className="bold">Create New Custom Default For Your Team</h3>}
+      title={<h3 className="bold">{t(`txt_heal_check_create_custom`)}</h3>}
       centered
       destroyOnClose
       maskClosable
-      confirmLoading={isCreating}
       onOk={async () => await onHanldeCreate()}
       visible={isVisible}
       onCancel={() => setIsVisible(false)}
-      width={800}
+      width={1000}
     >
       <Form preserve={false} className="flex flex-gap-24" form={form}>
-        <Form.Item label="Name" name={'name'} rules={[{ required: true, message: 'Missing Name' }]}>
+        <Form.Item label={t(`txt_assessment_create_name`)} name={'name'} rules={[{ required: true, message: 'Missing Name' }]}>
           <Input />
         </Form.Item>
         <Form.List
@@ -86,14 +84,14 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
             {
               validator: async (_, questions) => {
                 if (!questions || questions.length < 5) {
-                  return Promise.reject(new Error('At least 5 questions'));
+                  return Promise.reject(new Error(`${t(`txt_heal_check_least`)}`));
                 }
               },
             },
             {
               validator: async (_, questions) => {
                 if (questions && questions.length > 20) {
-                  return Promise.reject(new Error('At maxium 20 questions'));
+                  return Promise.reject(new Error(`${t(`txt_heal_check_max`)}`));
                 }
               },
             },
@@ -101,6 +99,18 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
         >
           {(fields, { add, remove }, { errors }) => (
             <>
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    add();
+                  }}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  {t(`txt_heal_check_add_question`)}
+                </Button>
+              </Form.Item>
               <Form.ErrorList errors={errors} />
               {fields.map((field, index) => {
                 const colorOfQuestion = onHandleGenerateColor(index);
@@ -141,16 +151,6 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
                   </>
                 );
               })}
-              <Button
-                type="dashed"
-                onClick={() => {
-                  add();
-                }}
-                block
-                icon={<PlusOutlined />}
-              >
-                Add Question
-              </Button>
             </>
           )}
         </Form.List>

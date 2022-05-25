@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Avatar, Tooltip, Empty, Badge, Modal, notification } from 'antd';
+import { Avatar, Tooltip, Empty, Badge, Spin, notification, Modal, Tabs, Row } from 'antd';
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { useMutation, useQuery, useApolloClient, useSubscription } from '@apollo/client';
 import { BoardQueries, TeamQueries } from '../../../grapql-client/queries';
@@ -45,6 +46,7 @@ const { confirm } = Modal;
 
 export default function BoardComponent({ teamId, boardId }: Props) {
   const [board, setBoard] = useState<Board | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const [isBoardPanelActive, setIsBoardPanelActive] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
@@ -53,6 +55,17 @@ export default function BoardComponent({ teamId, boardId }: Props) {
   const client = useApolloClient();
   const me = useContext(selfContext);
   const [currentNumVotes, setCurrentNumVotes] = useState(0);
+  const { t } = useTranslation();
+
+  const { TabPane } = Tabs;
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+  };
 
   const [isVisibleMeetingNote, setIsVisibleMeetingNote] = useState(false);
 
@@ -281,6 +294,51 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                     {board?.currentPhase === 'VOTES' && (
                       <div className="currentLimitVotes">Votes {`${currentNumVotes}/${board?.votesLimit}`}</div>
                     )}
+                    <div className="board-action" style={{ right: 620, position: 'relative' }}>
+                      <div className="boardPanel" onClick={handleShowModal}>
+                        {t('txt_boards_turtorial')}
+                      </div>
+                      <Modal
+                        className="modal-userguide"
+                        title={`${t(`txt_boards_turtorial`)}`}
+                        visible={showModal}
+                        onCancel={handleCancel}
+                      >
+                        <Row>
+                          <Tabs defaultActiveKey="1">
+                            <TabPane tab={`${t(`txt_boards_intro`)}`} key="1">
+                              <p>{`${t(`txt_boards_intro_text`)}`}</p>
+                              <p>{`${t(`txt_boards_intro_text2`)}`}</p>
+                              <p>{`${t(`txt_boards_intro_text3`)}`}</p>
+                              <p>{`${t(`txt_boards_intro_text4`)}`}</p>
+                            </TabPane>
+                            <TabPane tab={`${t(`txt_boards_reflect`)}`} key="2">
+                              <p>{`${t(`txt_boards_reflect_text`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text1`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text2`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text3`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text4`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text5`)}`}</p>
+                              <p>{`${t(`txt_boards_reflect_text3`)}`}</p>
+                            </TabPane>
+                            <TabPane tab={`${t(`txt_boards_group`)}`} key="3">
+                              <p>{`${t(`txt_boards_group_text`)}`}</p>
+                              <p>{`${t(`txt_boards_group_text2`)}`}</p>
+                              <p>{`${t(`txt_boards_group_text3`)}`}</p>
+                            </TabPane>
+                            <TabPane tab={`${t(`txt_boards_votes`)}`} key="4">
+                              <p>{`${t(`txt_boards_votes_text`)}`}</p>
+                              <p>{`${t(`txt_boards_votes_text2`)}`}</p>
+                            </TabPane>
+                            <TabPane tab={`${t(`txt_boards_discuss`)}`} key="5">
+                              <p>{`${t(`txt_boards_discuss_text`)}`}</p>
+                              <p>{`${t(`txt_boards_discuss_text1`)}`}</p>
+                              <p>{`${t(`txt_boards_discuss_text2`)}`}</p>
+                            </TabPane>
+                          </Tabs>
+                        </Row>
+                      </Modal>
+                    </div>
                     <div className={`board-action ${isBoardPanelActive && 'active'}`}>
                       <div className="boardPanel" onClick={() => setIsBoardPanelActive(!isBoardPanelActive)}>
                         {isBoardPanelActive ? (
@@ -288,7 +346,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                         ) : (
                           <MenuOutlined className="boardPanelIcon" />
                         )}
-                        {'\t \t '} Action
+                        {'\t \t '} {t(`txt_boards_action`)}
                       </div>
                       <div className="boardActionPanel">
                         <ul>
@@ -297,13 +355,13 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                               <li>
                                 <PlusCircleOutlined className="boardPanelIcon " />
                                 <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                                  Create New Board
+                                  {t(`txt_boards_create_boards`)}
                                 </a>
                               </li>
                               <li>
                                 <EditOutlined className="boardPanelIcon " />
                                 <a className="editBoard" onClick={() => setIsUpdateModalVisible(true)}>
-                                  Edit Board
+                                  {t(`txt_boards_edit_board`)}
                                 </a>
                               </li>
                             </>
@@ -317,19 +375,19 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                           <li>
                             <PlusCircleOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                              Reset All Votes
+                              {t(`txt_boards_reset_all_votes`)}
                             </a>
                           </li>
                           <li>
                             <StarOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
-                              Show Bookmarks
+                              {t(`txt_boards_show_bookmarks`)}
                             </a>
                           </li>
                           <li>
                             <SnippetsOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>
-                              Meeting Notes
+                              {t(`txt_boards_meeting_notes`)}
                             </a>
                           </li>
                         </ul>
@@ -409,7 +467,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <BulbOutlined />
-                                Collect
+                                {t(`txt_boards_reflect`)}
                               </div>
                               <div
                                 className={`phase-step ${board?.currentPhase === 'GROUP' && 'active'}`}
@@ -436,7 +494,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <UngroupOutlined />
-                                Group
+                                {t(`txt_boards_group`)}
                               </div>
                               <div
                                 className={`phase-step ${board?.currentPhase === 'VOTES' && 'active'}`}
@@ -463,7 +521,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <LikeOutlined />
-                                Votes
+                                {t(`txt_boards_votes`)}
                               </div>
                               <div
                                 className={`phase-step ${board?.currentPhase === 'DISCUSS' && 'active'}`}
@@ -490,7 +548,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                 }}
                               >
                                 <MessageOutlined />
-                                Discuss
+                                {t(`txt_boards_discuss`)}
                               </div>
                             </div>
                             {(iMember?.isOwner || iMember?.isSuperOwner) && (
@@ -519,7 +577,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                   >
                                     <>
                                       <LockOutlined />
-                                      End Reflect
+                                      {t(`txt_boards_end_reflect`)}
                                     </>
                                   </div>
                                 ) : (
@@ -544,7 +602,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                     }}
                                   >
                                     <ArrowRightOutlined />
-                                    Next
+                                    {t(`txt_boards_next`)}
                                   </div>
                                 )}
                               </>
@@ -555,7 +613,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                   <div className="phase-action-btn" onClick={() => setTimeTrackingModalVisible(true)}>
                                     <>
                                       <FieldTimeOutlined />
-                                      Start Time
+                                      {t(`txt_boards_start_time`)}
                                     </>
                                   </div>
                                 ) : (
@@ -572,7 +630,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                                     }}
                                   >
                                     <FieldTimeOutlined />
-                                    Stop Time
+                                    {t(`txt_boards_stop_time`)}
                                   </div>
                                 )}
                               </>
@@ -580,7 +638,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                           </div>
                         )
                       ) : (
-                        <div className="lockedNoti">This board is locked for feedback by Admin</div>
+                        <div className="lockedNoti">{t(`txt_boards_notification_admin`)}</div>
                       )}
                     </div>
                   </div>

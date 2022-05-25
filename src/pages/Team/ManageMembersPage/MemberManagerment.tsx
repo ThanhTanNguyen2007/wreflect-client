@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, Empty } from 'antd';
 
 import { useQuery } from '@apollo/client';
@@ -21,6 +22,7 @@ export default function MemberManagerment({ teamId }: Props) {
   const [isVisibleEditDetails, setIsVisibleEditDetails] = useState(false);
   const [searchText, setSearchText] = useState('');
   const me = useContext(selfContext);
+  const { t } = useTranslation();
 
   const { loading, data, error, refetch } = useQuery<TeamQueries.getTeamResult, TeamQueries.getTeamVars>(
     TeamQueries.getTeam,
@@ -44,7 +46,11 @@ export default function MemberManagerment({ teamId }: Props) {
             <div className="flex flex-1 flex-dir-r manageMembersPage card mt-10 scrollable">
               <div className="flex-1 manageMembers">
                 <div className="mr-10">
-                  <SearchBar onHandleSearch={handleSearch} isLoading={loading} placeholder="Find members" />
+                  <SearchBar
+                    onHandleSearch={handleSearch}
+                    isLoading={loading}
+                    placeholder={`${t(`txt_member_find`)}`}
+                  />
                 </div>
                 <div className="mt-25">
                   <ListMember searchText={searchText} teamData={data.team} />
