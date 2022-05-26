@@ -3,16 +3,20 @@ import { Image, Col, Row, Tabs, Modal, Button } from 'antd';
 import { QuestionOutlined, UserOutlined } from '@ant-design/icons';
 
 import { Header } from './../../components/Header';
+import { useHistory } from 'react-router-dom';
 
 type Props = {
+  redirectUrl?: string;
   email: string | null;
   picture: string | null;
 };
 
 const { TabPane } = Tabs;
 
-const HomePage = ({ email, picture }: Props) => {
+const HomePage = ({ email, picture, redirectUrl }: Props) => {
   const [showModal, setShowModal] = useState(false);
+
+  console.log(redirectUrl);
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -23,7 +27,7 @@ const HomePage = ({ email, picture }: Props) => {
   };
   return (
     <div className="home-page">
-      <Header email={email} picture={picture} />
+      <Header redirectUrl={redirectUrl} email={email} picture={picture} />
       <Row>
         <Col span={8}>
           <h1 style={{ fontSize: 40 }}>RETROSPECTIVE IS GOOD</h1>

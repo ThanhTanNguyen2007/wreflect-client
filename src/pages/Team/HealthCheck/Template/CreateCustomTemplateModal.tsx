@@ -80,7 +80,11 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
       width={800}
     >
       <Form preserve={false} className="flex flex-gap-24" form={form}>
-        <Form.Item label={t(`txt_assessment_create_name`)} name={'name'} rules={[{ required: true, message: 'Missing Name' }]}>
+        <Form.Item
+          label={t(`txt_assessment_create_name`)}
+          name={'name'}
+          rules={[{ required: true, message: 'Missing Name' }]}
+        >
           <Input />
         </Form.Item>
         <Form.List
@@ -104,18 +108,6 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
         >
           {(fields, { add, remove }, { errors }) => (
             <>
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                  }}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  {t(`txt_heal_check_add_question`)}
-                </Button>
-              </Form.Item>
               <Form.ErrorList errors={errors} />
               {fields.map((field, index) => {
                 const colorOfQuestion = onHandleGenerateColor(index);
@@ -156,16 +148,18 @@ export default function CreateCustomTemplate({ teamId, isVisible, setIsVisible }
                   </>
                 );
               })}
-              <Button
-                type="dashed"
-                onClick={() => {
-                  add();
-                }}
-                block
-                icon={<PlusOutlined />}
-              >
-                Add Question
-              </Button>
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    add();
+                  }}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  {t(`txt_heal_check_add_question`)}
+                </Button>
+              </Form.Item>
             </>
           )}
         </Form.List>

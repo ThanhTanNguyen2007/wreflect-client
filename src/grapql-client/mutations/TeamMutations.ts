@@ -164,4 +164,19 @@ const updateActionTracker = gql`
   }
 `;
 
+export type joinTeamWithLinkResult = {
+  joinTeamWithLink: Team;
+};
+export type joinTeamWithLinkVars = {
+  teamId: string;
+};
+export const joinTeamWithLink = gql`
+  ${TEAM_FIELDS}
+  mutation joinTeamWithLink($teamId: String!) {
+    joinTeamWithLink(teamId: $teamId) {
+      ...TeamFields
+    }
+  }
+`;
+
 export { createTeam, updateTeam, deleteTeam, changeTeamAccess, updateActionTracker };

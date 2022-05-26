@@ -15,24 +15,12 @@ const App = (): JSX.Element => {
   const [me, setMe] = useState<null | User>(null);
   const [teamId, setTeamId] = useState<string>('');
   const [boardId, setBoardId] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
-  // const [constructor, setConstructor] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   setUpdateLoginState((newMe: null | User) => {
     setMe(newMe);
     localStorage.setItem('email', newMe?.email || '');
   });
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (!!me?.id) {
-  //       window.addEventListener('beforeunload', (ev) => {
-  //         ev.preventDefault();
-  //         return auth.logout();
-  //       });
-  //     }
-  //   };
-  // });
 
   useEffect(() => {
     (async function () {
