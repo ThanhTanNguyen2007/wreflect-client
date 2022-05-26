@@ -71,7 +71,7 @@ const Routes = ({ me }: Props) => {
                     <Switch>
                       <Route path="/teams" component={Team} />
                       <Redirect from="/" exact to="/teams" />
-                      <Route path="/admin" exact>
+                      <Route path="/admin">
                         <AdminPage isAdmin={isAdmin} />
                       </Route>
                       <Route
