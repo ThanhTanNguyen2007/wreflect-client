@@ -83,19 +83,4 @@ export const getTeamsOfUser = gql`
     }
   }
 `;
-
-export type checkInviteTeamResult = {
-  checkInviteTeam: Team;
-};
-export type checkInviteTeamVars = {
-  teamId: string;
-};
-export const checkInviteTeam = gql`
-  ${TEAM_FIELDS}
-  query checkInviteTeam($teamId: String) {
-    checkInviteTeam(teamId: $teamId) {
-      ...TeamFields
-    }
-  }
-`;
 export { getTeams, getTeam };

@@ -40,6 +40,7 @@ export default {
     clientID: parseString('REACT_APP_AUTH0_CLIENT_ID'),
     responseType: parseString('REACT_APP_AUTH0_RESPONSE_TYPE'),
     redirectUri: parseString('REACT_APP_REDIRECT_URI'),
+    initialScreen: 'signup',
   },
   SERVER_BASE_URL: parseString('REACT_APP_SERVER_BASE_URL'),
   GIPHY_API: parseString('REACT_APP_GIPHY_API'),

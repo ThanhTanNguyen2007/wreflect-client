@@ -71,12 +71,12 @@ export default function CreateAction({ team, selectedBoards }: Props) {
               <Form.Item name="column" rules={[{ required: true }]}>
                 <Select bordered size="large" placeholder="Select Column...">
                   {team?.boards
-                    ?.find((board) => board?.id === selectedBoards[0])
-                    ?.columns?.map((column) => {
-                      if (column?.isActive) {
+                    ?.find((board) => board.id === selectedBoards[0])
+                    ?.columns.map((column) => {
+                      if (column.isActive) {
                         return (
-                          <Option key={column?.id} value={column?.id}>
-                            {column?.title}
+                          <Option key={column.id} value={column.id}>
+                            {column.title}
                           </Option>
                         );
                       }

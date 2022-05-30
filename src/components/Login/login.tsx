@@ -7,7 +7,7 @@ import { auth, user } from '../../apis';
 import EmailVerificationNotice from './EmailVerificationNotice';
 import { createSemanticDiagnosticsBuilderProgram } from 'typescript';
 import { useHistory } from 'react-router-dom';
-import { Anchor, Button } from 'antd';
+import { Button } from 'antd';
 
 type Props = {
   isLoggedIn: boolean;
@@ -25,15 +25,11 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
   const authConfig: AuthOptions = config.AUTH0_WEBAUTH_CONFIG;
 
   if (redirectUri) {
-    // authConfig.redirectUri = `${config?.AUTH0_WEBAUTH_CONFIG?.redirectUri}${redirectUri}`;
-    // console.log(`${config?.AUTH0_WEBAUTH_CONFIG?.redirectUri}${redirectUri}`);
-    // authConfig.universalLoginPage = true;
-  }
-  if (redirectUri) {
-    localStorage?.setItem('redirect', redirectUri);
+    authConfig.redirectUri = redirectUri;
+    authConfig.universalLoginPage = false;
   }
 
-  // let isMounted = true;
+  let isMounted = true;
   const handleLogin = async (
     code: string,
     state: string,
@@ -43,24 +39,23 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
     history: H.History,
   ) => {
     setLoading(true);
-    // const INTENDED = `${config?.AUTH0_WEBAUTH_CONFIG?.redirectUri}${redirectUri}`;
     const res = await auth.login(code, state);
     if (!res) {
       return;
     }
-    // if (isMounted) {
-    if (res.sub) {
-      setSub(res.sub);
-    }
+    if (isMounted) {
+      if (res.sub) {
+        setSub(res.sub);
+      }
 
-    if (res.requiresEmailVerification) {
-      setNeedsEmailVerification(res.requiresEmailVerification);
-    }
+      if (res.requiresEmailVerification) {
+        setNeedsEmailVerification(res.requiresEmailVerification);
+      }
 
-    if (res.email) {
-      setEmail(res.email);
+      if (res.email) {
+        setEmail(res.email);
+      }
     }
-    // }
 
     //Clear search params
     const indexOfSearchParams = location.href.indexOf('&code');
@@ -71,11 +66,6 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
     setLoading(false);
     if (location.pathname.includes('wa-client')) {
       return;
-    }
-    const redirectLink = localStorage?.getItem('redirect');
-    if (redirectLink) {
-      localStorage?.removeItem('redirect');
-      history.push(`${redirectLink}`);
     }
 
     if (partnerId || isAdmin) {
@@ -92,9 +82,9 @@ const Login = ({ isLoggedIn, children, redirectUri }: Props): JSX.Element => {
         handleLogin(code, state, setEmail, setNeedsEmailVerification, setSub, history);
       }
     }
-    // return () => {
-    //   isMounted = false;
-    // };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {

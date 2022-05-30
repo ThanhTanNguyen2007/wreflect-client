@@ -317,9 +317,12 @@ code {
   border-radius: 10px; }
 
 .home-page {
-  overflow: scroll; }
+  overflow: scroll;
+  margin-top: 100px; }
   .home-page::-webkit-scrollbar {
     display: none; }
+  .home-page b {
+    color: black !important; }
 
 .ant-row {
   justify-content: space-around; }
@@ -1199,7 +1202,10 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   backdrop-filter: saturate(200%) blur(1.875rem); }
 
 .header {
-  background-color: #f7f7f7; }
+  background-color: #f7f7f7;
+  position: fixed;
+  z-index: 2;
+  width: 100%; }
   .header .titlePage {
     font-size: x-large;
     font-weight: bold; }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TweenOneGroup } from 'rc-tween-one';
 import { Form, notification, message, Button, FormInstance, Input, Tag, Switch, Tooltip } from 'antd';
@@ -8,12 +8,11 @@ import { TeamQueries } from '../../../grapql-client/queries';
 import { UserAddOutlined, CheckOutlined, SendOutlined, CopyOutlined, CloseOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { Team } from '../../../types';
-import config from '../../../config';
 
 const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
 
 type Props = {
-  team?: Team;
+  teamData?: Team;
 };
 
 type listStatusAddMembers = {
@@ -44,15 +43,10 @@ const showNotification = (data: listStatusAddMembers) => {
   });
 };
 
-const AddMembersModal = ({ team }: Props) => {
+const AddMembersModal = ({ teamData }: Props) => {
   const [listEmails, setListEmails] = useState<string[]>([]);
   const formRef = useRef<FormInstance>(null);
   const { t } = useTranslation();
-  const [link, setLink] = useState(`${config?.AUTH0_WEBAUTH_CONFIG?.redirectUri}/invite-link/${team?.id}`);
-
-  useEffect(() => {
-    setLink(`${config?.AUTH0_WEBAUTH_CONFIG?.redirectUri}/invite-link/${team?.id}`);
-  }, [team]);
 
   const [addNewMember] = useMutation<MemberMutations.addMembersResult, MemberMutations.addMembersVars>(
     MemberMutations.addMembers,
@@ -76,12 +70,6 @@ const AddMembersModal = ({ team }: Props) => {
     TeamMutations.changeTeamAccessVars
   >(TeamMutations.changeTeamAccess, {
     refetchQueries: [TeamQueries.getTeams, TeamQueries.getTeam],
-    onError: (error) => {
-      notification?.error({
-        message: error?.message,
-        placement: 'bottomRight',
-      });
-    },
   });
 
   const onAddEmail = (value: any) => {
@@ -128,12 +116,12 @@ const AddMembersModal = ({ team }: Props) => {
     if (listEmails.length <= 0) return;
     const myListEmails = _.clone(listEmails);
     setListEmails([]);
-    addNewMember({ variables: { emailUsers: myListEmails, teamId: team?.id as string } });
+    addNewMember({ variables: { emailUsers: myListEmails, teamId: teamData?.id as string } });
   };
 
   const copyToClipboard = async () => {
     navigator.clipboard
-      .writeText(link)
+      .writeText('http://localhost:3000')
       .then(() => {
         message.info('Embedded Url is copied to clipboard!');
       })
@@ -143,11 +131,10 @@ const AddMembersModal = ({ team }: Props) => {
   };
 
   const handleChangeAccess = (value: boolean) => {
-    if (team) {
-      changeTeamAccess({ variables: { teamId: team?.id, isPublic: value } });
+    if (teamData) {
+      changeTeamAccess({ variables: { teamId: teamData?.id, isPublic: value } });
     }
   };
-
 
   return (
     <div>
@@ -161,17 +148,17 @@ const AddMembersModal = ({ team }: Props) => {
           checkedChildren={<CheckOutlined />}
           unCheckedChildren={<CloseOutlined />}
           onChange={handleChangeAccess}
-          checked={team?.isPublic}
+          checked={teamData?.isPublic}
         />
       </h4>
       <p>{t(`txt_member_join_link`)}</p>
       <div>
         <Input.Group compact>
-          <Input disabled={true} style={{ width: 'calc(100% - 80px)' }} defaultValue={`${link}`} />
+          <Input disabled={true} style={{ width: 'calc(100% - 80px)' }} defaultValue={'http://localhost:3000'} />
           <Tooltip title="copy git url">
             <Button
               style={{ borderRadius: '0px' }}
-              disabled={!team?.isPublic}
+              disabled={!teamData?.isPublic}
               onClick={copyToClipboard}
               icon={<CopyOutlined />}
             />

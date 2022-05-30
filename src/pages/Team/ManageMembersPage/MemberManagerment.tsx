@@ -57,7 +57,7 @@ export default function MemberManagerment({ teamId }: Props) {
                 </div>
               </div>
               <div className="flex-1 addTeamMembers">
-                <AddTeamMembers team={data.team} />
+                <AddTeamMembers teamData={data.team} />
               </div>
               <EditTeamDetailModal
                 isVisible={isVisibleEditDetails}

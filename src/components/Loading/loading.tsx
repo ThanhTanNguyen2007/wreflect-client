@@ -18,13 +18,11 @@ export default function loading({ children, loading, error }: Props) {
       ) : (
         <>
           {error ? (
-            <div className="flex flex-1 flex-ai-c flex-jc-c">
-              <Result
-                status={error?.graphQLErrors[0]?.extensions?.code}
-                title={error?.graphQLErrors[0]?.extensions?.code}
-                subTitle={error?.message}
-              />
-            </div>
+            <Result
+              status={error?.graphQLErrors[0]?.extensions?.code}
+              title={error?.graphQLErrors[0]?.extensions?.code}
+              subTitle={error?.message}
+            />
           ) : (
             children
           )}
