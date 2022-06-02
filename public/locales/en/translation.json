@@ -201,6 +201,52 @@
   "txt_interests": "Interest(s)",
   "txt_workplace": "Workplace",
 
+  "txt_homepage_title_1": "WHAT IS REFLECT ?",
+  "txt_homepage_title_2": "WHY HAVE wREFLECT?  ",
+  "txt_homepage_title_3": "wREFLECT VALUES FOR PERSONALITY ?",
+  "txt_homepage_title_4": "wREFLECT VALUES FOR GROUP ?",
+  "txt_homepage_title_5": "IN SHORT",
+  "txt_homepage_title_6": "WHAT ROLE DOES wREFLECT ?",
+
+  "txt_homepage_content_with_member": "With Member :",
+  "txt_homepage_content_with_reflection_board": "With Reflection Board :",
+
+  "txt_homepage_content_with_action_tracker": "With Action Tracker :",
+  "txt_homepage_content_with_health_check": "With Health Check :",
+  "txt_homepage_content_with_personal_reflection": "With Persional Reflection :",
+  "txt_homepage_content_with_personal_profile": "With Personal Profile :",
+  "txt_homepage_content_with_searching_profile": "With Searching Profile :",
+
+  "txt_homepage_content_retrospective_1": "wReflect",
+  "txt_homepage_content_retrospective_2": "is a website help you can be done too the view back to the body and the company was being over in the time of your work",
+  "txt_homepage_content_retrospective_3": "As well as being able to know the good and bad parts, from which we can give the results of ourselves as well as all members of the team after the working process.",
+
+  "txt_homepage_content_why_1": "Realizing the difficulty through the process of self-reflection through writing, asking and answering questions  ",
+  "txt_homepage_content_why_2": "was born to solve this problem more easily, it helps us to interact with the members more through the functions inside it. To know more about the function, please go down below.  ",
+
+  "txt_homepage_content_evaluate_1": "Help team members interact as well as follow the progress of the work  ",
+  "txt_homepage_content_evaluate_3": "yourself more easily.  ",
+  "txt_homepage_content_evaluate_4": "This is a tool to help me reflect on my good and bad sides through the evaluation of the members as well as my own assessment to be able to come up with a plan to develop myself better in the future. future.  ",
+  "txt_homepage_content_evaluate_5": "This is a place for me to keep track of my current tasks, as well as the planned observations from myself, whether I have completed or not.  ",
+  "txt_homepage_content_evaluate_6": "As a place to help yourself see the health of your work, such as whether you work in a group well, are you happy or sad when working in a group, ... Then this place will be a place to help. you can see those. In addition, you can also see the amount of work health of other members.  ",
+  "txt_homepage_content_evaluate_7": "A place where you can give suggestions to your teammates as well as re-evaluate yourself so that you and your teammates can see shortcomings to improve or sometimes praise to continue promoting and trying. try to contribute.  ",
+
+  "txt_homepage_content_evaluate_8": "helps users to create a team as desired and helps Leader easily manage his members.  ",
+  "txt_homepage_content_evaluate_9": "This is a useful tool for the team to be able to meet online. A place where everyone can give opinions and review together the good points and bad points that the team has made during the working time.  ",
+  "txt_homepage_content_evaluate_10": "This is a place to help the team check the work of the team that has set out as well as review whether the work has been completed or not.  ",
+  "txt_homepage_content_evaluate_11": "Users have to answer questions through which they will realize whether they are really understanding the project in the current stage or there is a lack of work.  ",
+  "txt_homepage_content_evaluate_12": "This is where everyone can comment on group members as well as self-reflect to have the best overview of their current situation. There is great value in improving yourself day by day.  ",
+  "txt_homepage_content_evaluate_13": "Through self-assessment and evaluation by members who have worked with, this is where those data will be saved.  ",
+  "txt_homepage_content_evaluate_14": "This function will help users find people with the right requirements for the position they are looking for.  ",
+
+  "txt_homepage_content_evaluate_15": "It is for the above reasons and based on the Reflect team method I wrote  ",
+  "txt_homepage_content_evaluate_16": "wReflect website",
+  "txt_homepage_content_evaluate_17": "With the hope that this will be a tool to help teams as well as individuals to re-evaluate their working process so that they can soon overcome their weaknesses as well as maintain their performance throughout the project. Not just a tool to measure meetings, but we hope to be",
+  "txt_homepage_content_evaluate_18": "A place for people to freely express their opinions as well as be heard",
+  "txt_homepage_content_evaluate_19": "We hope that we will always be with you in the future development journey.",
+
+  "txt_homepage_content_tutorial": "Tutorial",
+
   "txt_teams": "Teams",
   "txt_notifications": "Notifications",
   "txt_account": "Account",

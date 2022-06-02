@@ -317,9 +317,13 @@ code {
   border-radius: 10px; }
 
 .home-page {
-  overflow: scroll; }
+  overflow: scroll;
+  margin-top: 100px; }
   .home-page::-webkit-scrollbar {
     display: none; }
+  .home-page b {
+    color: black !important;
+    font-size: 20px; }
 
 .ant-row {
   justify-content: space-around; }
@@ -332,6 +336,12 @@ p {
   .button-home-page button {
     width: 184px;
     height: 40px; }
+
+.ant-carousel .slick-dots li {
+  background: gray; }
+
+.ant-carousel .slick-dots li .slick-active {
+  background: blue; }
 
 .ant-menu.ant-menu-dark .ant-menu-sub, .ant-layout-sider-trigger {
   background: #a4a0f1; }
@@ -1203,7 +1213,10 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   backdrop-filter: saturate(200%) blur(1.875rem); }
 
 .header {
-  background-color: #f7f7f7; }
+  background-color: #f7f7f7;
+  position: fixed;
+  z-index: 2;
+  width: 100%; }
   .header .titlePage {
     font-size: x-large;
     font-weight: bold; }

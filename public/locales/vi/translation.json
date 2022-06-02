@@ -193,6 +193,53 @@
   "txt_team_detail_numberOfBoard": "Thành viên",
   "txt_team_detail_createdSince": "Nhóm được tạo kể từ",
 
+  "txt_homepage_title_1": "REFLECT LÀ GÌ ?",
+  "txt_homepage_title_2": "TẠI SAO CÓ wREFLECT ?",
+  "txt_homepage_title_3": "GIÁ TRỊ CỦA wREFLECT ĐEM LẠI CHO CÁ NHÂN ?",
+  "txt_homepage_title_4": "GIÁ TRỊ CỦA wREFLECT ĐEM LẠI CHO TẬP THỂ ?",
+  "txt_homepage_title_5": "TÓM LẠI",
+  "txt_homepage_title_6": "wREFLECT ĐÓNG VAI TRÒ GÌ ?",
+
+  "txt_homepage_content_with_member": "Với Member :",
+  "txt_homepage_content_with_reflection_board": "Với Reflection Board :",
+
+  "txt_homepage_content_with_action_tracker": "Với Action Tracker :",
+  "txt_homepage_content_with_health_check": "Với Health Check :",
+  "txt_homepage_content_with_personal_reflection": "Với Persional Reflection :",
+  "txt_homepage_content_with_personal_profile": "Với Personal Profile :",
+  "txt_homepage_content_with_searching_profile": "Với Searching Profile :",
+
+  "txt_homepage_content_retrospective_1": "wReflect",
+  "txt_homepage_content_retrospective_2": " là một website giúp các bạn có thể thực hiện quá trình nhìn nhận lại bản thân và các công việc đã trải qua trong suốt quá trình làm việc của bạn",
+  "txt_homepage_content_retrospective_3": "cũng như có thể biết được phần làm tốt và chưa tốt,từ đó chúng ta có thể cho ra được kết quả của bản thân cũng như tất cả thành viên trong nhóm sau quá trình làm việc.",
+
+  "txt_homepage_content_why_1": "Nhận thấy sự khó khăn qua các quá trình nhìn nhận lại bản thân thông qua cách viết ,hỏi và trả lời thì",
+  "txt_homepage_content_why_2": "được ra đời để giải quyết vấn đề này một cách dễ dàng hơn, nó giúp cho chúng ta có thể tương tác với các thành viên được nhiều hơn thông qua các chức năng bên trong nó. Đề biết thêm về chức năng mời bạn xuống bên dưới.",
+
+  "txt_homepage_content_evaluate_1": "giúp cho thành viên trong nhóm có thể tương tác cũng như theo sát tiến độ các công việc",
+  "txt_homepage_content_evaluate_3": "của bản thân một cách dễ dàng hơn.",
+  "txt_homepage_content_evaluate_4": "Đây là công cụ giúp cho bản thân có thể nhìn nhận lại được những mặt tốt và xấu của mình qua đánh giá của các thành viên cũng như đánh giá của bản thân để có thể đưa ra phương án phát triển bản thân tốt hơn trong tương lai.",
+  "txt_homepage_content_evaluate_5": "Đây là nơi giúp cho bản thân có thể theo dõi các công việc hiện tại của mình, cũng như các quan sát được hoạch định ra từ bản thân mình đã hoàn thành hay chưa.",
+  "txt_homepage_content_evaluate_6":  "Là nơi giúp bản thân xem được sức khoẻ công việc của mình, chẳng hạn như bạn làm việc trong nhóm có tốt không, có đang vui vẻ hay đang buồn khi làm việc trong nhóm không, ...Thì nơi này sẽ là nơi giúp bạn xem được những cái đó. Ngoài ra, bạn cũng có thể xem được lượng sức khoẻ công việc của các thành viên khác.",
+  "txt_homepage_content_evaluate_7":  "Nơi giúp bản thân có thể góp ý với đồng đội cũng nhưng đánh giá lại chính bản thân mình để mình và đồng đội có thể nhìn thấy thiếu xót để hoàn thiện hoặc đôi khi cũng có thể lời khen ngợi để tiếp tục phát huy và cố gắng đóng góp .",
+
+
+  "txt_homepage_content_evaluate_8":  "giúp cho người dùng có thể tạo được một team như ý muốn và giúp Leader dễ dàng quản lí các thành viên của mình.",
+  "txt_homepage_content_evaluate_9":  "đây là công cụ hữu ích cho team để có thể họp online . Nơi mọi người có thể đưa ra ý kiến và cùng nhau nhìn nhận lại các điểm tốt và điểm xấu mà team đã làm được trong thời gian làm việc.",
+  "txt_homepage_content_evaluate_10":  "đây là nơi giúp team kiểm tra công việc của team đã đề ra cũng như nhìn nhận lại xem những công việc đó đã được hoàn thành hay chưa.",
+  "txt_homepage_content_evaluate_11":  "Người dùng phải trả lời các câu hỏi qua đó họ sẽ nhận ra bản thân có đang thực sự hiểu dự án trong giai đoạn hiện tại hay có sự chểnh mảng trong công việc hay không.",
+  "txt_homepage_content_evaluate_12":  "đây là nơi mọi người có thể góp ý về các thành viên trong nhóm cũng như tự nhìn nhận lại bản thân để có cái nhìn tổng quan nhất về tình hình hiện tại của bản thân . Có giá trị rất lớn trong việc hoàn thiện bản thân hơn từng ngày.",
+  "txt_homepage_content_evaluate_13":  "qua việc tự đánh giá bản thân và được đánh giá bởi các thành viên đã từng làm việc cùng thì đây là nơi sẽ lưu lại những dữ liệu đó.",
+  "txt_homepage_content_evaluate_14":  "chức năng này sẽ giúp người dùng tìm được những người có yêu cầu phù hợp với vị trí họ đang cần.",
+
+  "txt_homepage_content_evaluate_15":  "Chính vì những lí do trên và dựa vào phương pháp Reflect team mình đã viết ra",
+  "txt_homepage_content_evaluate_16":  "trang web wReflect",
+  "txt_homepage_content_evaluate_17":  "với mong muốn đây sẽ là một công cụ giúp các team cũng như cá nhân có thể nhìn nhận lại quá trình làm việc để có thể sớm khắc phục điểm yếu cũng như duy trì phong độ trong suốt dự án . Không chỉ là công cụ để đo lường họp hành mà chúng mình mong có thể là",
+  "txt_homepage_content_evaluate_18":  "nơi để mọi người thoải mái phát biểu ý kiến cũng như được lắng nghe",
+  "txt_homepage_content_evaluate_19":  "Mong rằng chúng mình sẽ luôn được đồng hành cùng các bạn trong suốt chặng đường phát triển sắp tới.",
+
+  "txt_homepage_content_tutorial":  "Xem Hướng Dẫn",
+
   "txt_teams": "Nhóm",
   "txt_notifications": "Thông báo",
   "txt_account": "Tài khoản",
