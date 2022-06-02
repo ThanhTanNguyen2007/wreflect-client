@@ -11,6 +11,7 @@ import { TeamQueries } from '../../../grapql-client/queries';
 import { MemberMutations } from '../../../grapql-client/mutations';
 import { Member, Team } from '../../../types';
 import config from '../../../config';
+import { useHistory } from 'react-router';
 
 type Props = {
   searchText: string;
@@ -21,6 +22,7 @@ const { confirm } = Modal;
 
 export default function ListMember({ searchText, teamData }: Props) {
   const me = useContext(SelfContext);
+  const history = useHistory();
 
   const [changeRoleMember] = useMutation<MemberMutations.changeRoleMemberResult, MemberMutations.changeRoleMemberVars>(
     MemberMutations.changeRoleMember,
@@ -49,6 +51,10 @@ export default function ListMember({ searchText, teamData }: Props) {
   );
 
   const iMember = teamData?.members?.find((member) => member?.userId === me?.id);
+
+  const onHandleViewProfile = (userId: string) => {
+    history?.push(`${userId === me?.id ? '/profile/me' : `/profile/${userId}`}`);
+  };
 
   return (
     <div style={{ flex: '1', overflowX: 'hidden', overflowY: 'scroll', height: '100%' }}>
@@ -126,7 +132,9 @@ export default function ListMember({ searchText, teamData }: Props) {
                   member?.isPendingInvitation ? (
                     'UnRegistered'
                   ) : (
-                    <a href="https://ant.design">{member?.user?.nickname || 'Unknown'}</a>
+                    <Button onClick={() => onHandleViewProfile(member?.userId)} type="text">
+                      {member?.user?.nickname || 'Unknown'}
+                    </Button>
                   )
                 }
                 description={member?.user?.email}

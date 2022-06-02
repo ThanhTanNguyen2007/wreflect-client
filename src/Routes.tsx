@@ -100,7 +100,7 @@ const Routes = ({ me }: Props) => {
                       />
                       <Route path="/notifications" exact render={({ match }) => <NotificationPage />} />
                       <Route
-                        path="/profile/me"
+                        path="/profile/:meId"
                         render={({ match }) => <AccountSetting userId={match.params.userId} />}
                       />
                       <Route

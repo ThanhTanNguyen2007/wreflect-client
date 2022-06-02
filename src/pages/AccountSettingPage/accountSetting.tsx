@@ -1,19 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { UserOutlined, DownOutlined, EditOutlined } from '@ant-design/icons';
+import { UserOutlined, DownOutlined, EditOutlined, RedoOutlined } from '@ant-design/icons';
 
 import { UserMutations } from '../../grapql-client/mutations';
 import SelfContext from '../../contexts/selfContext';
 
 import { user } from '../../apis';
-import { Avatar, Tabs, Button, Dropdown, Menu, notification } from 'antd';
+import { Avatar, Tabs, Button, Dropdown, Menu, notification, Empty } from 'antd';
 import moment from 'moment';
 import OwnedTeams from './ownedTeams';
 import { UserQueries } from '../../grapql-client/queries';
 import AnalyticComponent from './analytic';
 import { t } from 'i18next';
 import UploadAvatarModal from './UploadAvatarModal';
-import { updateUserResult, updateUserVars } from '../../grapql-client/mutations/UserMutation';
+import { reloadSkillsResult, updateUserResult, updateUserVars } from '../../grapql-client/mutations/UserMutation';
 import UpdateAccountModal from './UpdateAccountModal';
 
 const { TabPane } = Tabs;
@@ -26,7 +26,7 @@ const AccountSetting = ({ userId }: Props) => {
   const [isChangeAvatarVisible, setIsChangeAvatarVisible] = useState(false);
   const [isUpdateVisible, setIsUpdateVisbile] = useState(false);
   const me = useContext(SelfContext);
-  const [updateAccount] = useMutation(UserMutations.updateUser, {
+  const [updateAccount] = useMutation<updateUserResult, updateUserVars>(UserMutations.updateUser, {
     onError: (error) => {
       notification.error({
         message: error?.message,
@@ -35,7 +35,26 @@ const AccountSetting = ({ userId }: Props) => {
     },
   });
 
-  const { data: userProfile } = useQuery<UserQueries.getUserResult>(UserQueries?.getUser);
+  const [reloadSkills] = useMutation<reloadSkillsResult>(UserMutations?.reloadSkills, {
+    onCompleted: () => {
+      notification?.success({
+        message: 'Reload Skill Successfull',
+        placement: 'bottomRight',
+      });
+    },
+    onError: (error) => {
+      notification?.error({
+        message: error?.message,
+        placement: 'bottomRight',
+      });
+    },
+  });
+
+  const { data: userProfile } = useQuery<UserQueries.getUserResult>(UserQueries?.getUser, {
+    variables: {
+      userId,
+    },
+  });
 
   const handleFinish = (values: any) => {
     updateAccount({ variables: { picture: values['email'] } });
@@ -54,27 +73,27 @@ const AccountSetting = ({ userId }: Props) => {
   );
 
   return (
-    <div className="profileUser">
+    <div className="profileUser non-scroll">
       <UpdateAccountModal
-        userProfile={userProfile?.account}
+        userProfile={userProfile?.getUser}
         isVisible={isUpdateVisible}
         setIsVisible={setIsUpdateVisbile}
       />
       <UploadAvatarModal isVisible={isChangeAvatarVisible} setIsVisible={setIsChangeAvatarVisible} />
       <div className="headerSection">
         <div className="accInfor">
-          <Avatar size={70} src={userProfile?.account?.picture} />
+          <Avatar size={70} src={userProfile?.getUser?.picture} />
           <div className="accName">
-            <div className="gmail">{userProfile?.account?.nickname}</div>
+            <div className="gmail">{userProfile?.getUser?.nickname}</div>
             <p>
               {t(`txt_joinedAt`)}{' '}
-              <span className="user_id">{moment(+userProfile?.account?.createdAt).format('DD/MM/YYYY')}</span>
+              <span className="user_id">{moment(+userProfile?.getUser?.createdAt).format('DD/MM/YYYY')}</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container">
+      <div className="container scrollable" style={{ height: '100%' }}>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Profile" key="1">
             <>
@@ -91,15 +110,7 @@ const AccountSetting = ({ userId }: Props) => {
                 <div className="hihihiha flex flex-dir-r flex-1">
                   <div className="labelField flex-1">Picture:</div>
                   <div className="valueField flex-1">
-                    <Avatar src={userProfile?.account?.picture} />
-                  </div>
-                </div>
-              </div>
-              <div className="inforField flex-1">
-                <div className="hihihiha flex flex-dir-r flex-1">
-                  <div className="labelField flex-1">Name:</div>
-                  <div className="valueField flex-1">
-                    <div>{userProfile?.account?.nickname}</div>
+                    <Avatar src={userProfile?.getUser?.picture} />
                   </div>
                 </div>
               </div>
@@ -107,7 +118,15 @@ const AccountSetting = ({ userId }: Props) => {
                 <div className="hihihiha flex flex-dir-r flex-1">
                   <div className="labelField flex-1">Nickname:</div>
                   <div className="valueField flex-1">
-                    <div>{userProfile?.account?.email}</div>
+                    <div>{userProfile?.getUser?.nickname}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="inforField flex-1">
+                <div className="hihihiha flex flex-dir-r flex-1">
+                  <div className="labelField flex-1">Email:</div>
+                  <div className="valueField flex-1">
+                    <div>{userProfile?.getUser?.email}</div>
                   </div>
                 </div>
               </div>
@@ -115,7 +134,7 @@ const AccountSetting = ({ userId }: Props) => {
                 <div className="hihihiha flex flex-dir-r flex-1">
                   <div className="labelField flex-1">Gender:</div>
                   <div className="valueField flex-1">
-                    <div>{userProfile?.account?.gender}</div>
+                    <div>{userProfile?.getUser?.gender}</div>
                   </div>
                 </div>
               </div>
@@ -123,7 +142,31 @@ const AccountSetting = ({ userId }: Props) => {
                 <div className="hihihiha flex flex-dir-r flex-1">
                   <div className="labelField flex-1">Status:</div>
                   <div className="valueField flex-1">
-                    <div>{userProfile?.account?.sessions?.length > 0 ? 'Online' : 'Offline'}</div>
+                    <div>{userProfile?.getUser?.sessions?.length > 0 ? 'Online' : 'Offline'}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="inforField flex-1">
+                <div className="hihihiha flex flex-dir-r flex-1">
+                  <div className="labelField flex-1">Introduction:</div>
+                  <div className="valueField flex-1">
+                    <div>{userProfile?.getUser?.introduction}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="inforField flex-1">
+                <div className="hihihiha flex flex-dir-r flex-1">
+                  <div className="labelField flex-1">Workplace:</div>
+                  <div className="valueField flex-1">
+                    <div>{userProfile?.getUser?.workplace}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="inforField flex-1">
+                <div className="hihihiha flex flex-dir-r flex-1">
+                  <div className="labelField flex-1">Interests:</div>
+                  <div className="valueField flex-1">
+                    <div>{userProfile?.getUser?.interests}</div>
                   </div>
                 </div>
               </div>
@@ -133,8 +176,23 @@ const AccountSetting = ({ userId }: Props) => {
             <OwnedTeams />
           </TabPane>
           <TabPane tab="skills" key="3">
-            Your skill chart here
-            <AnalyticComponent skillValues={userProfile?.account?.skillValues} />
+            <>
+              <Button onClick={() => reloadSkills()} icon={<RedoOutlined />}>
+                Refresh Data
+              </Button>
+              <div className="mt-10">
+                {userProfile?.getUser?.skillValues?.length > 0 ? (
+                  <>
+                    Your skill chart here
+                    <AnalyticComponent skillValues={userProfile?.getUser?.skillValues} />
+                  </>
+                ) : (
+                  <div className="flex flex-1 flex-ai-c flex-jc-c">
+                    <Empty description="No data skills to display" />
+                  </div>
+                )}
+              </div>
+            </>
           </TabPane>
         </Tabs>
       </div>

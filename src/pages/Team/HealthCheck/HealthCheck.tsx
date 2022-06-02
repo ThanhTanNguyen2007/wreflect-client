@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, notification, Select, Switch, Badge, Card } from 'antd';
+import { Button, notification, Select, Switch, Badge, Card, Modal } from 'antd';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -52,6 +52,8 @@ export default function HealthCheck({ teamId, boardId }: Props) {
       teamId,
     },
   });
+
+  console.log(selecteTemplate);
 
   const { data: templates, loading: isLoading1 } = useQuery<getTemplatesOfTeamResult, getTemplatesOfTeamVars>(
     TemplateQueries?.getTemplatesOfTeam,
@@ -156,14 +158,13 @@ export default function HealthCheck({ teamId, boardId }: Props) {
     setAnswers([]);
     setIsViewResult(false);
     setSelectedTemplate(
-      templates?.getTemplatesOfTeam?.find((template) => template.id === getHealthCheck?.getHealthCheck?.templateId) ||
-        null,
+      templates?.getTemplatesOfTeam?.find((template) => template.id === getHealthCheck?.getHealthCheck?.templateId),
     );
     const test = _.uniqBy(getHealthCheck?.getHealthCheck?.memberOnHealthCheck, function (e) {
       return e.memberId;
     }).length;
     setNumMembersDoHealthCheck(test);
-  }, [teamId, boardId, data, getHealthCheck]);
+  }, [teamId, boardId, getHealthCheck, templates]);
 
   const renderListOptionBoard = data?.team?.boards?.map((board) => (
     <Option value={board?.id} key={board?.id}>
@@ -207,6 +208,8 @@ export default function HealthCheck({ teamId, boardId }: Props) {
     setAnswers([...newAnswers, value]);
   };
 
+  console.log('d', selecteTemplate);
+
   return (
     <>
       <CreateCustomTemplate teamId={teamId} isVisible={isVisibleCreateCustom} setIsVisible={setIsVisibleCreateCustom} />
@@ -217,7 +220,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
             <div className="team-health  flex flex-1 ">
               {getHealthCheck?.getHealthCheck ? (
                 <>
-                  <div className="header-content">
+                  <div className="flex flex-dir-r flex-jc-sb">
                     <Select
                       showSearch
                       showArrow
@@ -227,16 +230,20 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                     >
                       {renderListOptionBoard}
                     </Select>
-                    <div className="templates-overview poll-center-items">
+                    <div className="flex flex-dir-r flex-gap-10">
                       <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
                         {t(`txt_heal_check_go_to`)}
                       </Button>
-                      {!answerOfMembers ? (
+                      {answerOfMembers?.length == 0 ? (
                         <>
                           {isViewResult ? (
-                            <Button onClick={() => setIsViewResult(false)}>Go To Survey</Button>
+                            <Button type={'primary'} onClick={() => setIsViewResult(false)}>
+                              Go To Survey
+                            </Button>
                           ) : (
-                            <Button onClick={() => setIsViewResult(true)}>Show Results</Button>
+                            <Button type={'primary'} onClick={() => setIsViewResult(true)}>
+                              Show Results
+                            </Button>
                           )}
                         </>
                       ) : (
@@ -244,17 +251,17 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           {(iMember?.isOwner || iMember?.isSuperOwner) && (
                             <Button
                               style={{ marginLeft: '10px' }}
-                              // onClick={() => {
-                              //   Modal.confirm({
-                              //     title: 'Are you sure want to Reopen this health check',
-                              //     centered: true,
-                              //     okText: 'Reopen',
-                              //     cancelText: 'Cancel',
-                              //     onOk: async () => {
-                              //       reopenHealthCheck();
-                              //     },
-                              //   });
-                              // }}
+                              onClick={() => {
+                                Modal.confirm({
+                                  title: 'Are you sure want to Reopen this health check',
+                                  centered: true,
+                                  okText: 'Reopen',
+                                  cancelText: 'Cancel',
+                                  onOk: async () => {
+                                    reopenHealthCheck();
+                                  },
+                                });
+                              }}
                               type="ghost"
                             >
                               {t(`txt_heal_check_reopen`)}
@@ -344,7 +351,6 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                           {renderListOptionBoard}
                         </Select>
                         <div>
-                          <Button onClick={() => i18n.changeLanguage('vi')}>{t(`txt_heal_check_traslate`)}</Button>
                           <Button onClick={() => history.push(`/reflect/${teamId}/${boardId}`)} type="ghost">
                             {t(`txt_heal_check_go_to`)}
                           </Button>
@@ -357,10 +363,9 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                             className="flex flex-1 flex-dir-c flex-gap-10 poll-center-items"
                           >
                             <h3>{t(`txt_heal_check_create`)}</h3>
-                            <Button
-                              onClick={() => setIsVisibleCreateCustom(true)}
-                              type="primary"
-                            >{t(`txt_heal_check_let`)}</Button>
+                            <Button onClick={() => setIsVisibleCreateCustom(true)} type="primary">
+                              {t(`txt_heal_check_let`)}
+                            </Button>
                           </div>
                         </Card>
                         {templates?.getTemplatesOfTeam?.map((template) => (
@@ -397,8 +402,7 @@ export default function HealthCheck({ teamId, boardId }: Props) {
                       </div>
                       <div className="templates-overview poll-center-items">
                         <span style={{ marginRight: '10px' }} className="anonymous-label">
-                         
-                         {t(`txt_heal_check_secret`)}
+                          {t(`txt_heal_check_secret`)}
                         </span>
                         <Switch
                           checkedChildren={<CheckOutlined />}

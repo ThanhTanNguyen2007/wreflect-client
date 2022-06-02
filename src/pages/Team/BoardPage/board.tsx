@@ -295,7 +295,7 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                   setIsVisible={setIsBookmarkedVisible}
                 />
                 <div>
-                  <div className="boardTools">
+                  <div className="boardTools flex flex-dir-r flex-jc-sb">
                     <div className="countDown">
                       {board.timerInProgress && board.endTime ? (
                         <CountDown startTime={moment().valueOf()} endTime={board?.endTime?.valueOf()} />

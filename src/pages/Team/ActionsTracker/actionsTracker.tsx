@@ -112,11 +112,9 @@ export default function ActionsTracker({ teamId }: Props) {
       <Loading data={data?.team} loading={loading} error={error}>
         <div className="actionsTracker flex flex-1 scrollable ">
           <Card className="fullBoard flex flex-1 p-10">
-            <div className="header mb-10">
+            <div className="mb-10">
               <h2>{t(`txt_action_tracker`)}</h2>
-              <p className="mt-10">
-                {t(`txt_action_tracker_desc`)}
-              </p>
+              <p className="mt-10">{t(`txt_action_tracker_desc`)}</p>
             </div>
             <CreateAction team={data?.team} selectedBoards={selectedBoards} />
             <Card hoverable>

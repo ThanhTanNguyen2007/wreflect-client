@@ -25,13 +25,17 @@ const me = gql`
 `;
 
 export type getUserResult = {
-  account: User;
+  getUser: User;
+};
+
+export type getUserVars = {
+  userId?: string;
 };
 
 const getUser = gql`
   ${USER_FIELDS}
-  query getUser {
-    account {
+  query getUser($userId: ID) {
+    getUser(userId: $userId) {
       ...UserFields
     }
   }

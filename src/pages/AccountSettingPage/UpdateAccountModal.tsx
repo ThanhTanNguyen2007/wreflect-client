@@ -23,6 +23,7 @@ export default function UpdateAccountModal({ userProfile, isVisible, setIsVisibl
     onCompleted: () => {
       notification?.success({
         message: t('noti_update_success'),
+        placement: 'bottomRight',
       });
     },
     onError: (error) => {
@@ -57,7 +58,6 @@ export default function UpdateAccountModal({ userProfile, isVisible, setIsVisibl
   const onHandleChange = (changedValues: any, values: any) => {
     const nickname = values['nickname'];
     const gender = values['gender'];
-
     const introduction = values['introduction'];
     const workplace = values['workplace'];
     const interests = values['interests'];
@@ -76,7 +76,7 @@ export default function UpdateAccountModal({ userProfile, isVisible, setIsVisibl
 
   return (
     <Modal
-      title={`${t(`txt_edit`)} ${t(`txt_team`)}`}
+      title={`${t(`txt_edit`)} ${t(`Account`)}`}
       centered
       visible={isVisible}
       okText={t(`txt_update`)}
@@ -91,15 +91,17 @@ export default function UpdateAccountModal({ userProfile, isVisible, setIsVisibl
     >
       <Form
         initialValues={{
-          nickName: userProfile?.nickname,
+          nickname: userProfile?.nickname,
+          gender: userProfile?.gender,
           introduction: userProfile?.introduction,
+          workplace: userProfile?.workplace,
+          interests: userProfile?.interests,
         }}
         onValuesChange={onHandleChange}
         preserve={false}
         form={form}
         layout="vertical"
       >
-        <Form.Item name="nickname"></Form.Item>
         <Form.Item
           label={t(`txt_user_nickname`)}
           name={'nickname'}
@@ -108,29 +110,25 @@ export default function UpdateAccountModal({ userProfile, isVisible, setIsVisibl
           <Input />
         </Form.Item>
         <Form.Item
-          label={t(`txt_team_detail_desc`)}
+          label={'Gender'}
           name={'gender'}
           rules={[{ required: true, message: 'Description field is missing' }]}
         >
+          <Select>
+            <Select.Option value="UNSPECIFIED">UNSPECIFIED</Select.Option>
+            <Select.Option value="MALE">MALE</Select.Option>
+            <Select.Option value="FEMALE">FEMALE</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label={t(`txt_team_detail_desc`)} name={'introduction'}>
           <TextArea />
         </Form.Item>
-        <Form.Item
-          label={t(`txt_team_detail_desc`)}
-          name={'introduction'}
-          rules={[{ required: true, message: 'Description field is missing' }]}
-        >
+        <Form.Item label={t(`txt_team_detail_scope`)} name={'workplace'}>
           <TextArea />
         </Form.Item>
-        <Form.Item
-          label={t(`txt_team_detail_scope`)}
-          name={'workplace'}
-          rules={[{ required: true, message: 'Scope field is missing' }]}
-        ></Form.Item>
-        <Form.Item
-          label={t(`txt_team_detail_duration`)}
-          name={'interests'}
-          rules={[{ required: true, message: 'Duration field is missing' }]}
-        ></Form.Item>
+        <Form.Item label={t(`txt_team_detail_duration`)} name={'interests'}>
+          <TextArea />
+        </Form.Item>
       </Form>
     </Modal>
   );

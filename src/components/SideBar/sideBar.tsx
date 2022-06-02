@@ -111,9 +111,9 @@ const SideBar = ({ isAdmin }: Props) => {
                 <Menu.Item key="3" icon={<UsergroupDeleteOutlined />}>
                   <Link to="/admin/user-managerment">{t(`txt_usersManagement`)}</Link>
                 </Menu.Item>
-                <Menu.Item key="4" icon={<PieChartOutlined />}>
+                {/* <Menu.Item key="4" icon={<PieChartOutlined />}>
                   <Link to="/admin/analysis">{t('txt_analysis')}</Link>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="5" icon={<SlidersOutlined />}>
                   <Link to="/admin/variables-configuration">{t(`txt_variablesConfiguration`)}</Link>
                 </Menu.Item>
@@ -123,9 +123,9 @@ const SideBar = ({ isAdmin }: Props) => {
                 <Menu.Item style={{ marginTop: 10 }} icon={<GoldOutlined />} key="teams">
                   <Link to="/teams">{t('txt_teams')}</Link>
                 </Menu.Item>
-                <Menu.Item icon={<CompassOutlined />} key="connect">
+                {/* <Menu.Item icon={<CompassOutlined />} key="connect">
                   <Link to="/connect">{t('txt_connect')}</Link>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item
                   icon={
                     <Badge

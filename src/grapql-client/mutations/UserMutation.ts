@@ -19,7 +19,7 @@ export type updateUserVars = {
 export const updateUser = gql`
   ${USER_FIELDS}
   mutation updateUser(
-    $nickName: String
+    $nickname: String
     $picture: String
     $gender: String
     $workplace: String
@@ -30,7 +30,7 @@ export const updateUser = gql`
     $interests: String
   ) {
     updateUser(
-      nickName: $nickName
+      nickname: $nickname
       picture: $picture
       gender: $gender
       workplace: $workplace
@@ -74,6 +74,18 @@ export const banUser = gql`
       startDate: $startDate
       endDate: $endDate
     ) {
+      ...UserFields
+    }
+  }
+`;
+
+export type reloadSkillsResult = {
+  getSkillsAnalytic: User;
+};
+export const reloadSkills = gql`
+  ${USER_FIELDS}
+  mutation getSkillsAnalytic {
+    getSkillsAnalytic {
       ...UserFields
     }
   }

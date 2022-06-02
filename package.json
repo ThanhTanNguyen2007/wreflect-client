@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sass:build": " node-sass src/styles/sass/style.sass -o public/css",
@@ -22,11 +22,7 @@
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
     "@apollo/client": "^3.5.5",
-    "@ckeditor/ckeditor5-build-classic": "34.1.0",
-    "@ckeditor/ckeditor5-export-pdf": "^34.1.0",
-    "@ckeditor/ckeditor5-export-word": "34.1.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
-    "@craco/craco": "^6.4.3",
     "@giphy/js-fetch-api": "^4.1.2",
     "@giphy/react-components": "^5.6.1",
     "@reduxjs/toolkit": "^1.6.2",
@@ -38,7 +34,6 @@
     "antd-img-crop": "^3.16.0",
     "auth0-js": "9.14.2",
     "axios": "0.21.1",
-    "ckeditor5": "^34.1.0",
     "ckeditor5-thanhtan-custom-build": "^0.0.1",
     "date-fns": "2.16.1",
     "emoji-picker-react": "^3.5.0",

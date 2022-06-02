@@ -148,7 +148,6 @@ const AddMembersModal = ({ team }: Props) => {
     }
   };
 
-
   return (
     <div>
       <h3>{t(`txt_member_add`)}</h3>
@@ -168,7 +167,7 @@ const AddMembersModal = ({ team }: Props) => {
       <div>
         <Input.Group compact>
           <Input disabled={true} style={{ width: 'calc(100% - 80px)' }} defaultValue={`${link}`} />
-          <Tooltip title="copy git url">
+          <Tooltip title="copy url">
             <Button
               style={{ borderRadius: '0px' }}
               disabled={!team?.isPublic}
@@ -178,7 +177,7 @@ const AddMembersModal = ({ team }: Props) => {
           </Tooltip>
         </Input.Group>
       </div>
-      <p>{t(`txt_member_feature`)}</p>
+      {/* <p>{t(`txt_member_feature`)}</p> */}
       <h4 className="mt-25">{t(`txt_member_email`)}</h4>
       <Form onFinish={(value) => onAddEmail(value)} ref={formRef}>
         <Input.Group compact className="flex flex-dir-r">
