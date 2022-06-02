@@ -1,16 +1,46 @@
 import { USER_FIELDS } from './../fragments/userFragment';
 import { gql } from '@apollo/client';
-import { User } from '../../types';
+import { Gender, User } from '../../types';
 
+export type updateUserResult = {
+  updateUser: User;
+};
+export type updateUserVars = {
+  nickname?: string;
+  picture?: string;
+  gender?: Gender;
+  workplace?: string;
+  address?: string;
+  school?: string;
+  introduction?: string;
+  talents?: string;
+  interests?: string;
+};
 export const updateUser = gql`
-  mutation updateUser($picture: String) {
-    updateUser(picture: $picture) {
-      id
-      email
-      createdAt
-      updatedAt
-      isAdmin
-      userStatus
+  ${USER_FIELDS}
+  mutation updateUser(
+    $nickName: String
+    $picture: String
+    $gender: String
+    $workplace: String
+    $address: String
+    $school: String
+    $introduction: String
+    $talents: String
+    $interests: String
+  ) {
+    updateUser(
+      nickName: $nickName
+      picture: $picture
+      gender: $gender
+      workplace: $workplace
+      address: $address
+      school: $school
+      introduction: $introduction
+      talents: $talents
+      interests: $interests
+    ) {
+      ...UserFields
     }
   }
 `;

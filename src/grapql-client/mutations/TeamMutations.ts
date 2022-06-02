@@ -11,33 +11,12 @@ export type createTeamVars = {
   isPublic?: boolean;
   picture?: string;
 };
-export type updateTeamVars = {
-  id: string;
-  name?: string;
-  startDate?: string;
-  endDate?: string;
-  status?: string;
-  picture?: string;
-  isPublic?: string;
-  description?: string;
-};
 
-export type deleteTeamVars = {
-  teamId: string;
-};
 export type createTeamResult = {
   createTeam: Team;
 };
-export type updateTeamResult = {
-  updateTeam: Team;
-};
-export type deleteTeamResult = {
-  deleteTeam: {
-    count: number;
-  };
-};
 
-const createTeam = gql`
+export const createTeam = gql`
   mutation createTeam(
     $name: String!
     $startDate: String!
@@ -67,22 +46,32 @@ const createTeam = gql`
   }
 `;
 
-const updateTeam = gql`
+export type updateTeamResult = {
+  updateTeam: Team;
+};
+export type updateTeamVars = {
+  teamId: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  picture: string;
+  isPublic: boolean;
+  description: string;
+};
+export const updateTeam = gql`
   ${TEAM_FIELDS}
   mutation updateTeam(
-    $id: String!
-    $name: String
-    $startDate: String
-    $endDate: String
-    $status: String
-    $picture: String
-    $isPublic: Boolean
-    $description: String
+    $teamId: ID!
+    $name: String!
+    $startDate: String!
+    $endDate: String!
+    $picture: String!
+    $isPublic: Boolean!
+    $description: String!
   ) {
     updateTeam(
-      id: $id
+      teamId: $teamId
       name: $name
-      status: $status
       startDate: $startDate
       endDate: $endDate
       isPublic: $isPublic
@@ -94,10 +83,17 @@ const updateTeam = gql`
   }
 `;
 
-const deleteTeam = gql`
-  mutation deleteTeam($teamId: String!) {
+export type deleteTeamResult = {
+  deleteTeam: Team;
+};
+export type deleteTeamVars = {
+  teamId: string;
+};
+export const deleteTeam = gql`
+  ${TEAM_FIELDS}
+  mutation deleteTeam($teamId: ID!) {
     deleteTeam(teamId: $teamId) {
-      count
+      ...TeamFields
     }
   }
 `;
@@ -113,7 +109,7 @@ export type changeTeamAccessResult = {
   };
 };
 
-const changeTeamAccess = gql`
+export const changeTeamAccess = gql`
   ${TEAM_FIELDS}
   mutation ChangeTeamAccess($teamId: String!, $isPublic: Boolean!) {
     changeTeamAccess(teamId: $teamId, isPublic: $isPublic) {
@@ -137,7 +133,7 @@ export type updateActionTrackerVars = {
   status: OpinionStatus;
 };
 
-const updateActionTracker = gql`
+export const updateActionTracker = gql`
   ${TEAM_FIELDS}
   mutation updateActionTracker(
     $teamId: String!
@@ -164,4 +160,17 @@ const updateActionTracker = gql`
   }
 `;
 
-export { createTeam, updateTeam, deleteTeam, changeTeamAccess, updateActionTracker };
+export type joinTeamWithLinkResult = {
+  joinTeamWithLink: Team;
+};
+export type joinTeamWithLinkVars = {
+  teamId: string;
+};
+export const joinTeamWithLink = gql`
+  ${TEAM_FIELDS}
+  mutation joinTeamWithLink($teamId: String!) {
+    joinTeamWithLink(teamId: $teamId) {
+      ...TeamFields
+    }
+  }
+`;

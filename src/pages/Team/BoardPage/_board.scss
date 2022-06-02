@@ -294,64 +294,65 @@
         width: 100%;
         box-sizing: border-box;
       }
-      .opinionCol {
-        border-radius: 5px;
-        padding: 12px;
-        margin-bottom: 4px;
-        margin-top: 4px;
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-
-        .opinionHeader {
-          display: flex;
-          flex: 1;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          width: 100%;
-        }
-
-        .opinionContent {
-          overflow-wrap: break-word;
-          display: flex;
-          text-align: center;
-          align-items: center;
-          justify-content: center;
-          margin-top: 20px;
-          position: relative;
-
-          .opinionText {
-            overflow-wrap: break-word;
-          }
-
-          .opinionAction {
-            display: flex;
-            gap: 5px;
-          }
-        }
-
-        .opinionFooter {
-          margin-top: 15px;
-          text-align: end;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          .owner-opinion {
-            // margin-right: auto;
-            text-align: center;
-          }
-          .myVotes {
-            margin-right: auto;
-            margin-left: auto;
-          }
-          // .upvote {
-          //   margin-right: 10px;
-          // }
-        }
-      }
     }
+  }
+}
+
+.opinionCol {
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+
+  .opinionHeader {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .opinionContent {
+    overflow-wrap: break-word;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+
+    .opinionText {
+      overflow-wrap: break-word;
+    }
+
+    .opinionAction {
+      display: flex;
+      gap: 5px;
+    }
+  }
+
+  .opinionFooter {
+    margin-top: 15px;
+    text-align: end;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .owner-opinion {
+      // margin-right: auto;
+      text-align: center;
+    }
+    .myVotes {
+      margin-right: auto;
+      margin-left: auto;
+    }
+    // .upvote {
+    //   margin-right: 10px;
+    // }
   }
 }
 

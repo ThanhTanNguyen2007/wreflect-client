@@ -8,7 +8,7 @@ import {
   ExclamationCircleOutlined,
   DeleteFilled,
 } from '@ant-design/icons';
-import { Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { Board, Column, Member, Team } from '../../../types';
 import CreateTicket from './createTicket';
 import OpinionComponent from './opinion';
@@ -155,16 +155,27 @@ export default function ColumnComponent({
               )}
             {column?.opinions.map((opinion, index) => (
               <div key={opinion?.id}>
-                <OpinionComponent
-                  iMember={iMember}
-                  currentNumVotes={currentNumVotes}
-                  setCurrentNumVotes={setCurrentNumVotes}
-                  team={team}
-                  board={board}
-                  column={column}
+                <Draggable
+                  isDragDisabled={board.isLocked || board.currentPhase === 'VOTES'}
+                  draggableId={opinion.id}
                   index={index}
-                  opinion={opinion}
-                />
+                  key={opinion.id}
+                >
+                  {(provided) => (
+                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                      <OpinionComponent
+                        iMember={iMember}
+                        currentNumVotes={currentNumVotes}
+                        setCurrentNumVotes={setCurrentNumVotes}
+                        team={team}
+                        board={board}
+                        column={column}
+                        index={index}
+                        opinion={opinion}
+                      />
+                    </div>
+                  )}
+                </Draggable>
               </div>
             ))}
             {provided.placeholder}

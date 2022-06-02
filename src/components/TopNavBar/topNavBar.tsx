@@ -13,6 +13,10 @@ import {
 import selfContext from '../../contexts/selfContext';
 import { MemberMutations } from '../../grapql-client/mutations';
 import { useTranslation } from 'react-i18next';
+import {
+  subOnUpdateMeetingNoteResult,
+  subOnUpdateMeetingNoteVars,
+} from '../../grapql-client/subcriptions/BoardSubscription';
 
 const { Option } = Select;
 
@@ -79,6 +83,16 @@ const TopNavBar = ({ title, iMember, team, boardId }: Props) => {
       },
     },
   );
+
+  useSubscription<subOnUpdateMeetingNoteResult, subOnUpdateMeetingNoteVars>(BoardSubscription?.subOnUpdateMeetingNote, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log('data is', subscriptionData?.data?.subOnUpdateMeetingNote);
+    },
+    variables: {
+      teamId: team?.id,
+      boardId: boardId,
+    },
+  });
 
   const handleSelectBoard = async (value: string) => {
     history.push(`/reflect/${team?.id}/${value}`);

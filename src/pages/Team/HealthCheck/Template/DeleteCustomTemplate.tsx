@@ -40,7 +40,7 @@ export default function DeleteCustomTemplate({ template, isVisible, setIsVisible
   const onHandleDelete = async () => {
     form?.validateFields().then(async (values) => {
       const name = values['name'];
-      if (!name || name !== template?.title) {
+      if (name !== template?.title) {
         return notification?.error({
           message: 'Input not match with name of template',
           placement: 'bottomRight',
@@ -64,7 +64,7 @@ export default function DeleteCustomTemplate({ template, isVisible, setIsVisible
       maskClosable
       confirmLoading={isDeleting}
       okText="Delete"
-      onOk={async () => await onHandleDelete()}
+      onOk={onHandleDelete}
       onCancel={() => setIsVisible(false)}
     >
       <Form preserve={false} form={form}>

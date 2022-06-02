@@ -4,9 +4,9 @@ import { Card, Empty } from 'antd';
 
 import { useQuery } from '@apollo/client';
 import SearchBar from '../../../components/SearchBar/SearchBar';
-import ListMember from '../TeamDetailPage/listMember';
+import ListMember from '../TeamSettingPage/listMember';
 import { TeamQueries } from '../../../grapql-client/queries';
-import EditTeamDetailModal from '../TeamDetailPage/editTeamDetailModal';
+import EditTeamDetailModal from '../TeamSettingPage/editTeamDetailModal';
 
 import { Loading } from '../../../components/Loading';
 import { AddTeamMembers } from '.';
@@ -57,7 +57,7 @@ export default function MemberManagerment({ teamId }: Props) {
                 </div>
               </div>
               <div className="flex-1 addTeamMembers">
-                <AddTeamMembers teamData={data.team} />
+                <AddTeamMembers team={data.team} />
               </div>
               <EditTeamDetailModal
                 isVisible={isVisibleEditDetails}

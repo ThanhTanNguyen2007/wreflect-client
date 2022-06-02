@@ -24,17 +24,31 @@ export const updateBoard = gql`
 export type deleteBoardResult = {
   deleteBoard: Board;
 };
-
 export type deleteBoardVars = {
   meId: string;
   teamId: string;
 };
-
 export const deleteBoard = gql`
   ${TEAM_FIELDS}
   subscription Subscription($meId: ID!, $teamId: ID!) {
     deleteBoard(meId: $meId, teamId: $teamId) {
       ...TeamFields
+    }
+  }
+`;
+
+export type subOnUpdateMeetingNoteResult = {
+  subOnUpdateMeetingNote: Board;
+};
+export type subOnUpdateMeetingNoteVars = {
+  teamId: string;
+  boardId: string;
+};
+export const subOnUpdateMeetingNote = gql`
+  ${BOARD_FIELDS}
+  subscription subOnUpdateMeetingNote($teamId: ID!, $boardId: ID!) {
+    subOnUpdateMeetingNote(teamId: $teamId, boardId: $boardId) {
+      ...BoardFields
     }
   }
 `;

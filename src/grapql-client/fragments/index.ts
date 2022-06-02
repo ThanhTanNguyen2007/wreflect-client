@@ -14,3 +14,4 @@ export * as TemplateFragment from './templateFragment';
 export * as TemplateQuestionFragment from './templateQuestionFragment';
 export * as HealthCheckFragment from './healthCheckFragment';
 export * as MemberOnHealthCheckOnQuestionFragment from './memberOnHealthCheckOnQuestionFragment';
+export * as SessionFragment from './sessionFragment';

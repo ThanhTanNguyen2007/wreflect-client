@@ -75,6 +75,7 @@ export type Board = {
   disableUpVote: boolean;
   isAnonymous: boolean;
   votesLimit: number;
+  meetingNote: string;
   title: string;
   timerInProgress: boolean;
   type: BoardType;
@@ -244,6 +245,7 @@ export type User = {
   introduction: string | null;
   talents: string | null;
   interests: string | null;
+  sessions: Session[];
   notifications: Notification[];
   skillValues: UserOnCriteria[];
 };

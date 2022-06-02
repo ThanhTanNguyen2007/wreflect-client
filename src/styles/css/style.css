@@ -317,12 +317,9 @@ code {
   border-radius: 10px; }
 
 .home-page {
-  overflow: scroll;
-  margin-top: 100px; }
+  overflow: scroll; }
   .home-page::-webkit-scrollbar {
     display: none; }
-  .home-page b {
-    color: black !important; }
 
 .ant-row {
   justify-content: space-around; }
@@ -365,10 +362,13 @@ div#rc-tabs-2-panel-1 {
 ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   margin: 20px 0px 0px 0px; }
 
-.teamDetails .nameTeam {
+.teamSetting .nameTeam {
   font-family: 'Poppins';
   font-size: 30px;
   font-style: "oblique"; }
+
+.teamSetting .ant-avatar:hover {
+  visibility: "hidden"; }
 
 .profileUser {
   padding: 10px 60px 0px 60px; }
@@ -654,45 +654,46 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
       display: inline-block;
       width: 100%;
       box-sizing: border-box; }
-    .board .column .colContent .opinionCol {
-      border-radius: 5px;
-      padding: 12px;
-      margin-bottom: 4px;
-      margin-top: 4px;
-      display: inline-block;
-      width: 100%;
-      box-sizing: border-box; }
-      .board .column .colContent .opinionCol .opinionHeader {
-        display: flex;
-        flex: 1;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%; }
-      .board .column .colContent .opinionCol .opinionContent {
-        overflow-wrap: break-word;
-        display: flex;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-        position: relative; }
-        .board .column .colContent .opinionCol .opinionContent .opinionText {
-          overflow-wrap: break-word; }
-        .board .column .colContent .opinionCol .opinionContent .opinionAction {
-          display: flex;
-          gap: 5px; }
-      .board .column .colContent .opinionCol .opinionFooter {
-        margin-top: 15px;
-        text-align: end;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; }
-        .board .column .colContent .opinionCol .opinionFooter .owner-opinion {
-          text-align: center; }
-        .board .column .colContent .opinionCol .opinionFooter .myVotes {
-          margin-right: auto;
-          margin-left: auto; }
+
+.opinionCol {
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box; }
+  .opinionCol .opinionHeader {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; }
+  .opinionCol .opinionContent {
+    overflow-wrap: break-word;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative; }
+    .opinionCol .opinionContent .opinionText {
+      overflow-wrap: break-word; }
+    .opinionCol .opinionContent .opinionAction {
+      display: flex;
+      gap: 5px; }
+  .opinionCol .opinionFooter {
+    margin-top: 15px;
+    text-align: end;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+    .opinionCol .opinionFooter .owner-opinion {
+      text-align: center; }
+    .opinionCol .opinionFooter .myVotes {
+      margin-right: auto;
+      margin-left: auto; }
 
 .config-board-modal {
   display: flex;
@@ -1202,10 +1203,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light {
   backdrop-filter: saturate(200%) blur(1.875rem); }
 
 .header {
-  background-color: #f7f7f7;
-  position: fixed;
-  z-index: 2;
-  width: 100%; }
+  background-color: #f7f7f7; }
   .header .titlePage {
     font-size: x-large;
     font-weight: bold; }

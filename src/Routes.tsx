@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Layout, Spin } from 'antd';
-import { Router, Switch, Redirect, Route } from 'react-router-dom';
+import { Router, Switch, Redirect, Route, BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 // const HomePage = React.lazy(() => import('./pages/HomePage/homePage'));
@@ -26,95 +26,93 @@ import { AccountSetting } from './pages/AccountSettingPage';
 import { NotFound } from './pages/NotFoundPage';
 import { ManageBoardPage } from './pages/Team/ManageBoardPage';
 import HealthCheck from './pages/Team/HealthCheck/HealthCheck';
-import TeamDetail from './pages/Team/TeamDetailPage/teamDetail';
+import TeamSetting from './pages/Team/TeamSettingPage/TeamSetting';
 import { PersonalReflection } from './pages/Team/PersonalReflection';
 import NotificationPage from './pages/NotificationPage/notificationList';
 import UserManagementPage from './pages/Admin/UserManagerment/UserManagerment';
 import TeamManagerment from './pages/Admin/TeamManagerment/TeamManagerment';
 import SystemConfiguration from './pages/Admin/SystemConfiguration/SystemConfiguration';
 import AdminPage from './pages/Admin/AdminPage';
-
-// const HealthCheck = React.lazy(() => import('./pages/Team/HealthCheck/HealthCheck'));
+import InvitePage from './pages/InvitePage/InvitePage';
+// import { useRouteMatch } from 'react-router-dom';
 
 type Props = {
   me: null | User;
 };
 
 const { Content } = Layout;
-const customHistory = createBrowserHistory();
+// const customHistory = createBrowserHistory();
 
 const Routes = ({ me }: Props) => {
   const isLoggedIn = !!me?.id;
+  console.log(me?.id);
+  // const isLoggedIn = true;
   const email = me?.email || null;
   const isAdmin = me?.isAdmin || null;
-  const picture = me?.picture || null;
+  // const { path } = useRouteMatch();
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
-          <Spin size="large" />
-        </div>
-      }
-    >
-      <Layout style={{ minHeight: '100vh', overflow: 'hidden' }}>
-        <Router history={customHistory}>
-          <Switch>
-            {isLoggedIn ? (
+    <>
+      <Suspense
+        fallback={
+          <div className="flex flex-ai-c flex-jc-c" style={{ flex: 1, height: '100vh' }}>
+            <Spin size="large" />
+          </div>
+        }
+      >
+        <Layout style={{ minHeight: '100vh', overflow: 'hidden' }}>
+          <BrowserRouter>
+            {!!isLoggedIn ? (
               <>
                 <SideBar email={email} isAdmin={isAdmin} />
                 <Layout className="site-layout flex flex-1 non-scroll">
                   <Content className="flex flex-1" style={{ padding: '10px 10px 0px 20px', gap: '10px' }}>
                     <Switch>
-                      <Route path="/teams" exact component={Team} />
-                      <>
-                        <Switch>
-                          <Route path="/admin">
-                            <AdminPage isAdmin={isAdmin} />
-                          </Route>
-                          <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} />
-                          <Route
-                            path="/reflect/:teamId/:boardId"
-                            exact
-                            render={({ match }) => (
-                              <Board teamId={match.params.teamId} boardId={match.params.boardId} />
-                            )}
-                          />
-                          <Route
-                            path="/actions-tracker/:teamId"
-                            exact
-                            render={({ match }) => <ActionTracker teamId={match.params.teamId} />}
-                          />
-                          <Route
-                            path="/team-health/:teamId/:boardId"
-                            exact
-                            render={({ match }) => (
-                              <HealthCheck teamId={match.params.teamId} boardId={match.params.boardId} />
-                            )}
-                          />
-                          <Route
-                            path="/manage-members/:teamId"
-                            render={({ match }) => <ManageMembers teamId={match.params.teamId} />}
-                          />
-                          <Route path="/notifications" exact render={({ match }) => <NotificationPage />} />
-                          <Route
-                            path="/profile/me"
-                            exact
-                            render={({ match }) => <AccountSetting userId={match.params.userId} />}
-                          />
-                          <Route
-                            path="/manage-board/:teamId"
-                            render={({ match }) => <ManageBoardPage teamId={match.params.teamId} />}
-                          />
-                          <Route
-                            path="/team-details/:teamId"
-                            render={({ match }) => <TeamDetail teamId={match.params.teamId} />}
-                          />
-                          <Redirect from="/" exact to="/teams" />
-                          <Route path="/not-found" component={NotFound} />
-                          <Redirect to="/not-found" />
-                        </Switch>
-                      </>
+                      <Route path="/teams" component={Team} />
+                      <Redirect from="/" exact to="/teams" />
+                      <Route path="/admin">
+                        <AdminPage isAdmin={isAdmin} />
+                      </Route>
+                      <Route
+                        path="/invite-link/:teamId"
+                        exact
+                        render={({ match }) => <InvitePage teamId={match?.params?.teamId} />}
+                      />
+                      <Route path="/personal-reflect" render={({ match }) => <PersonalReflection />} />
+                      <Route
+                        path="/reflect/:teamId/:boardId"
+                        render={({ match }) => <Board teamId={match.params.teamId} boardId={match.params.boardId} />}
+                      />
+                      <Route
+                        path="/actions-tracker/:teamId"
+                        exact
+                        render={({ match }) => <ActionTracker teamId={match.params.teamId} />}
+                      />
+                      <Route
+                        path="/team-health/:teamId/:boardId"
+                        render={({ match }) => (
+                          <HealthCheck teamId={match.params.teamId} boardId={match.params.boardId} />
+                        )}
+                      />
+                      <Route
+                        path="/manage-members/:teamId"
+                        render={({ match }) => <ManageMembers teamId={match.params.teamId} />}
+                      />
+                      <Route path="/notifications" exact render={({ match }) => <NotificationPage />} />
+                      <Route
+                        path="/profile/me"
+                        render={({ match }) => <AccountSetting userId={match.params.userId} />}
+                      />
+                      <Route
+                        path="/manage-board/:teamId"
+                        render={({ match }) => <ManageBoardPage teamId={match.params.teamId} />}
+                      />
+                      <Route
+                        path="/team-details/:teamId"
+                        render={({ match }) => <TeamSetting teamId={match.params.teamId} />}
+                      />
+                      <Route path="/not-found" component={NotFound} />
+                      <Redirect to="/not-found" />
                     </Switch>
                   </Content>
                   {/* <Footer>
@@ -124,14 +122,28 @@ const Routes = ({ me }: Props) => {
               </>
             ) : (
               <Switch>
-                <Route path="/" component={() => <HomePage email={email} picture={picture} />} />
-                <Redirect to="/" />
+                <Route
+                  path="/"
+                  exact
+                  render={({ location }: { location: any }) => (
+                    <>
+                      <HomePage redirectUrl={location?.state?.from} email={email} />
+                    </>
+                  )}
+                />
+                <Redirect
+                  path="/"
+                  to={{
+                    pathname: '/',
+                    state: { from: `${location.pathname}` },
+                  }}
+                />
               </Switch>
             )}
-          </Switch>
-        </Router>
-      </Layout>
-    </Suspense>
+          </BrowserRouter>
+        </Layout>
+      </Suspense>
+    </>
   );
 };
 

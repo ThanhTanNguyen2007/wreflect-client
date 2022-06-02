@@ -14,6 +14,7 @@ export const BOARD_FIELDS = gql`
     disableUpVote
     isAnonymous
     votesLimit
+    meetingNote
     title
     timerInProgress
     endTime

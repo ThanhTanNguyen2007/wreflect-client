@@ -10,7 +10,6 @@ export const MEMBER_FIELDS = gql`
     isSuperOwner
     isPendingInvitation
     isGuess
-    meetingNote
     invitedBy
     joinedAt
     user {

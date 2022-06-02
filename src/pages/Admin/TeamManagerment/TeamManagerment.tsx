@@ -32,8 +32,6 @@ export default function TeamManagerment({ isAdmin }: Props) {
     },
   });
 
-  // console.log('users', users);
-
   const columns = [
     {
       title: 'Created At',
@@ -138,7 +136,7 @@ export default function TeamManagerment({ isAdmin }: Props) {
   return (
     <div className="teamManagermentPage flex flex-1">
       <PageHeader className="site-page-header flex flex-ai-c flex-jc-c" title="Team Managerment" />
-      <div className="flex flex-1 flex-dir-c">
+      <div className="flex flex-1 flex-dir-c non-scrollable">
         <Card className="listItem highligh flex flex-1 width-100 non-scroll">
           <>
             <>

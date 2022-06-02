@@ -32,10 +32,10 @@ export type createBoardVars = {
   isActiveCol5?: boolean;
 };
 
-const createBoard = gql`
+export const createBoard = gql`
   ${TEAM_FIELDS}
   mutation Mutation(
-    $teamId: String!
+    $teamId: ID!
     $isPublic: Boolean
     $isLocked: Boolean
     $disableDownVote: Boolean
@@ -117,11 +117,11 @@ export type updateBoardVars = {
   isActiveCol5?: boolean;
 };
 
-const updateBoard = gql`
+export const updateBoard = gql`
   ${BOARD_FIELDS}
   mutation Mutation(
-    $teamId: String!
-    $boardId: String!
+    $teamId: ID!
+    $boardId: ID!
     $isPublic: Boolean
     $isLocked: Boolean
     $disableDownVote: Boolean
@@ -183,13 +183,28 @@ export type deleteBoardVars = {
   boardId: string;
 };
 
-const deleteBoard = gql`
+export const deleteBoard = gql`
   ${TEAM_FIELDS}
-  mutation Mutation($teamId: String!, $boardId: String!) {
+  mutation Mutation($teamId: ID!, $boardId: ID!) {
     deleteBoard(teamId: $teamId, boardId: $boardId) {
       ...TeamFields
     }
   }
 `;
 
-export { createBoard, updateBoard, deleteBoard };
+export type updateMeetingNoteResult = {
+  updateMeetingNote: Board;
+};
+export type updateMeetingNoteVars = {
+  teamId: string;
+  boardId: string;
+  meetingNote: string;
+};
+export const updateMeetingNote = gql`
+  ${BOARD_FIELDS}
+  mutation updateMeetingNote($teamId: ID!, $boardId: ID!, $meetingNote: String!) {
+    updateMeetingNote(teamId: $teamId, boardId: $boardId, meetingNote: $meetingNote) {
+      ...BoardFields
+    }
+  }
+`;
