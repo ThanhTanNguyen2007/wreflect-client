@@ -3,8 +3,8 @@ import { Modal, notification } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from 'ckeditor5-thanhtan-custom-build/build/ckeditor';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic/';
+// import ClassicEditor from 'ckeditor5-thanhtan-custom-build/build/ckeditor';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic/';
 import { useTranslation } from 'react-i18next';
 
 import { BoardMutations, MemberMutations } from '../../../grapql-client/mutations';
