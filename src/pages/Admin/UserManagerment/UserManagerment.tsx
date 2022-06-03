@@ -43,14 +43,14 @@ export default function UserManagementPage({ isAdmin }: Props) {
     },
     {
       title: 'Status',
-      dataIndex: 'userStatus',
+      // dataIndex: 'userStatus',
       key: 'email',
       width: 150,
-      render(value: string) {
+      render(value, row) {
         return (
           <div className="flex flex-dir-r flex-gap-10 flex-ai-c">
-            <div className={`dot ${value.toLowerCase() == 'online' ? 'green' : 'red'}`} />
-            <div>{value.toLowerCase()}</div>
+            <div className={`dot ${row?.sessions?.length > 0 ? 'green' : 'red'}`} />
+            <div>{row?.sessions?.length > 0 ? 'Online' : 'Offline'}</div>
           </div>
         );
       },
@@ -77,26 +77,26 @@ export default function UserManagementPage({ isAdmin }: Props) {
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: 'Action',
-      key: 'action',
-      width: 100,
-      render(value, row: User) {
-        return (
-          <>
-            <Button
-              type="primary"
-              danger={row?.banningUser?.id ? true : false}
-              icon={<>{row?.banningUser?.id ? <UnlockOutlined /> : <LockOutlined />}</>}
-              onClick={() => setSelectedUser(row)}
-              title="Ban"
-            >
-              Ban
-            </Button>
-          </>
-        );
-      },
-    },
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   width: 100,
+    //   render(value, row: User) {
+    //     return (
+    //       <>
+    //         <Button
+    //           type="primary"
+    //           danger={row?.banningUser?.id ? true : false}
+    //           icon={<>{row?.banningUser?.id ? <UnlockOutlined /> : <LockOutlined />}</>}
+    //           onClick={() => setSelectedUser(row)}
+    //           title="Ban"
+    //         >
+    //           Ban
+    //         </Button>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   const onHandleSearch = (searchText: string) => {
@@ -110,10 +110,10 @@ export default function UserManagementPage({ isAdmin }: Props) {
   };
 
   return (
-    <div className="userManagementPage flex flex-1">
+    <div className="userManagementPage non-scroll flex flex-1">
       <BanUserModal user={selectedUser} setUser={setSelectedUser} />
       <PageHeader className="site-page-header flex flex-ai-c flex-jc-c" title="User Managerment" />
-      <div className="flex flex-1 flex-dir-c">
+      <div className="flex flex-1 flex-dir-c non-scroll">
         <Card className="listItem highligh flex flex-1 width-100 non-scroll">
           <>
             <>
@@ -136,7 +136,7 @@ export default function UserManagementPage({ isAdmin }: Props) {
                 />
               </div>
               <Divider style={{ marginBottom: 0 }} />
-              <div className="flex p-10 flex-1 flex-gap-10 non-scroll">
+              <div className="flex p-10 flex-1 flex-gap-10 scrollable">
                 <Table
                   className="scrollable"
                   loading={isGetting}

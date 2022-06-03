@@ -134,9 +134,9 @@ export default function TeamManagerment({ isAdmin }: Props) {
   };
 
   return (
-    <div className="teamManagermentPage flex flex-1">
+    <div className="teamManagermentPage non-scroll flex flex-1">
       <PageHeader className="site-page-header flex flex-ai-c flex-jc-c" title="Team Managerment" />
-      <div className="flex flex-1 flex-dir-c non-scrollable">
+      <div className="flex flex-1 flex-dir-c non-scroll">
         <Card className="listItem highligh flex flex-1 width-100 non-scroll">
           <>
             <>
@@ -159,7 +159,7 @@ export default function TeamManagerment({ isAdmin }: Props) {
                 />
               </div>
               <Divider style={{ marginBottom: 0 }} />
-              <div className="flex p-10 flex-1 flex-gap-10 non-scroll">
+              <div className="flex p-10 flex-1 flex-gap-10 scrollable">
                 <Table
                   className="scrollable"
                   loading={isGettingTeams}

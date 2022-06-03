@@ -388,12 +388,12 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                           Start Timer
                         </a>
                       </li> */}
-                          <li>
+                          {/* <li>
                             <TrademarkCircleOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsCreateModalVisible(true)}>
                               {t(`txt_boards_reset_all_votes`)}
                             </a>
-                          </li>
+                          </li> */}
                           <li>
                             <StarOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsBookmarkedVisible(true)}>

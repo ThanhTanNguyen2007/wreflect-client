@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "react-scripts start",
-    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && react-scripts build",
+    "build": "set NODE_OPTIONS=--max_old_space_size=8192 && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sass:build": " node-sass src/styles/sass/style.sass -o public/css",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
     "@apollo/client": "^3.5.5",
+    "@ckeditor/ckeditor5-build-classic": "34.1.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
     "@giphy/js-fetch-api": "^4.1.2",
     "@giphy/react-components": "^5.6.1",
