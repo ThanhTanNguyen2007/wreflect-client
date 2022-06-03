@@ -22,8 +22,8 @@
   "dependencies": {
     "@ant-design/charts": "^1.2.14",
     "@apollo/client": "^3.5.5",
-    "@ckeditor/ckeditor5-build-classic": "34.1.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
+    "@ckeditor/ckeditor5-build-classic": "34.1.0",
     "@giphy/js-fetch-api": "^4.1.2",
     "@giphy/react-components": "^5.6.1",
     "@reduxjs/toolkit": "^1.6.2",
