@@ -400,12 +400,12 @@ export default function BoardComponent({ teamId, boardId }: Props) {
                               {t(`txt_boards_show_bookmarks`)}
                             </a>
                           </li>
-                          {/* <li>
+                          <li>
                             <SnippetsOutlined className="boardPanelIcon " />
                             <a className="addBoard" onClick={() => setIsVisibleMeetingNote(true)}>
                               {t(`txt_boards_meeting_notes`)}
                             </a>
-                          </li> */}
+                          </li>
                         </ul>
                       </div>
                     </div>
